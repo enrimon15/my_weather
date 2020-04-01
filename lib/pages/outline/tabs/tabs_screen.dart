@@ -27,6 +27,7 @@ class _TabScreenState extends State<TabScreen> {
         child: Scaffold(
           appBar: CustomAppBar(
             tabItem: this._choices,
+            shadow: false,
             title: 'My Weather',
             isTabBar: true,
             context: context

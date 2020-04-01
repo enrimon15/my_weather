@@ -8,9 +8,11 @@ class CustomAppBar {
   final bool isTabBar;
   final String title;
   final BuildContext context;
+  bool shadow = true;
 
   CustomAppBar({
     this.tabItem,
+    this.shadow,
     @required this.isTabBar,
     @required this.title,
     @required this.context
@@ -20,6 +22,7 @@ class CustomAppBar {
     if (this.isTabBar) {
        return AppBar(
         title: Text(this.title),
+        elevation: shadow ? 6.0 : 0.0,
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -32,6 +35,9 @@ class CustomAppBar {
         bottom: TabBar(
           labelStyle: TextStyle(fontSize: 15),
           indicatorColor: Colors.white,
+          /*indicator: UnderlineTabIndicator( for width of tab indicator
+              insets: EdgeInsets.symmetric(horizontal:30.0)
+          ),*/
           tabs: this.tabItem.map((TabItem choice) {
             return Tab(
               text: choice.title,
