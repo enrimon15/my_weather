@@ -10,105 +10,82 @@ class HourItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (hour.hour.substring(0,2) == now.hour.toString()) {
-      return NowHour(hour: hour);
-    } else {
-      return GenericHour(hour: hour);
-    }
-  }
-}
+    final _isNow = hour.hour.substring(0,2) == now.hour.toString();
 
-class GenericHour extends StatelessWidget {
-  const GenericHour({
-    Key key,
-    @required this.hour,
-  }) : super(key: key);
-
-  final Hour hour;
-
-  @override
-  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          Text(
-            hour.hour.substring(0,2),
-            style: TextStyle(
-              color: Theme.of(context).primaryColor,
-              fontSize: 18,
-            ),
-          ),
-          Image.asset(
-            WeatherIcon.selectIcon(hour.weather.status),
-            height: 34,
-          ),
-          Text(
-            '${hour.weather.temperature.split(' ')[0]}°',
-            style: TextStyle(
-              fontSize: 15,
-            ),
-          )
-        ],
-      ),
+      child: _isNow ? _buildNowHour() : _buildGenericHour(context),
     );
   }
-}
 
-class NowHour extends StatelessWidget {
-  const NowHour({
-    Key key,
-    @required this.hour,
-  }) : super(key: key);
-
-  final Hour hour;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(23),
-                    bottom: Radius.circular(23)
+  //builder method
+  Widget _buildNowHour() {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(23),
+                  bottom: Radius.circular(23)
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 4,
+                  blurRadius:2,
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 4,
-                    blurRadius:2,
-                  ),
-                ],
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              margin: EdgeInsets.symmetric(vertical: 6),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Text(
-                    'Ora',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Image.asset(
-                    WeatherIcon.selectIcon(hour.weather.status),
-                    //alignment: Alignment.bottomLeft,
-                    height: 34,
-                  ),
-                ],
-              ),
+              ],
             ),
-          )
-        ],
-      ),
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            margin: EdgeInsets.symmetric(vertical: 6),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Text(
+                  'Ora',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+                Image.asset(
+                  WeatherIcon.selectIcon(hour.weather.status),
+                  //alignment: Alignment.bottomLeft,
+                  height: 34,
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
+
+  Widget _buildGenericHour(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        Text(
+          hour.hour.substring(0,2),
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontSize: 18,
+          ),
+        ),
+        Image.asset(
+          WeatherIcon.selectIcon(hour.weather.status),
+          height: 34,
+        ),
+        Text(
+          '${hour.weather.temperature.split(' ')[0]}°',
+          style: TextStyle(
+            fontSize: 15,
+          ),
+        )
+      ],
+    );
+  }
+
 }

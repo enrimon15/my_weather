@@ -8,11 +8,13 @@ class CustomAppBar {
   final bool isTabBar;
   final String title;
   final BuildContext context;
+  final Function onTabPressed;
   bool shadow = true;
 
   CustomAppBar({
     this.tabItem,
     this.shadow,
+    this.onTabPressed,
     @required this.isTabBar,
     @required this.title,
     @required this.context
@@ -43,12 +45,14 @@ class CustomAppBar {
               text: choice.title,
             );
           }).toList(),
+          onTap: (index) => onTabPressed(index),
         ),
       );
     }
     else {
        return AppBar(
-        title: Text('My Weather'),
+        title: Text(this.title),
+        elevation: 10,
         actions: <Widget>[
           IconButton(
             icon: Icon(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_weather/models/drawer_item.dart';
 import 'package:my_weather/pages/favorites/favorites_screen.dart';
 import 'package:my_weather/pages/info/info_screen.dart';
 import 'package:my_weather/pages/search/search_screen.dart';
@@ -10,7 +9,6 @@ class MainDrawer extends StatelessWidget {
   //list of menu items
   final List<DrawerItem> drawerItem = [
     DrawerItem(title: 'Home', icon: Icons.location_on, onTap: '/'),
-    //DrawerItem(title: 'Cerca', icon: Icons.search, onTap: SearchScreen.routeName),
     DrawerItem(title: 'Preferiti', icon: Icons.star, onTap: FavoritesScreen.routeName),
     DrawerItem(title: 'Impostazioni', icon: Icons.settings, onTap: SettingsScreen.routeName),
     DrawerItem(title: 'DIVIDER'),
@@ -83,4 +81,12 @@ class MainDrawer extends StatelessWidget {
       ),
     );
   }
+}
+
+class DrawerItem {
+  final String title;
+  final IconData icon;
+  final String onTap;
+
+  DrawerItem({this.title, this.icon, this.onTap});
 }

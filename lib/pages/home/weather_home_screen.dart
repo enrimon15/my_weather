@@ -13,7 +13,7 @@ class Home extends StatelessWidget {
           clipper: MyClipperCurved(),
           child: CurrentWeather(),
         ),
-        HoursList(),
+        HoursList()
       ],
     );
   }

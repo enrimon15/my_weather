@@ -5,6 +5,7 @@ import 'package:my_weather/pages/info/info_screen.dart';
 import 'package:my_weather/pages/outline/tabs/tabs_screen.dart';
 import 'package:my_weather/pages/search/search_screen.dart';
 import 'package:my_weather/pages/settings/settings_screen.dart';
+import 'package:my_weather/providers/favorite_cities.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'theme/colors.dart';
@@ -31,19 +32,19 @@ class MyApp extends StatelessWidget {
       //declaration of providers class
       providers: [
         ChangeNotifierProvider<TodayWeather>(create: (_) => TodayWeather()),
-        ChangeNotifierProvider<TodayWeather>(create: (_) => TodayWeather()),
+        ChangeNotifierProvider<NextFiveDaysWeather>(create: (_) => NextFiveDaysWeather()),
+        ChangeNotifierProvider<FavoriteCities>(create: (_) => FavoriteCities()),
       ],
       child: MaterialApp(
         title: 'My Weather',
         theme: ThemeData(
           primarySwatch: ThemeColors.primaryColor, //#0D47A1
           accentColor: ThemeColors.tertiaryColor, //#FFC107
-          secondaryHeaderColor: ThemeColors.secondaryColor, //#4FC3F7 //mettere blue
-          // muli , monserrat , comfortaa
+          secondaryHeaderColor: ThemeColors.secondaryColor, //#4FC3F7
           textTheme: GoogleFonts.ralewayTextTheme(textTheme), //global font (raleway)
-          appBarTheme: AppBarTheme( //appbar font (quicksand)
+          appBarTheme: AppBarTheme( ////different font for appbar (quicksand)
               textTheme: ThemeData.light().textTheme.copyWith(
-                  title: GoogleFonts.quicksand( //different font for appbar
+                  title: GoogleFonts.quicksand(
                     textStyle: textTheme.title,
                     fontSize: 20,
                     color: Colors.white
