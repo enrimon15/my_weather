@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/pages/favorites/widget/favorite_card_widget.dart';
 import 'package:my_weather/pages/outline/custom_appbar.dart';
@@ -22,7 +23,7 @@ class FavoritesScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-          title: 'Preferiti',
+          title: tr("fav_title"),
           isTabBar: false,
           context: context
       ).getAppBar(),
@@ -34,19 +35,18 @@ class FavoritesScreen extends StatelessWidget{
             return Center( child: CircularProgressIndicator() );
           }
           else if (snapshot.hasError) {
-            return Center(child: Text('Oops.. preferiti non caricati correttamente!'));
+            return Center(child: Text(tr("fav_error")));
           }
           else {
             return Consumer<FavoriteCities>(
               child: Center(
-                child: Text('Non hai ancora aggiunto nessun preferito!'),
+                child: Text(tr("fav_no_content")),
               ),
               builder: (ctx, favoriteCities, ch) =>
                 favoriteCities.getCityList.length <= 0
                   ? ch
                   : Container(
-                    padding: const EdgeInsets.only(top: 10),
-                    margin: EdgeInsets.all(20),
+                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                     child: ListView.builder(
                       itemCount: favoriteCities.getCityList.length,
                       itemBuilder: (ctx, i) => FavoriteCard(favoriteCities.getCityList[i], backgroundList[i % backgroundList.length]),

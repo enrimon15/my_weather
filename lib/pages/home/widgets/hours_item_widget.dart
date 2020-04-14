@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/models/day_weather.dart';
 import 'package:my_weather/utilities/select_weather_icon.dart';
@@ -44,7 +45,7 @@ class HourItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Text(
-                  'Ora',
+                  tr("home_now"),
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,

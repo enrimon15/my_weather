@@ -2,7 +2,8 @@
 class WeatherIcon {
   static final String iconPath = 'assets/img/icons/';
   static final String iconPathMarker = 'assets/img/markers/';
-  static final Map<String, String> iconMapping = {
+
+  static final Map<String, String> iconMappingIT = {
     "Sereno" : "sereno.png",
     "Soleggiato" : "soleggiato.png",
     "Cielo Coperto" : "cielocoperto.png",
@@ -11,13 +12,22 @@ class WeatherIcon {
     "Neve" : "neve.png"
   };
 
+  static final Map<String, String> iconMappingEN = {
+    "Clear" : "sereno.png",
+    "Sunny" : "soleggiato.png",
+    "Partly Cloudy" : "cielocoperto.png",
+    "Cloudy" : "nuvoloso.png",
+    "Rain" : "pioggia.png",
+    "Snow" : "neve.png"
+  };
+
   static String selectIcon(String icon) {
-    return iconPath + iconMapping[icon];
+    return iconPath + iconMappingIT[icon];
   }
 
   static String selectIconMarker(String icon){
     String addMarker = 'marker.';
-    List<String> splitted = iconMapping[icon].split('.');
+    List<String> splitted = iconMappingIT[icon].split('.');
     return iconPathMarker + splitted[0] + addMarker + splitted[1];
   }
 

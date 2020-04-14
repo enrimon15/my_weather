@@ -1,0 +1,41 @@
+{
+  "yes" : "Si",
+  "no" : "No",
+
+  "tab_today": "Oggi",
+  "tab_details": "Dettagli",
+  "tab_map": "Mappa",
+
+  "snackbar_favorite_add_error" : "Non è stato possibile aggiungere preferito",
+  "snackbar_favorite_remove_error" : "Non è stato possibile rimuovere preferito",
+  "try_again" : "Riprova",
+  "generic_error": "Qualcosa è andato storto",
+
+  "search_hint" : "Cerca",
+
+  "drawer_home" : "Home",
+  "drawer_favorites" : "Preferiti",
+  "drawer_info" : "Info",
+  "drawer_settings" : "Impostazioni",
+
+  "map_error" : "Oops.. Mappa non disponibile",
+  "home_now" : "Ora",
+  "details_humidity" : "Umidità",
+  "details_pressure" : "Pressione",
+  "details_wind" : "Vento",
+  "details_next_days" : "Prossimi 5 giorni",
+
+  "fav_title" : "Preferiti",
+  "fav_no_content" : "Non hai ancora aggiunto nessun preferito!",
+  "fav_error" : "Oops.. preferiti non caricati correttamente!",
+  "fav_dialog_title" : "Sei sicuro?",
+  "fav_dialog_content" : "Vuoi rimuovere la città dai preferiti?",
+
+  "settings_title" : "Impostazioni",
+  "settings_location" : "Posizione",
+  "settings_location_description" : "Consenso alla geolocalizzazione",
+  "settings_language" : "Lingua",
+  "settings_language_description" : "Scegli la lingua",
+  "settings_metric" : "Unità di misura",
+  "settings_metric_description" : "Scegli l'unità"
+}

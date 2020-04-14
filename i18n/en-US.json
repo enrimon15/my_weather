@@ -1,0 +1,41 @@
+{
+  "yes" : "Yes",
+  "no" : "No",
+
+  "tab_today": "Today",
+  "tab_details": "Details",
+  "tab_map": "Map",
+
+  "snackbar_favorite_add_error" : "Could not add favorite",
+  "snackbar_favorite_remove_error" : "Could not remove favorite",
+  "try_again" : "Try Again",
+  "generic_error": "Something went wrong",
+
+  "search_hint" : "Search",
+
+  "drawer_home" : "Home",
+  "drawer_favorites" : "Favorites",
+  "drawer_info" : "Info",
+  "drawer_settings" : "Settings",
+
+  "map_error" : "Oops.. Map is not available",
+  "home_now" : "Now",
+  "details_humidity" : "Humidity",
+  "details_pressure" : "Pressure",
+  "details_wind" : "Wind",
+  "details_next_days" : "Next 5 days",
+
+  "fav_title" : "Favorites",
+  "fav_no_content" : "You haven't added any favorites yet!",
+  "fav_error" : "Oops.. Favorites not loaded correctly!",
+  "fav_dialog_title" : "Are you sure",
+  "fav_dialog_content" : "Do you want to remove the city from your favorites?",
+
+  "settings_title" : "Settings",
+  "settings_location" : "Location",
+  "settings_location_description" : "Allow geolocation",
+  "settings_language" : "Language",
+  "settings_language_description" : "Choose the language",
+  "settings_metric" : "Metric",
+  "settings_metric_description" : "Choose the metric"
+}

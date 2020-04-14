@@ -1,13 +1,16 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_weather/pages/favorites/favorites_screen.dart';
 import 'package:my_weather/pages/info/info_screen.dart';
 import 'package:my_weather/pages/outline/tabs/tabs_screen.dart';
-import 'package:my_weather/pages/search/search_screen.dart';
 import 'package:my_weather/pages/settings/settings_screen.dart';
 import 'package:my_weather/providers/favorite_cities.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
+import 'package:my_weather/providers/search_cities.dart';
 import 'package:my_weather/providers/today_weather.dart';
+import 'package:my_weather/utilities/localization_constants.dart';
 import 'theme/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -18,12 +21,16 @@ void main() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  initializeDateFormatting('it_IT', null); //initialize dateFormat locale
-  runApp(MyApp());
+  //initializeDateFormatting('it_IT', null); //initialize dateFormat locale
+  runApp( EasyLocalization(
+    child: MyApp(),
+    supportedLocales: InternationalizationConstants.SUPPORTED_LOCALES, //[ Locale('en', 'US'), Locale('it', 'IT') ],
+    path: 'i18n',
+  ));
 }
 
+// This widget is the root of your application.
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -34,8 +41,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<TodayWeather>(create: (_) => TodayWeather()),
         ChangeNotifierProvider<NextFiveDaysWeather>(create: (_) => NextFiveDaysWeather()),
         ChangeNotifierProvider<FavoriteCities>(create: (_) => FavoriteCities()),
+        ChangeNotifierProvider<SearchCities>(create: (_) => SearchCities()),
       ],
       child: MaterialApp(
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate, //translates the basic text in material widgets
+          GlobalWidgetsLocalizations.delegate, //translate the text direction (LTR/RTL)
+          EasyLocalization.of(context).delegate, //it takes the json in i18n
+        ],
+        supportedLocales: EasyLocalization.of(context).supportedLocales,
+        locale: EasyLocalization.of(context).locale,
+        localeResolutionCallback: (locale, supportedLocales) => resolutionLocale(locale, supportedLocales),
+        debugShowCheckedModeBanner: false,
         title: 'My Weather',
         theme: ThemeData(
           primarySwatch: ThemeColors.primaryColor, //#0D47A1
@@ -58,10 +75,20 @@ class MyApp extends StatelessWidget {
           SettingsScreen.routeName: (ctx) => SettingsScreen(),
           FavoritesScreen.routeName: (ctx) => FavoritesScreen(),
           InfoScreen.routeName: (ctx) => InfoScreen(),
-          SearchScreen.routeName: (ctx) => SearchScreen(),
         },
         //onUnknownRoute:
       ),
     );
   }
+}
+
+//check if the current device locale is supported, if it's not supported set default locale
+Locale resolutionLocale(locale, supportedLocales) {
+  for (var supportedLocale in supportedLocales) {
+    if (supportedLocale.languageCode == locale.languageCode && supportedLocale.countryCode == locale.countryCode) {
+      return supportedLocale;
+    }
+  }
+  //if the locale is not supported, use the first one (default english)
+  return InternationalizationConstants.ENGLISH;
 }

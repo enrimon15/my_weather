@@ -8,10 +8,14 @@ import 'package:my_weather/pages/map/weather_map_screen.dart';
 import 'package:my_weather/pages/outline/custom_appbar.dart';
 import 'package:my_weather/pages/outline/drawer/drawer_widget.dart';
 import 'package:my_weather/pages/outline/tabs/show_alert_widget.dart';
+import 'package:my_weather/providers/search_cities.dart';
 import 'package:my_weather/providers/today_weather.dart';
+import 'package:my_weather/utilities/localization_constants.dart';
 import 'package:my_weather/utilities/location.dart';
 import 'package:provider/provider.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class TabScreen extends StatefulWidget {
@@ -24,16 +28,18 @@ class _TabScreenState extends State<TabScreen> {
   bool _isLoading = false; //to check the completion of the fetching data
   bool _isInit = true; //to check fist time the screen is loaded
   bool _isErrorFetching = false; //to check if there is an error in fetching data
+  bool _locationPermission = true;
   int _selectedIndex = 0; //to know which tab is pressed
   CityFavorite _currentCity = new CityFavorite(); //current city
   bool _isFavoriteCity = false; //to check if current city is favorite
+  bool _isSearchReady = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>(); //key of context, for snakebar
 
   //List of tabs
   final List<TabItem> _choices = [
-    TabItem(title: 'Oggi', screen: Home()),
-    TabItem(title: 'Dettagli', screen: Details()),
-    TabItem(title: 'Mappa', screen: Maps()),
+    TabItem(title: tr("tab_today"), screen: Home()),
+    TabItem(title: tr("tab_details"), screen: Details()),
+    TabItem(title: tr("tab_map"), screen: Maps()),
   ];
 
   @override
@@ -44,7 +50,12 @@ class _TabScreenState extends State<TabScreen> {
         _isLoading = true;
         _isErrorFetching = false;
         _isFavoriteCity = false;
+        _locationPermission = true;
       });
+
+      _loadSearch();
+
+      //_getPrefs();
 
       final routeArgs = ModalRoute.of(context).settings.arguments as Map<String,String>; //take param from route
       if (routeArgs != null) { //if there are params (city, province) fetch data from server with this params
@@ -61,13 +72,32 @@ class _TabScreenState extends State<TabScreen> {
     super.didChangeDependencies();
   }
 
+  //load all cities from a json
+  _loadSearch() {
+    final searchProvider = Provider.of<SearchCities>(context, listen: false);
+    if (searchProvider.getAllCities.length <= 0) {
+      searchProvider.fetchData().then( (_) {
+        setState(() { _isSearchReady = true; });
+      });
+    }
+  }
+
+  //fare un provider
+  _getPrefs() {
+    SharedPreferences.getInstance().then( (prefs) {
+      prefs.getString(InternationalizationConstants.PREFS_METRIC_KEY) ?? InternationalizationConstants.CELSIUS;
+    });
+  }
+
   //it fetches data from server and then check if city is favorite or not
   void _fetchData(String city, String province, BuildContext context) {
+    //final searchProvider = Provider.of<SearchCities>(context, listen: false);
     //this wait for a list of operations passed into an array inside .wait
     Future
       .wait([
         Provider.of<TodayWeather>(context, listen: false).fetchData(city, province),
-        Provider.of<NextFiveDaysWeather>(context, listen: false).fetchData(city, province)
+        Provider.of<NextFiveDaysWeather>(context, listen: false).fetchData(city, province),
+        //if (searchProvider.getAllCities.length <= 0) searchProvider.fetchData()
       ])
       .then((_) {
         setState(() {
@@ -96,10 +126,10 @@ class _TabScreenState extends State<TabScreen> {
     bool result;
     if (!_isFavoriteCity) {
       result = await DBHelper.insertCity(_currentCity);
-      result ? setState(() {_isFavoriteCity = true;}) : _showSnakebar('Non è stato possibile aggiungere preferito');
+      result ? setState(() {_isFavoriteCity = true;}) : _showSnakebar(tr("snackbar_favorite_add_error"));
     } else {
       result = await DBHelper.delete(_currentCity);
-      result ? setState(() {_isFavoriteCity = false;}) : _showSnakebar('Non è stato possibile rimuovere preferito');
+      result ? setState(() {_isFavoriteCity = false;}) : _showSnakebar(tr("snackbar_favorite_remove_error"));
     }
   }
 
@@ -111,7 +141,12 @@ class _TabScreenState extends State<TabScreen> {
   //it handle init error of app (fetching data, location, check ecc)
   _handleInitError(error) {
     print(error.toString());
-    setState(() {_isErrorFetching = true;});
+    switch (error.toString()) {
+      case 'NO LOCATION PERMISSION' : {setState(() {_locationPermission = false;});}
+      break;
+
+      default: setState(() {_isErrorFetching = true;});
+    }
   }
 
 
@@ -124,11 +159,11 @@ class _TabScreenState extends State<TabScreen> {
           key: _scaffoldKey,
           appBar: CustomAppBar(
             tabItem: this._choices,
-            shadow: false,
             onTabPressed: _onItemTapped,
             title: 'My Weather',
             isTabBar: true,
-            context: context
+            context: context,
+            isSearchReady: _isSearchReady
           ).getAppBar(),
           drawer: MainDrawer(),
           body: _buildBody(context),
@@ -141,8 +176,8 @@ class _TabScreenState extends State<TabScreen> {
     if (_isErrorFetching) {
       return ShowAlert(
         title: 'Oops..',
-        content: 'Qualcosa è andato storto',
-        buttonContent: 'Riprova',
+        content: tr("generic_error"),
+        buttonContent: tr("try_again"),
         onTap: () => Navigator.of(context).pushReplacementNamed('/'),
       );
     } else if (_isLoading) {

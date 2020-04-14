@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class NextFiveDays extends StatelessWidget {
         'assets/img/calendar.png',
         height: 48,
       ),
-      title: Text('Prossimi 5 giorni'),
+      title: Text(tr("details_next_days")),
     );
   }
 

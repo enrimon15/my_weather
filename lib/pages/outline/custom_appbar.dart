@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_weather/models/tab_item.dart';
 import 'package:flutter/foundation.dart';
-import 'package:my_weather/pages/search/search_screen.dart';
+import 'package:my_weather/pages/search/data_search.dart';
 
 class CustomAppBar {
   final List<TabItem> tabItem;
@@ -9,29 +9,29 @@ class CustomAppBar {
   final String title;
   final BuildContext context;
   final Function onTabPressed;
-  bool shadow = true;
+  bool isSearchReady = true;
 
   CustomAppBar({
     this.tabItem,
-    this.shadow,
     this.onTabPressed,
     @required this.isTabBar,
     @required this.title,
-    @required this.context
+    @required this.context,
+    this.isSearchReady,
   });
 
    AppBar getAppBar() {
     if (this.isTabBar) {
        return AppBar(
         title: Text(this.title),
-        elevation: shadow ? 10.0 : 0.0,
+        elevation: 0.0,
         actions: <Widget>[
           IconButton(
             icon: Icon(
               Icons.search,
               color: Colors.white,
             ),
-            onPressed: () => Navigator.of(context).pushNamed(SearchScreen.routeName),
+            onPressed: () => isSearchReady ? showSearch(context: context, delegate: DataSearch()) : null,
           ),
         ],
         bottom: TabBar(
@@ -59,7 +59,7 @@ class CustomAppBar {
               Icons.search,
               color: Colors.white,
             ),
-            onPressed: () => Navigator.of(context).pushNamed(SearchScreen.routeName),
+            onPressed: () => showSearch(context: context, delegate: DataSearch()),
           ),
         ],
       );

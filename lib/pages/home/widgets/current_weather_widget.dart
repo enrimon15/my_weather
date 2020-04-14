@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'package:my_weather/utilities/select_weather_icon.dart';
@@ -7,10 +8,10 @@ import 'package:intl/intl.dart';
 class CurrentWeather extends StatelessWidget {
 
   final DateTime now = new DateTime.now();
-  final locale = 'it_IT';
 
   @override
   Widget build(BuildContext context) {
+    final intlLocale = EasyLocalization.of(context).locale.toString();
     final weatherProvider = Provider.of<TodayWeather>(context); //provider
     final currentWeather = weatherProvider.getCurrentWeather;
 
@@ -28,7 +29,6 @@ class CurrentWeather extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
-                //'L\' Aquila,',
                 weatherProvider.getTodayWeather.cityName + ',',
                 style: TextStyle(
                   color: Colors.white,
@@ -38,7 +38,6 @@ class CurrentWeather extends StatelessWidget {
               SizedBox(width: 20,),
               Text(
                 currentWeather.temperature.substring(0,2) + '°',
-                //'18°',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 40,
@@ -48,8 +47,7 @@ class CurrentWeather extends StatelessWidget {
           ),
           SizedBox(height: 15,),
           Text(
-            //'Domenica 6',
-            '${DateFormat.EEEE(locale).format(DateTime.now())} ${now.day}',
+            '${DateFormat.EEEE(intlLocale).format(DateTime.now())} ${now.day}',
             style: TextStyle(
               color: Colors.white70,
               fontSize: 18,
@@ -62,7 +60,6 @@ class CurrentWeather extends StatelessWidget {
           ),
           SizedBox(height: 30,),
           Text(
-            //'Cielo Coperto',
             currentWeather.status,
             style: TextStyle(
               letterSpacing: 8,

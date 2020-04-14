@@ -79,8 +79,10 @@ class DBHelper {
   }
 
   static Future<bool> delete(CityFavorite city) async {
+    print('db delete');
     final db = await DBHelper.open();
     int result = await db.delete(table, where: '$columnId = ?', whereArgs: [city.id]);
+    print('db delete finito');
     close(db);
     return result > 0 ;
   }

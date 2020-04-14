@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:my_weather/models/generic_weather.dart';
@@ -11,7 +12,7 @@ class DetailsCard extends StatelessWidget {
   List<DetailsItem> _getDetails() {
     List<DetailsItem> items = [];
     items.add(DetailsItem(
-      title: 'Umidità',
+      title: tr("details_humidity"),
       content: currentWeather.humidity,
       img: Image.asset(
         'assets/img/drop.png',
@@ -20,7 +21,7 @@ class DetailsCard extends StatelessWidget {
     ));
     items.add(DetailsItem(title: 'DIVIDER'));
     items.add(DetailsItem(
-        title: 'Pressione',
+        title: tr("details_pressure"),
         content: currentWeather.pressure,
         img: Image.asset(
           'assets/img/speedometer.png',
@@ -29,7 +30,7 @@ class DetailsCard extends StatelessWidget {
     ));
     items.add(DetailsItem(title: 'DIVIDER'));
     items.add(DetailsItem(
-        title: 'Vento',
+        title: tr("details_wind"),
         content: currentWeather.wind,
         img: Image.asset(
           'assets/img/wind.png',
@@ -66,49 +67,6 @@ class DetailsCard extends StatelessWidget {
     );
   }
 }
-
-class TestWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text('ciao'),
-        SizedBox(height: 15,),
-        Text('ciao'),
-        SizedBox(height: 15,),
-        Text('ciao'),
-        SizedBox(height: 15,),
-        Text('ciao'),
-        SizedBox(height: 15,),
-        Text('ciao'),
-        SizedBox(height: 15,),
-        Text('ciao'),
-        SizedBox(height: 15,),
-        Text('ciao'),
-        SizedBox(height: 15,),
-        Text('ciao'),
-        SizedBox(height: 15,),
-        Text('ciao'),
-        SizedBox(height: 15,),
-        Text('ciao'),
-        Text('ciao'),
-        Text('ciao'),
-        Text('ciao'),
-        Text('ciao'),
-        Text('ciao'),
-        Text('ciao'),
-      ],
-    );
-  }
-}
-
-
-/*
-
-
-        
-
- */
 
 
 class DetailsItem {
