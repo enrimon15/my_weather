@@ -1,10 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/pages/outline/custom_appbar.dart';
-import 'package:my_weather/pages/outline/drawer/drawer_widget.dart';
-import 'package:my_weather/utilities/data_convert_localization.dart';
+import 'package:my_weather/pages/outline/drawer_widget.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -16,12 +14,12 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   List<String> _languages = InternationalizationConstants.languages;
-  List<String> _allMetrics = InternationalizationConstants.ALL_METRICS;
-  String _metricKey = InternationalizationConstants.PREFS_METRIC_KEY;
+  List<String> _listUnits = InternationalizationConstants.LIST_UNITS_DISPLAY;
+  String _unitsKey = InternationalizationConstants.PREFS_UNITS_KEY;
   String _locationKey = InternationalizationConstants.PREFS_LOCATION_KEY;
 
   bool _isPosition;
-  String _metric;
+  String _units;
   SharedPreferences prefs;
 
   bool _isPrefsLoaded = false;
@@ -36,7 +34,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _getSharedPrefs() async {
     prefs = await SharedPreferences.getInstance();
     _isPosition = prefs.getBool(_locationKey) ?? true;
-    _metric = prefs.getString(_metricKey) ?? InternationalizationConstants.CELSIUS;
+    _units = prefs.getString(_unitsKey) ?? InternationalizationConstants.METRIC;
   }
 
   Widget _buildSwitchListTile(String title, String subTitle, bool currentValue, Function updateValue, Icon icon) {
@@ -103,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   tr("settings_location"),
                   tr("settings_location_description"),
                   _isPosition,
-                      (newValue) {
+                  (newValue) {
                     prefs.setBool(_locationKey, newValue);
                     setState(() {
                       _isPosition = newValue;
@@ -116,21 +114,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   tr("settings_language_description"),
                   _lang,
                   _languages,
-                      (newValue) {
+                  (newValue) {
                     Locale newLocale = _getNewLocale(newValue, context);
                     EasyLocalization.of(context).locale = newLocale;
                   },
                   const Icon(Icons.language),
                 ),
                 _buildDropDownListTile(
-                  tr("settings_metric"),
-                  tr("settings_metric_description"),
-                  _metric,
-                  _allMetrics,
-                      (newValue) {
-                    prefs.setString(_metricKey, newValue);
+                  tr("settings_units"),
+                  tr("settings_units_description"),
+                  _getDisplayUnits(_units),
+                  _listUnits,
+                  (newValue) {
+                    prefs.setString(_unitsKey, _getUnits(newValue));
                     setState(() {
-                      _metric = newValue;
+                      _units = _getUnits(newValue);
                     });
                   },
                   const Icon(Icons.whatshot),
@@ -141,5 +139,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
+  }
+
+  String _getUnits(String unitsDisplay) {
+    final binding = {
+      InternationalizationConstants.IMPERIAL_DISPLAY : InternationalizationConstants.IMPERIAL,
+      InternationalizationConstants.METRIC_DISPLAY : InternationalizationConstants.METRIC
+    };
+    return binding[unitsDisplay];
+  }
+
+  String _getDisplayUnits(String units) {
+    final binding = {
+      InternationalizationConstants.IMPERIAL : InternationalizationConstants.IMPERIAL_DISPLAY,
+      InternationalizationConstants.METRIC : InternationalizationConstants.METRIC_DISPLAY
+    };
+    return binding[units];
   }
 }

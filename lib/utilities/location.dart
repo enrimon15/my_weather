@@ -10,10 +10,30 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LocationHelper {
 
   static Future<String> fetchLocation() async {
+    //check permission shared preferences status
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool(InternationalizationConstants.PREFS_LOCATION_KEY) == false) {
-      throw ConfigurationException('NO LOCATION PERMISSION');
+      throw ConfigurationException('LOCATION PERMISSION PREFS NOT ENABLED');
     }
+
+    Location location = new Location(); //location
+    //check permission status
+    PermissionStatus _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        throw ConfigurationException('LOCATION PERMISSION SETTINGS NOT ENABLED');
+      }
+    }
+    //check service status
+    bool _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        throw ConfigurationException('LOCATION SERVICE NOT ENABLED');
+      }
+    }
+    //all permission is ok
     final locData = await Location().getLocation();
 
     final url = 'http://192.168.1.51:3000/mock/coords/getCity/${locData.latitude}/${locData.longitude}';

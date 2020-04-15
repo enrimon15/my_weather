@@ -10,6 +10,12 @@
   "snackbar_favorite_remove_error" : "Could not remove favorite",
   "try_again" : "Try Again",
   "generic_error": "Something went wrong",
+  "location_prefs_error" : "Localization not allowed",
+  "location_prefs_button" : "Enable",
+  "location_settings_error" : "Geolocation not enabled",
+  "location_app_error" : "The App does not grant permissions for geolocation",
+  "settings_button" : "Settings",
+  "connection_error" : "No internet connection",
 
   "search_hint" : "Search",
 
@@ -36,6 +42,6 @@
   "settings_location_description" : "Allow geolocation",
   "settings_language" : "Language",
   "settings_language_description" : "Choose the language",
-  "settings_metric" : "Metric",
-  "settings_metric_description" : "Choose the metric"
+  "settings_units" : "Units",
+  "settings_units_description" : "Choose the units"
 }

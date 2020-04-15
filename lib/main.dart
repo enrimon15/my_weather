@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_weather/pages/favorites/favorites_screen.dart';
 import 'package:my_weather/pages/info/info_screen.dart';
-import 'package:my_weather/pages/outline/tabs/tabs_screen.dart';
+import 'package:my_weather/pages/outline/tabs_screen.dart';
 import 'package:my_weather/pages/settings/settings_screen.dart';
 import 'package:my_weather/providers/favorite_cities.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';

@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/pages/favorites/widget/favorite_card_widget.dart';
 import 'package:my_weather/pages/outline/custom_appbar.dart';
-import 'package:my_weather/pages/outline/drawer/drawer_widget.dart';
+import 'package:my_weather/pages/outline/drawer_widget.dart';
 import 'package:my_weather/providers/favorite_cities.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +21,8 @@ class FavoritesScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    String lang = EasyLocalization.of(context).locale.languageCode.toUpperCase(); //language to send to server
+
     return Scaffold(
       appBar: CustomAppBar(
           title: tr("fav_title"),
@@ -29,7 +31,7 @@ class FavoritesScreen extends StatelessWidget{
       ).getAppBar(),
       drawer: MainDrawer(),
       body: FutureBuilder(
-        future: Provider.of<FavoriteCities>(context, listen: false).fetchFavoriteCities(),
+        future: Provider.of<FavoriteCities>(context, listen: false).fetchFavoriteCities(lang),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center( child: CircularProgressIndicator() );

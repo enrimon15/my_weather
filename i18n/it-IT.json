@@ -10,6 +10,12 @@
   "snackbar_favorite_remove_error" : "Non è stato possibile rimuovere preferito",
   "try_again" : "Riprova",
   "generic_error": "Qualcosa è andato storto",
+  "location_prefs_error" : "Accesso alla localizzazione non consentito",
+  "location_prefs_button" : "Abilita",
+  "location_settings_error" : "Geolocalizzazione non abilitata",
+  "location_app_error" : "L'App non concede i permessi per la geolocalizzazione",
+  "settings_button" : "Impostazioni",
+  "connection_error" : "Connessione internet assente",
 
   "search_hint" : "Cerca",
 
@@ -36,6 +42,6 @@
   "settings_location_description" : "Consenso alla geolocalizzazione",
   "settings_language" : "Lingua",
   "settings_language_description" : "Scegli la lingua",
-  "settings_metric" : "Unità di misura",
-  "settings_metric_description" : "Scegli l'unità"
+  "settings_units" : "Unità di misura",
+  "settings_units_description" : "Scegli l'unità"
 }

@@ -17,7 +17,7 @@ class SearchCities with ChangeNotifier {
       _allCities = listCities.map<CitySearch>( (json) => CitySearch.fromJson(json) ).toList();
       notifyListeners();
     } catch (error) {
-      print(error);
+      print('error: ' + error.toString());
       throw error;
     }
 

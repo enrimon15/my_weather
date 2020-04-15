@@ -35,6 +35,7 @@ class DataSearch extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     final searchCities = Provider.of<SearchCities>(context).getAllCities;
+    // 7978 cities
     final listCitiesMatch = query.isEmpty
         ? []
         : searchCities.where( (city) => city.name.toLowerCase().startsWith(query.toLowerCase()) ).toList();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_weather/pages/outline/drawer/drawer_widget.dart';
+import 'package:my_weather/pages/outline/drawer_widget.dart';
 
 class InfoScreen extends StatelessWidget {
   static const routeName = '/info';

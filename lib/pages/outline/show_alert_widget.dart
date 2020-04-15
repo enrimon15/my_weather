@@ -5,13 +5,17 @@ class ShowAlert extends StatelessWidget {
   final String title;
   final String content;
   final String buttonContent;
+  final String secondButtonContent; //optional
   final Function onTap;
+  final Function secondOnTap;
 
   ShowAlert({
     @required this.title,
     @required this.content,
     @required this.buttonContent,
     @required this.onTap,
+    this.secondButtonContent,
+    this.secondOnTap
   });
 
   @override
@@ -29,6 +33,7 @@ class ShowAlert extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Icon(Icons.error_outline, size: 30),
+            SizedBox(height: 20),
             Text(content),
           ],
         ),
@@ -37,7 +42,13 @@ class ShowAlert extends StatelessWidget {
         FlatButton(
           child: Text(buttonContent, style: TextStyle( color: Colors.blue ),),
           onPressed: onTap, //reload page
-        )
+        ),
+        secondButtonContent != null && secondOnTap != null
+            ? FlatButton(
+                child: Text(secondButtonContent, style: TextStyle( color: Colors.blue ),),
+                onPressed: secondOnTap, //reload page
+              )
+            : null,
       ],
     );
   }

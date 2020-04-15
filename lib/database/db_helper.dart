@@ -58,7 +58,7 @@ class DBHelper {
         where: '$columnName = ? and $columnProvince = ?',
         whereArgs: [city.name, city.province]
     );
-    print(maps);
+    print('cityFavorite:' + maps.toString());
     close(db);
     if (maps.length > 0) {
       return CityFavorite.fromMap(maps.first);

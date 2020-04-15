@@ -6,6 +6,7 @@ import 'package:my_weather/exceptions/http_exception.dart';
 import 'package:my_weather/models/city_favorite.dart';
 import 'package:my_weather/models/day_weather.dart';
 import 'package:my_weather/models/generic_weather.dart';
+import 'package:my_weather/utilities/localization_constants.dart';
 
 class TodayWeather with ChangeNotifier {
   var now = new DateTime.now().hour;
@@ -13,10 +14,13 @@ class TodayWeather with ChangeNotifier {
   GenericWeather _currentWeather = new GenericWeather.emptyInitialize();
   CityFavorite _currentCity = new CityFavorite();
   Map<String,dynamic> _coords = {};
+  String _units = InternationalizationConstants.METRIC;
 
 
-  Future<void> fetchData(String city, String prov) async {
-    final url = 'http://192.168.1.51:3000/mock/weather/today/city/$city/$prov';
+  Future<void> fetchData(String city, String prov, String lang) async {
+    _units = await InternationalizationConstants.getUnits(); //get metric from shared preferences
+
+    final url = 'http://192.168.1.51:3000/mock/weather/today/$city/$prov/$lang/units=$_units';
     print(url);
 
     try {
@@ -31,7 +35,7 @@ class TodayWeather with ChangeNotifier {
         throw HttpException('Failed to load today weather from server');
       }
     } catch (error) {
-        print(error);
+        print('TodayWeatherProvider: ' + error.toString());
         throw error;
     }
   }
@@ -41,7 +45,7 @@ class TodayWeather with ChangeNotifier {
     Map<String,double> result = {};
 
     _todayWeather.hours.map( (singleHour) {
-      double temp = double.parse(singleHour.weather.temperature.substring(0,2));
+      double temp = double.parse(singleHour.weather.temperature.split(' ')[0]);
       temperatures.add(temp);
     }).toList();
 
@@ -82,5 +86,7 @@ class TodayWeather with ChangeNotifier {
   DayWeather get getTodayWeather => _todayWeather;
 
   CityFavorite get getCurrentCity => _currentCity;
+
+  String get units => _units;
 
 }

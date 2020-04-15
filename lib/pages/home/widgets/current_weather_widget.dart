@@ -37,7 +37,7 @@ class CurrentWeather extends StatelessWidget {
               ),
               SizedBox(width: 20,),
               Text(
-                currentWeather.temperature.substring(0,2) + '°',
+                currentWeather.temperature.split(' ')[0] + '°',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 40,

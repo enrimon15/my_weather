@@ -25,7 +25,7 @@ class Header extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                currentWeather.temperature.substring(0,2) + '°',
+                '${currentWeather.temperature.split(' ')[0]}°',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,

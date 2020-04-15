@@ -5,15 +5,17 @@ import 'package:my_weather/database/db_helper.dart';
 import 'package:my_weather/exceptions/http_exception.dart';
 import 'package:my_weather/models/city_favorite.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_weather/utilities/localization_constants.dart';
 
 class FavoriteCities with ChangeNotifier {
   List<CityFavorite> _favoriteCities = [];
+  String _units = InternationalizationConstants.METRIC;
 
-  Future<void> fetchFavoriteCities() async {
+  Future<void> fetchFavoriteCities(String lang) async {
     try{
       _favoriteCities = await DBHelper.getAllCities();
       await Future.forEach(_favoriteCities, (singleCity) async {
-        singleCity = await fetchData(singleCity);
+        singleCity = await fetchData(singleCity, lang);
       });
       notifyListeners();
     } catch (error) {
@@ -22,8 +24,10 @@ class FavoriteCities with ChangeNotifier {
     }
   }
 
-  Future<CityFavorite> fetchData(CityFavorite city) async {
-    final url = 'http://192.168.1.51:3000/mock/weather/current/city/${city.name}/${city.province}';
+  Future<CityFavorite> fetchData(CityFavorite city, String lang) async {
+    _units = await InternationalizationConstants.getUnits();
+
+    final url = 'http://192.168.1.51:3000/mock/weather/current/${city.name}/${city.province}/$lang/units=$_units';
     print(url);
 
     try {
@@ -33,7 +37,7 @@ class FavoriteCities with ChangeNotifier {
         print('provider ' + jsonResponse);
         Map<String,dynamic> result = json.decode(jsonResponse);
         Map<String, dynamic> currentWeather = result['weather'];
-        city.temperature = (currentWeather['currentTemperature'] as String).substring(0,2) + '°';
+        city.temperature = (currentWeather['currentTemperature'] as String).split(' ')[0] + '°';
         city.condition = (currentWeather['currentStatus'] as String);
         return city;
       } else {
@@ -46,4 +50,6 @@ class FavoriteCities with ChangeNotifier {
   }
 
   List<CityFavorite> get getCityList => _favoriteCities;
+
+  String get units => _units;
 }

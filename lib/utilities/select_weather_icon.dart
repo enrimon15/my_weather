@@ -22,12 +22,18 @@ class WeatherIcon {
   };
 
   static String selectIcon(String icon) {
-    return iconPath + iconMappingIT[icon];
+    if (iconMappingIT.containsKey(icon)) return iconPath + iconMappingIT[icon];
+    else if (iconMappingEN.containsKey(icon)) return iconPath + iconMappingEN[icon];
+
   }
 
   static String selectIconMarker(String icon){
     String addMarker = 'marker.';
-    List<String> splitted = iconMappingIT[icon].split('.');
+    List<String> splitted = [];
+
+    if (iconMappingIT.containsKey(icon)) splitted = iconMappingIT[icon].split('.');
+    else if (iconMappingEN.containsKey(icon)) splitted = iconMappingEN[icon].split('.');
+
     return iconPathMarker + splitted[0] + addMarker + splitted[1];
   }
 

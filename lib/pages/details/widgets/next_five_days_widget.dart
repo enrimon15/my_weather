@@ -62,7 +62,7 @@ class NextFiveDays extends StatelessWidget {
                   ),
                 ),
                 trailing: Text(
-                  days[i-1].temp.substring(0,2) + '°',
+                  days[i-1].temp.split(' ')[0] + '°',
                   style: GoogleFonts.lato(
                     textStyle: TextStyle(
                         fontSize: 36

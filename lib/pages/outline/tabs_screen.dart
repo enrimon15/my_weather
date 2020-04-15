@@ -1,15 +1,19 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/database/db_helper.dart';
+import 'package:my_weather/exceptions/configuration_exception.dart';
 import 'package:my_weather/models/city_favorite.dart';
 import 'package:my_weather/models/tab_item.dart';
 import 'package:my_weather/pages/details/weather_details_screen.dart';
 import 'package:my_weather/pages/home/weather_home_screen.dart';
 import 'package:my_weather/pages/map/weather_map_screen.dart';
 import 'package:my_weather/pages/outline/custom_appbar.dart';
-import 'package:my_weather/pages/outline/drawer/drawer_widget.dart';
-import 'package:my_weather/pages/outline/tabs/show_alert_widget.dart';
+import 'package:my_weather/pages/outline/drawer_widget.dart';
+import 'package:my_weather/pages/outline/show_alert_widget.dart';
+import 'package:my_weather/pages/settings/settings_screen.dart';
 import 'package:my_weather/providers/search_cities.dart';
 import 'package:my_weather/providers/today_weather.dart';
+import 'package:my_weather/utilities/connectivity.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
 import 'package:my_weather/utilities/location.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +32,10 @@ class _TabScreenState extends State<TabScreen> {
   bool _isLoading = false; //to check the completion of the fetching data
   bool _isInit = true; //to check fist time the screen is loaded
   bool _isErrorFetching = false; //to check if there is an error in fetching data
-  bool _locationPermission = true;
+  bool _locationPermissionPrefs = true;
+  bool _locationPermissionSettings = true;
+  bool _locationPermissionApp = true;
+  bool _isConnectivity = true;
   int _selectedIndex = 0; //to know which tab is pressed
   CityFavorite _currentCity = new CityFavorite(); //current city
   bool _isFavoriteCity = false; //to check if current city is favorite
@@ -50,22 +57,31 @@ class _TabScreenState extends State<TabScreen> {
         _isLoading = true;
         _isErrorFetching = false;
         _isFavoriteCity = false;
-        _locationPermission = true;
+        _locationPermissionPrefs = true;
+        _locationPermissionSettings = true;
+        _locationPermissionApp = true;
+        _isConnectivity = true;
       });
 
       _loadSearch();
 
-      //_getPrefs();
+      ConnectionUtility.checkConnection().then( (conn) { //check connectivity
+        if(conn) { //if there is connection
+          final routeArgs = ModalRoute.of(context).settings.arguments as Map<String,String>; //take param from route
+          if (routeArgs != null) { //if there are params (city, province) fetch data from server with this params
+            print('routeArgs: ' + routeArgs.toString());
+            _fetchData(routeArgs['name'], routeArgs['province'], context);
+          } else {
+            //get current location, from location get relative city and then pass it to the fetchWeatherData method
+            LocationHelper.fetchLocation().then( (city) => _fetchData(city, 'NULL', context) )
+                .catchError((error) => _handleInitError(error));
+          }
+        } else { //if there is no connection
+          throw ConfigurationException('NO INTERNET CONNECTION');
+        }
+      }).catchError((error) => _handleInitError(error));
 
-      final routeArgs = ModalRoute.of(context).settings.arguments as Map<String,String>; //take param from route
-      if (routeArgs != null) { //if there are params (city, province) fetch data from server with this params
-        print(routeArgs);
-        _fetchData(routeArgs['name'], routeArgs['province'], context);
-      } else {
-        //get current location, from location get relative city and then pass it to the fetchWeatherData method
-        LocationHelper.fetchLocation().then( (city) => _fetchData(city, 'NULL', context) )
-        .catchError((error) => _handleInitError(error));
-      }
+
 
     }
     _isInit = false; //is not any more first time
@@ -79,24 +95,24 @@ class _TabScreenState extends State<TabScreen> {
       searchProvider.fetchData().then( (_) {
         setState(() { _isSearchReady = true; });
       });
-    }
+    } else setState(() { _isSearchReady = true; });
   }
 
-  //fare un provider
+  /*fare un provider
   _getPrefs() {
     SharedPreferences.getInstance().then( (prefs) {
       prefs.getString(InternationalizationConstants.PREFS_METRIC_KEY) ?? InternationalizationConstants.CELSIUS;
     });
-  }
+  }*/
 
   //it fetches data from server and then check if city is favorite or not
   void _fetchData(String city, String province, BuildContext context) {
-    //final searchProvider = Provider.of<SearchCities>(context, listen: false);
+    String lang = EasyLocalization.of(context).locale.languageCode.toUpperCase(); //language to send to server
     //this wait for a list of operations passed into an array inside .wait
     Future
       .wait([
-        Provider.of<TodayWeather>(context, listen: false).fetchData(city, province),
-        Provider.of<NextFiveDaysWeather>(context, listen: false).fetchData(city, province),
+        Provider.of<TodayWeather>(context, listen: false).fetchData(city, province, lang),
+        Provider.of<NextFiveDaysWeather>(context, listen: false).fetchData(city, province, lang),
         //if (searchProvider.getAllCities.length <= 0) searchProvider.fetchData()
       ])
       .then((_) {
@@ -140,9 +156,18 @@ class _TabScreenState extends State<TabScreen> {
 
   //it handle init error of app (fetching data, location, check ecc)
   _handleInitError(error) {
-    print(error.toString());
+    print('error: ' + error.toString());
     switch (error.toString()) {
-      case 'NO LOCATION PERMISSION' : {setState(() {_locationPermission = false;});}
+      case 'LOCATION PERMISSION SETTINGS NOT ENABLED' : {setState(() {_locationPermissionApp = false;});}
+      break;
+
+      case 'LOCATION PERMISSION PREFS NOT ENABLED' : {setState(() {_locationPermissionPrefs = false;});}
+      break;
+
+      case 'LOCATION SERVICE NOT ENABLED' : {setState(() {_locationPermissionSettings = false;});}
+      break;
+
+      case 'NO INTERNET CONNECTION' : {setState(() {_isConnectivity = false;});}
       break;
 
       default: setState(() {_isErrorFetching = true;});
@@ -180,11 +205,51 @@ class _TabScreenState extends State<TabScreen> {
         buttonContent: tr("try_again"),
         onTap: () => Navigator.of(context).pushReplacementNamed('/'),
       );
-    } else if (_isLoading) {
-        return Center(child: CircularProgressIndicator());
+    }
+    else if (!_locationPermissionSettings) {
+      return ShowAlert(
+        title: 'Oops..',
+        content: tr("location_settings_error"),
+        buttonContent: tr("try_again"),
+        secondButtonContent: tr("settings_button"),
+        onTap: () => Navigator.of(context).pushReplacementNamed('/'),
+        secondOnTap: () => AppSettings.openLocationSettings(),
+      );
+    }
+    else if (!_locationPermissionPrefs) {
+      return ShowAlert(
+        title: 'Oops..',
+        content: tr("location_prefs_error"),
+        buttonContent: tr("try_again"),
+        secondButtonContent: tr("settings_button"),
+        onTap: () => Navigator.of(context).pushReplacementNamed('/'),
+        secondOnTap: () => Navigator.of(context).pushReplacementNamed(SettingsScreen.routeName),
+      );
+    }
+    else if (!_locationPermissionApp) {
+      return ShowAlert(
+        title: 'Oops..',
+        content: tr("location_app_error"),
+        buttonContent: tr("try_again"),
+        secondButtonContent: tr("settings_button"),
+        onTap: () => Navigator.of(context).pushReplacementNamed('/'),
+        secondOnTap: () => AppSettings.openAppSettings(),
+      );
+    }
+    else if (!_isConnectivity) {
+      return ShowAlert(
+        title: 'Oops..',
+        content: tr("connection_error"),
+        buttonContent: tr("try_again"),
+        secondButtonContent: tr("settings_button"),
+        onTap: () => Navigator.of(context).pushReplacementNamed('/'),
+        secondOnTap: () => AppSettings.openWIFISettings(),
+      );
+    }
+    else if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
     } else {
         return TabBarView(
-          //physics: _selectedIndex == 2 ? NeverScrollableScrollPhysics() : null,
           children: _choices.map((TabItem choice){
             return choice.screen;
           }).toList(),
