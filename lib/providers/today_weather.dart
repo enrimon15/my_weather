@@ -9,7 +9,6 @@ import 'package:my_weather/models/generic_weather.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
 
 class TodayWeather with ChangeNotifier {
-  var now = new DateTime.now().hour;
   DayWeather _todayWeather = new DayWeather.emptyInitialize();
   GenericWeather _currentWeather = new GenericWeather.emptyInitialize();
   CityFavorite _currentCity = new CityFavorite();
@@ -18,6 +17,7 @@ class TodayWeather with ChangeNotifier {
 
 
   Future<void> fetchData(String city, String prov, String lang) async {
+    String now = new DateTime.now().hour.toString();
     _units = await InternationalizationConstants.getUnits(); //get metric from shared preferences
 
     final url = 'http://192.168.1.51:3000/mock/weather/today/$city/$prov/$lang/units=$_units';
@@ -28,7 +28,9 @@ class TodayWeather with ChangeNotifier {
       if (response.statusCode == 200 && response.body.isNotEmpty) {
         String jsonResponse =  response.body;
         _todayWeather = DayWeather.fromJson(json.decode(jsonResponse)); //parsing json response into my object
-        _currentWeather = _todayWeather.hours.singleWhere((singleHour) => singleHour.hour == '$now:00').weather; //save the current weather
+        now = now.length == 1 ? '0$now:00' : '$now:00';
+        print(now);
+        _currentWeather = _todayWeather.hours.singleWhere((singleHour) => singleHour.hour == now).weather; //save the current weather
         _currentCity = CityFavorite(name: _todayWeather.cityName, province: _todayWeather.cityProvince.substring(1,3));
         notifyListeners();
       } else {
@@ -74,7 +76,7 @@ class TodayWeather with ChangeNotifier {
         throw HttpException('Failed to load city coords from server');
       }
     } catch (error) {
-      print('TodayWeatherProvider: ' + error);
+      print('TodayWeatherProvider coords: ' + error);
       throw error;
     }
   }

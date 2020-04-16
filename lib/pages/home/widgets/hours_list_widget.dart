@@ -12,10 +12,7 @@ class HoursList extends StatelessWidget {
 
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.only(
-          bottom: 20,
-          top: 0,
-        ),
+        padding: const EdgeInsets.only(bottom: 20, top: 0),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemBuilder: (ctx, index) {
@@ -23,7 +20,7 @@ class HoursList extends StatelessWidget {
           },
           itemCount: hours.length,
         ),
-        ),
+      ),
     );
   }
 }

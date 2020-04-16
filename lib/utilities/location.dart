@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LocationHelper {
 
   static Future<String> fetchLocation() async {
+    print('location, fetch location enter');
     //check permission shared preferences status
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool(InternationalizationConstants.PREFS_LOCATION_KEY) == false) {
@@ -17,8 +18,12 @@ class LocationHelper {
     }
 
     Location location = new Location(); //location
+    PermissionStatus _permissionGranted;
+    bool _serviceEnabled;
+    LocationData _locData;
+
     //check permission status
-    PermissionStatus _permissionGranted = await location.hasPermission();
+    _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
@@ -26,20 +31,23 @@ class LocationHelper {
       }
     }
     //check service status
-    bool _serviceEnabled = await location.serviceEnabled();
+    _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
         throw ConfigurationException('LOCATION SERVICE NOT ENABLED');
       }
     }
+    print('before get location');
     //all permission is ok
-    final locData = await Location().getLocation();
+    _locData = await location.getLocation().catchError( (error) => print('Unable to get location: ' + error.toString()) );
+    print('location: ' + _locData.longitude.toString() + ', ' + _locData.latitude.toString());
 
-    final url = 'http://192.168.1.51:3000/mock/coords/getCity/${locData.latitude}/${locData.longitude}';
+    final url = 'http://192.168.1.51:3000/mock/coords/getCity/${_locData.latitude}/${_locData.longitude}';
     print(url);
 
     try {
+      print('entrato nel try location');
       final response = await http.get(url);
       if (response.statusCode == 200 && response.body.isNotEmpty) {
         String jsonResponse =  response.body;

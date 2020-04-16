@@ -72,9 +72,11 @@ class _TabScreenState extends State<TabScreen> {
             print('routeArgs: ' + routeArgs.toString());
             _fetchData(routeArgs['name'], routeArgs['province'], context);
           } else {
+            print('tab, location enter');
             //get current location, from location get relative city and then pass it to the fetchWeatherData method
-            LocationHelper.fetchLocation().then( (city) => _fetchData(city, 'NULL', context) )
+            LocationHelper.fetchLocation().then( (city) { print('entrato nel then location'); _fetchData(city, 'NULL', context); print('dopo then location'); } )
                 .catchError((error) => _handleInitError(error));
+            print('tab, fine location');
           }
         } else { //if there is no connection
           throw ConfigurationException('NO INTERNET CONNECTION');
@@ -177,19 +179,22 @@ class _TabScreenState extends State<TabScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final appBar = CustomAppBar(
+        tabItem: this._choices,
+        onTabPressed: _onItemTapped,
+        title: 'My Weather',
+        isTabBar: true,
+        context: context,
+        isSearchReady: _isSearchReady
+    ).getAppBar();
+
     return DefaultTabController(
         initialIndex: 0, //default page
         length: 3,
         child: Scaffold(
           key: _scaffoldKey,
-          appBar: CustomAppBar(
-            tabItem: this._choices,
-            onTabPressed: _onItemTapped,
-            title: 'My Weather',
-            isTabBar: true,
-            context: context,
-            isSearchReady: _isSearchReady
-          ).getAppBar(),
+          appBar: appBar,
           drawer: MainDrawer(),
           body: _buildBody(context),
           floatingActionButton: _buildFAB(),

@@ -11,6 +11,7 @@ class HourItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final _isNow = hour.hour.substring(0,2) == now.hour.toString();
 
     return Padding(
@@ -21,46 +22,47 @@ class HourItem extends StatelessWidget {
 
   //builder method
   Widget _buildNowHour() {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(23),
-                  bottom: Radius.circular(23)
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 4,
-                  blurRadius:2,
-                ),
-              ],
+    return LayoutBuilder(
+      builder: (ctx, constraints) {
+        //20.9
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.vertical(
+                top: Radius.circular(23),
+                bottom: Radius.circular(23)
             ),
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            margin: EdgeInsets.symmetric(vertical: 6),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Text(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 4,
+                blurRadius:2,
+              ),
+            ],
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          margin: EdgeInsets.symmetric(vertical: constraints.maxHeight * 0.15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
                   tr("home_now"),
                   style: TextStyle(
-                    fontSize: 18,
                     color: Colors.white,
                   ),
                 ),
-                Image.asset(
-                  WeatherIcon.selectIcon(hour.weather.status),
-                  //alignment: Alignment.bottomLeft,
-                  height: 34,
-                ),
-              ],
-            ),
+              ),
+              Image.asset(
+                WeatherIcon.selectIcon(hour.weather.status),
+                //alignment: Alignment.bottomLeft,
+                height: 34,
+              ),
+            ],
           ),
-        )
-      ],
+        );
+      },
     );
   }
 

@@ -10,6 +10,7 @@ class CustomAppBar {
   final BuildContext context;
   final Function onTabPressed;
   bool isSearchReady = true;
+  static double height;
 
   CustomAppBar({
     this.tabItem,
@@ -20,9 +21,12 @@ class CustomAppBar {
     this.isSearchReady,
   });
 
+
+
    AppBar getAppBar() {
+
     if (this.isTabBar) {
-       return AppBar(
+      final tabAppBar = AppBar(
         title: Text(this.title),
         elevation: 0.0,
         actions: <Widget>[
@@ -38,7 +42,7 @@ class CustomAppBar {
           labelStyle: TextStyle(fontSize: 15),
           indicatorColor: Colors.white,
           indicator: UnderlineTabIndicator( //for width of tab indicator
-              insets: EdgeInsets.symmetric(horizontal:30.0),
+            insets: EdgeInsets.symmetric(horizontal:30.0),
           ),
           tabs: this.tabItem.map((TabItem choice) {
             return Tab(
@@ -48,9 +52,12 @@ class CustomAppBar {
           onTap: (index) => onTabPressed(index),
         ),
       );
+
+       height = tabAppBar.preferredSize.height;
+       return tabAppBar;
     }
     else {
-       return AppBar(
+      final simpleAppBar = AppBar(
         title: Text(this.title),
         elevation: 10,
         actions: <Widget>[
@@ -63,6 +70,9 @@ class CustomAppBar {
           ),
         ],
       );
+
+       height = simpleAppBar.preferredSize.height;
+       return simpleAppBar;
     }
   }
 
