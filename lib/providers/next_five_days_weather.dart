@@ -5,17 +5,18 @@ import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_weather/exceptions/http_exception.dart';
 import 'package:my_weather/models/five_days_weather.dart';
+import 'package:my_weather/utilities/api_constants.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
 
 class NextFiveDaysWeather with ChangeNotifier {
   FiveDaysWeather _fiveDaysWeather = new FiveDaysWeather.emptyInitialize();
   String _units = InternationalizationConstants.METRIC;
-  final _apiKey = GlobalConfiguration().getString("CETEMPS_API_KEY");
 
   Future<void> fetchData(String city, String prov, String lang) async {
     _units = await InternationalizationConstants.getUnits();
 
-    final url = 'http://192.168.1.51:3000/mock/weather/fivedays/$city/$prov/$lang/units=$_units/api-key=$_apiKey';
+    //final url = 'http://192.168.1.51:3000/mock/weather/fivedays/$city/$prov/$lang/units=$_units/api-key=$_apiKey';
+    final url = '${ApiConstants.baseURL}/mock/weather/fivedays/$city/$prov/$lang/units=$_units/api-key=${ApiConstants.apiKey}';
     print(url);
 
     try {

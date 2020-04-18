@@ -7,6 +7,7 @@ import 'package:my_weather/exceptions/http_exception.dart';
 import 'package:my_weather/models/city_favorite.dart';
 import 'package:my_weather/models/day_weather.dart';
 import 'package:my_weather/models/generic_weather.dart';
+import 'package:my_weather/utilities/api_constants.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
 
 class TodayWeather with ChangeNotifier {
@@ -15,14 +16,14 @@ class TodayWeather with ChangeNotifier {
   CityFavorite _currentCity = new CityFavorite();
   Map<String,dynamic> _coords = {};
   String _units = InternationalizationConstants.METRIC;
-  final _apiKey = GlobalConfiguration().getString("CETEMPS_API_KEY");
 
 
   Future<void> fetchData(String city, String prov, String lang) async {
     String now = new DateTime.now().hour.toString();
     _units = await InternationalizationConstants.getUnits(); //get metric from shared preferences
 
-    final url = 'http://192.168.1.51:3000/mock/weather/today/$city/$prov/$lang/units=$_units/api-key=$_apiKey';
+    //final url = 'http://192.168.1.51:3000/mock/weather/today/$city/$prov/$lang/units=$_units/api-key=$_apiKey';
+    final url = '${ApiConstants.baseURL}/mock/weather/today/$city/$prov/$lang/units=$_units/api-key=${ApiConstants.apiKey}';
     print(url);
 
     try {
@@ -62,7 +63,8 @@ class TodayWeather with ChangeNotifier {
   Future<void> fetchCoords() async {
     final String cityName = _todayWeather.cityName;
     final String cityProvince = _todayWeather.cityProvince.substring(1,3);
-    final url = 'http://192.168.1.51:3000/mock/coords/city/$cityName/$cityProvince/api-key=$_apiKey';
+    //final url = 'http://192.168.1.51:3000/mock/coords/city/$cityName/$cityProvince/api-key=$_apiKey';
+    final url = '${ApiConstants.baseURL}/mock/coords/city/$cityName/$cityProvince/api-key=${ApiConstants.apiKey}';
     print(url);
 
     try {
