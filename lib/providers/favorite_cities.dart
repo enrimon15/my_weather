@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:my_weather/database/db_helper.dart';
 import 'package:my_weather/exceptions/http_exception.dart';
 import 'package:my_weather/models/city_favorite.dart';
@@ -10,6 +11,7 @@ import 'package:my_weather/utilities/localization_constants.dart';
 class FavoriteCities with ChangeNotifier {
   List<CityFavorite> _favoriteCities = [];
   String _units = InternationalizationConstants.METRIC;
+  final _apiKey = GlobalConfiguration().getString("CETEMPS_API_KEY");
 
   Future<void> fetchFavoriteCities(String lang) async {
     try{
@@ -27,11 +29,11 @@ class FavoriteCities with ChangeNotifier {
   Future<CityFavorite> fetchData(CityFavorite city, String lang) async {
     _units = await InternationalizationConstants.getUnits();
 
-    final url = 'http://192.168.1.51:3000/mock/weather/current/${city.name}/${city.province}/$lang/units=$_units';
+    final url = 'http://192.168.1.51:3000/mock/weather/current/${city.name}/${city.province}/$lang/units=$_units/api-key=$_apiKey';
     print(url);
 
     try {
-      final response = await http.get(url);
+      final response = await http.get(url).timeout(const Duration(seconds: 5));
       if (response.statusCode == 200 && response.body.isNotEmpty) {
         String jsonResponse =  response.body;
         print('provider ' + jsonResponse);

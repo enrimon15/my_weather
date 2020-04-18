@@ -25,6 +25,8 @@ class HourItem extends StatelessWidget {
     return LayoutBuilder(
       builder: (ctx, constraints) {
         //20.9
+        final constr = constraints.maxHeight * 0.15;
+        double paddingNowItem = constr > 20 ? constr : 8;
         return Container(
           decoration: BoxDecoration(
             color: Colors.blue,
@@ -41,7 +43,7 @@ class HourItem extends StatelessWidget {
             ],
           ),
           padding: EdgeInsets.symmetric(horizontal: 8),
-          margin: EdgeInsets.symmetric(vertical: constraints.maxHeight * 0.15),
+          margin: EdgeInsets.symmetric(vertical: paddingNowItem),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -84,8 +85,16 @@ class FavoriteCard extends StatelessWidget {
                 WeatherIcon.selectIcon(favoriteCity.condition),
                 height: 48,
               ),
-              title: Text('${favoriteCity.name}, ${favoriteCity.province}', style: TextStyle(color: white, fontWeight: bold)),
-              subtitle: Text(favoriteCity.condition, style: TextStyle(color: white, fontWeight: bold)),
+              title: AutoSizeText(
+                '${favoriteCity.name}, ${favoriteCity.province}',
+                style: TextStyle(color: white, fontWeight: bold),
+                maxLines: 1, minFontSize: 10, overflowReplacement: Text(favoriteCity.name)
+              ),
+              subtitle: AutoSizeText(
+                favoriteCity.condition,
+                style: TextStyle(color: white, fontWeight: bold),
+                maxLines: 1, minFontSize: 8, overflowReplacement: Text("next_days_overflow_condition"),
+              ),
               trailing: Text(
                 favoriteCity.temperature,
                 style: GoogleFonts.lato(

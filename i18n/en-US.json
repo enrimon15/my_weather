@@ -30,6 +30,8 @@
   "details_pressure" : "Pressure",
   "details_wind" : "Wind",
   "details_next_days" : "Next 5 days",
+  "next_days_overflow_condition" : "Weather",
+  "details_next_days_overflow" : "Next days",
 
   "fav_title" : "Favorites",
   "fav_no_content" : "You haven't added any favorites yet!",
@@ -43,5 +45,6 @@
   "settings_language" : "Language",
   "settings_language_description" : "Choose the language",
   "settings_units" : "Units",
-  "settings_units_description" : "Choose the units"
+  "settings_units_description" : "Choose the units",
+  "overflow_settings_subtitle" : "Manage"
 }

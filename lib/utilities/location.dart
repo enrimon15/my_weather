@@ -4,13 +4,14 @@ import 'package:my_weather/exceptions/configuration_exception.dart';
 import 'package:my_weather/exceptions/http_exception.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
 import 'dart:convert';
-
+import 'package:global_configuration/global_configuration.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationHelper {
 
   static Future<String> fetchLocation() async {
-    print('location, fetch location enter');
+    final _apiKey = GlobalConfiguration().getString("CETEMPS_API_KEY");
+
     //check permission shared preferences status
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.getBool(InternationalizationConstants.PREFS_LOCATION_KEY) == false) {
@@ -38,16 +39,13 @@ class LocationHelper {
         throw ConfigurationException('LOCATION SERVICE NOT ENABLED');
       }
     }
-    print('before get location');
     //all permission is ok
     _locData = await location.getLocation().catchError( (error) => print('Unable to get location: ' + error.toString()) );
-    print('location: ' + _locData.longitude.toString() + ', ' + _locData.latitude.toString());
 
-    final url = 'http://192.168.1.51:3000/mock/coords/getCity/${_locData.latitude}/${_locData.longitude}';
+    final url = 'http://192.168.1.51:3000/mock/coords/getCity/${_locData.latitude}/${_locData.longitude}/api-key=$_apiKey';
     print(url);
 
     try {
-      print('entrato nel try location');
       final response = await http.get(url);
       if (response.statusCode == 200 && response.body.isNotEmpty) {
         String jsonResponse =  response.body;

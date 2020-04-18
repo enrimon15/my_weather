@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/foundation.dart';
@@ -32,7 +33,7 @@ class NextFiveDays extends StatelessWidget {
         'assets/img/calendar.png',
         height: 48,
       ),
-      title: Text(tr("details_next_days")),
+      title: AutoSizeText(tr("details_next_days"), maxLines: 2, minFontSize: 10, overflowReplacement: Text(tr("details_next_days_overflow")) ),
     );
   }
 
@@ -54,12 +55,15 @@ class NextFiveDays extends StatelessWidget {
               padding: const EdgeInsets.only(top: 10),
               child: ListTile(
                 leading: days[i-1].image,
-                title: Text(days[i-1].day),
-                subtitle: Text(
+                title: AutoSizeText( days[i-1].day, maxLines: 1, minFontSize: 10, overflowReplacement: Text(days[i-1].day.split(' ')[0]) ),
+                subtitle: AutoSizeText(
                   days[i-1].condition,
                   style: TextStyle(
                       letterSpacing: 0.5
                   ),
+                  maxLines: 1,
+                  minFontSize: 8,
+                  overflowReplacement: Text(tr("next_days_overflow_condition")),
                 ),
                 trailing: Text(
                   days[i-1].temp.split(' ')[0] + '°',

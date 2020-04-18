@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_weather/providers/today_weather.dart';
@@ -21,23 +22,42 @@ class TempCard extends StatelessWidget {
               height: 48,
             ),
             SizedBox(width: 6),
-            Text('MAX'),
-            SizedBox(width: 10),
-            Text(
-              '${temperatureAverage['max']}°',
-              style: GoogleFonts.lato(
-                textStyle: TextStyle(color: Colors.grey),
+            Expanded(
+              child: AutoSizeText.rich(
+                TextSpan(
+                  children: <TextSpan> [
+                    TextSpan(text: 'MAX'),
+                    TextSpan(text: '  '),
+                    TextSpan(
+                        text: '${temperatureAverage['max']}°',
+                        style: GoogleFonts.lato( textStyle: TextStyle(color: Colors.grey) ),
+                    ),
+                  ]
+                ),
+                maxLines: 1,
+                minFontSize: 0,
+                textAlign: TextAlign.left,
               ),
             ),
-            Spacer(),
-            Text(
-              '${temperatureAverage['min']}°',
-              style: GoogleFonts.lato(
-                textStyle: TextStyle(color: Colors.grey),
+            //Spacer(),
+            SizedBox(width: 10),
+            Expanded(
+              child: AutoSizeText.rich(
+                TextSpan(
+                  children: <TextSpan> [
+                    TextSpan(
+                      text: '${temperatureAverage['min']}°',
+                      style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.grey)),
+                    ),
+                    TextSpan(text: '  '),
+                    TextSpan(text: 'MIN'),
+                  ],
+                ),
+                maxLines: 1,
+                minFontSize: 0,
+                textAlign: TextAlign.right,
               ),
             ),
-            SizedBox(width: 10),
-            Text('MIN'),
             SizedBox(width: 6),
             Image.asset(
               'assets/img/mintemp.png',
@@ -49,3 +69,16 @@ class TempCard extends StatelessWidget {
     );
   }
 }
+
+/*
+
+Text('MAX'),
+            SizedBox(width: 10),
+            Text(
+              '${temperatureAverage['max']}°',
+              style: GoogleFonts.lato(
+                textStyle: TextStyle(color: Colors.grey),
+              ),
+            ),
+
+ */

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/pages/outline/custom_appbar.dart';
@@ -37,10 +38,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _units = prefs.getString(_unitsKey) ?? InternationalizationConstants.METRIC;
   }
 
-  Widget _buildSwitchListTile(String title, String subTitle, bool currentValue, Function updateValue, Icon icon) {
+  Widget _buildSwitchListTile(String title, String subtitle, bool currentValue, Function updateValue, Icon icon) {
     return SwitchListTile(
       title: Text(title),
-      subtitle: Text(subTitle),
+      subtitle: AutoSizeText( subtitle, maxLines: 1, minFontSize: 10, overflowReplacement: Text(tr("overflow_settings_subtitle")) ),
       value: currentValue,
       onChanged: updateValue,
       secondary: Column( mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[icon] ),
@@ -50,7 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildDropDownListTile(String title, String subtitle, String currentValue, List<String> values, Function updateValue, Icon icon) {
     return ListTile(
       title: Text(title),
-      subtitle: Text(subtitle),
+      subtitle: AutoSizeText( subtitle, maxLines: 1, minFontSize: 10, overflowReplacement: Text(tr("overflow_settings_subtitle")) ),
       leading: Column( mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[icon] ),
       trailing: DropdownButton<String>(
         value: currentValue,

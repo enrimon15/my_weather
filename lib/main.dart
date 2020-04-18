@@ -14,14 +14,15 @@ import 'package:my_weather/utilities/localization_constants.dart';
 import 'theme/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:global_configuration/global_configuration.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([ //allow only portrait screen
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  //initializeDateFormatting('it_IT', null); //initialize dateFormat locale
+  await GlobalConfiguration().loadFromAsset("secrets");
   runApp( EasyLocalization(
     child: MyApp(),
     supportedLocales: InternationalizationConstants.SUPPORTED_LOCALES, //[ Locale('en', 'US'), Locale('it', 'IT') ],

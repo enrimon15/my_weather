@@ -14,12 +14,10 @@ import 'package:my_weather/pages/settings/settings_screen.dart';
 import 'package:my_weather/providers/search_cities.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'package:my_weather/utilities/connectivity.dart';
-import 'package:my_weather/utilities/localization_constants.dart';
 import 'package:my_weather/utilities/location.dart';
 import 'package:provider/provider.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 class TabScreen extends StatefulWidget {
@@ -72,11 +70,9 @@ class _TabScreenState extends State<TabScreen> {
             print('routeArgs: ' + routeArgs.toString());
             _fetchData(routeArgs['name'], routeArgs['province'], context);
           } else {
-            print('tab, location enter');
             //get current location, from location get relative city and then pass it to the fetchWeatherData method
-            LocationHelper.fetchLocation().then( (city) { print('entrato nel then location'); _fetchData(city, 'NULL', context); print('dopo then location'); } )
+            LocationHelper.fetchLocation().then( (city) => _fetchData(city, 'NULL', context) )
                 .catchError((error) => _handleInitError(error));
-            print('tab, fine location');
           }
         } else { //if there is no connection
           throw ConfigurationException('NO INTERNET CONNECTION');

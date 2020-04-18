@@ -1,6 +1,7 @@
 import 'dart:convert';
 import "dart:math";
 import 'package:flutter/material.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_weather/exceptions/http_exception.dart';
 import 'package:my_weather/models/city_favorite.dart';
@@ -14,17 +15,18 @@ class TodayWeather with ChangeNotifier {
   CityFavorite _currentCity = new CityFavorite();
   Map<String,dynamic> _coords = {};
   String _units = InternationalizationConstants.METRIC;
+  final _apiKey = GlobalConfiguration().getString("CETEMPS_API_KEY");
 
 
   Future<void> fetchData(String city, String prov, String lang) async {
     String now = new DateTime.now().hour.toString();
     _units = await InternationalizationConstants.getUnits(); //get metric from shared preferences
 
-    final url = 'http://192.168.1.51:3000/mock/weather/today/$city/$prov/$lang/units=$_units';
+    final url = 'http://192.168.1.51:3000/mock/weather/today/$city/$prov/$lang/units=$_units/api-key=$_apiKey';
     print(url);
 
     try {
-      final response = await http.get(url);
+      final response = await http.get(url).timeout(const Duration(seconds: 5));
       if (response.statusCode == 200 && response.body.isNotEmpty) {
         String jsonResponse =  response.body;
         _todayWeather = DayWeather.fromJson(json.decode(jsonResponse)); //parsing json response into my object
@@ -42,17 +44,17 @@ class TodayWeather with ChangeNotifier {
     }
   }
   
-  Map<String, double> getMinMaxTemp() {
+  Map<String, int> getMinMaxTemp() {
     List<double> temperatures = [];
-    Map<String,double> result = {};
+    Map<String,int> result = {};
 
     _todayWeather.hours.map( (singleHour) {
       double temp = double.parse(singleHour.weather.temperature.split(' ')[0]);
       temperatures.add(temp);
     }).toList();
 
-    result["max"] = temperatures.reduce(max);
-    result["min"] = temperatures.reduce(min);
+    result["max"] = (temperatures.reduce(max)).round();
+    result["min"] = (temperatures.reduce(min)).round();
 
     return result;
   }
@@ -60,11 +62,11 @@ class TodayWeather with ChangeNotifier {
   Future<void> fetchCoords() async {
     final String cityName = _todayWeather.cityName;
     final String cityProvince = _todayWeather.cityProvince.substring(1,3);
-    final url = 'http://192.168.1.51:3000/mock/coords/city/$cityName/$cityProvince';
+    final url = 'http://192.168.1.51:3000/mock/coords/city/$cityName/$cityProvince/api-key=$_apiKey';
     print(url);
 
     try {
-      final response = await http.get(url);
+      final response = await http.get(url).timeout(const Duration(seconds: 5));
       if (response.statusCode == 200 && response.body.isNotEmpty) {
         String jsonResponse =  response.body;
         _coords = jsonDecode(jsonResponse);
