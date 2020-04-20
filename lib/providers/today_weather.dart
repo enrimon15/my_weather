@@ -1,7 +1,6 @@
 import 'dart:convert';
 import "dart:math";
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_weather/exceptions/http_exception.dart';
 import 'package:my_weather/models/city_favorite.dart';
@@ -9,6 +8,8 @@ import 'package:my_weather/models/day_weather.dart';
 import 'package:my_weather/models/generic_weather.dart';
 import 'package:my_weather/utilities/api_constants.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
+
+import 'package:flutter/foundation.dart';
 
 class TodayWeather with ChangeNotifier {
   DayWeather _todayWeather = new DayWeather.emptyInitialize();
@@ -19,6 +20,12 @@ class TodayWeather with ChangeNotifier {
 
 
   Future<void> fetchData(String city, String prov, String lang) async {
+    if (kIsWeb) {
+      print('is web');
+    } else {
+      print('is not web');
+    }
+
     String now = new DateTime.now().hour.toString();
     _units = await InternationalizationConstants.getUnits(); //get metric from shared preferences
 
