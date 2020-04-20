@@ -18,7 +18,8 @@ class LeafletMapWidget extends StatelessWidget {
       layers: [
         TileLayerOptions(
             urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            subdomains: ['a', 'b', 'c']
+            subdomains: ['a', 'b', 'c'],
+            tileProvider: NonCachingNetworkTileProvider(),
         ),
         MarkerLayerOptions(
           markers: [

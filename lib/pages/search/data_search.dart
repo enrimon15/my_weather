@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:my_weather/providers/search_cities.dart';
-import 'package:provider/provider.dart';
+import 'package:my_weather/models/city_search.dart';
+import 'package:my_weather/utilities/search_cities.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class DataSearch extends SearchDelegate<String> {
+
+  List<CitySearch> searchCities = SearchCitiesUtility.allCities;
 
   @override
   String get searchFieldLabel => tr("search_hint");
 
   @override
   List<Widget> buildActions(BuildContext context) {
-    return [IconButton(icon: Icon(Icons.clear), onPressed: () {
-      query = "";
-    },)];
+      return [IconButton(icon: Icon(Icons.clear), onPressed: () {
+        query = "";
+      },)];
   }
+
+
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -28,17 +32,20 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    return null;
+    return buildSuggestions(context);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final searchCities = Provider.of<SearchCities>(context).getAllCities;
     // 7978 cities
+    if (searchCities.length <= 0) {
+      return Column();
+    }
+
     final listCitiesMatch = query.isEmpty
         ? []
         : searchCities.where( (city) => city.name.toLowerCase().startsWith(query.toLowerCase()) ).toList();
+
 
     return ListView.builder(
         itemCount: listCitiesMatch.length,

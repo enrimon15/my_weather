@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_weather/pages/favorites/favorites_screen.dart';
@@ -9,7 +10,7 @@ class MainDrawer extends StatelessWidget {
   //list of menu items
   final List<DrawerItem> drawerItem = [
     DrawerItem(title: tr("drawer_home"), icon: Icons.location_on, onTap: '/'),
-    DrawerItem(title: tr("drawer_favorites"), icon: Icons.star, onTap: FavoritesScreen.routeName),
+    if(!kIsWeb) DrawerItem(title: tr("drawer_favorites"), icon: Icons.star, onTap: FavoritesScreen.routeName),
     DrawerItem(title: tr("drawer_settings"), icon: Icons.settings, onTap: SettingsScreen.routeName),
     DrawerItem(title: 'DIVIDER'),
     DrawerItem(title: tr("drawer_info"), icon: Icons.info, onTap: InfoScreen.routeName),

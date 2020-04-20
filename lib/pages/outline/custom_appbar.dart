@@ -9,7 +9,6 @@ class CustomAppBar {
   final String title;
   final BuildContext context;
   final Function onTabPressed;
-  bool isSearchReady = true;
   static double height;
 
   CustomAppBar({
@@ -18,7 +17,6 @@ class CustomAppBar {
     @required this.isTabBar,
     @required this.title,
     @required this.context,
-    this.isSearchReady,
   });
 
 
@@ -35,7 +33,7 @@ class CustomAppBar {
               Icons.search,
               color: Colors.white,
             ),
-            onPressed: () => isSearchReady ? showSearch(context: context, delegate: DataSearch()) : null,
+            onPressed: () => showSearch(context: context, delegate: DataSearch()),
           ),
         ],
         bottom: TabBar(

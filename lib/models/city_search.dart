@@ -1,8 +1,10 @@
 class CitySearch {
-  final String name;
-  final String province;
+  String name;
+  String province;
 
   CitySearch(this.name, this.province);
+
+  CitySearch.emptyInitialize();
 
   CitySearch.fromJson(Map<String, dynamic> json) :
     name = json['comune'],

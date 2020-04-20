@@ -11,13 +11,13 @@ import 'package:my_weather/pages/outline/custom_appbar.dart';
 import 'package:my_weather/pages/outline/drawer_widget.dart';
 import 'package:my_weather/pages/outline/show_alert_widget.dart';
 import 'package:my_weather/pages/settings/settings_screen.dart';
-import 'package:my_weather/providers/search_cities.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'package:my_weather/utilities/connectivity.dart';
 import 'package:my_weather/utilities/location.dart';
 import 'package:provider/provider.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 
 
 class TabScreen extends StatefulWidget {
@@ -37,7 +37,6 @@ class _TabScreenState extends State<TabScreen> {
   int _selectedIndex = 0; //to know which tab is pressed
   CityFavorite _currentCity = new CityFavorite(); //current city
   bool _isFavoriteCity = false; //to check if current city is favorite
-  bool _isSearchReady = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>(); //key of context, for snakebar
 
   //List of tabs
@@ -61,47 +60,35 @@ class _TabScreenState extends State<TabScreen> {
         _isConnectivity = true;
       });
 
-      _loadSearch();
-
-      ConnectionUtility.checkConnection().then( (conn) { //check connectivity
-        if(conn) { //if there is connection
-          final routeArgs = ModalRoute.of(context).settings.arguments as Map<String,String>; //take param from route
-          if (routeArgs != null) { //if there are params (city, province) fetch data from server with this params
-            print('routeArgs: ' + routeArgs.toString());
-            _fetchData(routeArgs['name'], routeArgs['province'], context);
-          } else {
-            //get current location, from location get relative city and then pass it to the fetchWeatherData method
-            LocationHelper.fetchLocation().then( (city) => _fetchData(city, 'NULL', context) )
-                .catchError((error) => _handleInitError(error));
+      if(kIsWeb) {
+        _initAppData(context);
+      } else {
+        ConnectionUtility.checkConnection().then( (conn) { //check connectivity
+          if(conn) { //if there is connection
+            _initAppData(context);
+          } else { //if there is no connection
+            throw ConfigurationException('NO INTERNET CONNECTION');
           }
-        } else { //if there is no connection
-          throw ConfigurationException('NO INTERNET CONNECTION');
-        }
-      }).catchError((error) => _handleInitError(error));
-
-
+        }).catchError((error) => _handleInitError(error));
+      }
 
     }
     _isInit = false; //is not any more first time
     super.didChangeDependencies();
   }
 
-  //load all cities from a json
-  _loadSearch() {
-    final searchProvider = Provider.of<SearchCities>(context, listen: false);
-    if (searchProvider.getAllCities.length <= 0) {
-      searchProvider.fetchData().then( (_) {
-        setState(() { _isSearchReady = true; });
-      });
-    } else setState(() { _isSearchReady = true; });
+  _initAppData(BuildContext context) {
+    final routeArgs = ModalRoute.of(context).settings.arguments as Map<String,String>; //take param from route
+    if (routeArgs != null) { //if there are params (city, province) fetch data from server with this params
+      print('routeArgs: ' + routeArgs.toString());
+      _fetchData(routeArgs['name'], routeArgs['province'], context);
+    } else {
+      //get current location, from location get relative city and then pass it to the fetchWeatherData method
+      LocationHelper.fetchLocation().then( (city) => _fetchData(city, 'NULL', context) )
+          .catchError((error) => _handleInitError(error));
+    }
   }
 
-  /*fare un provider
-  _getPrefs() {
-    SharedPreferences.getInstance().then( (prefs) {
-      prefs.getString(InternationalizationConstants.PREFS_METRIC_KEY) ?? InternationalizationConstants.CELSIUS;
-    });
-  }*/
 
   //it fetches data from server and then check if city is favorite or not
   void _fetchData(String city, String province, BuildContext context) {
@@ -115,13 +102,15 @@ class _TabScreenState extends State<TabScreen> {
       ])
       .then((_) {
         setState(() {
-          _currentCity = Provider.of<TodayWeather>(context, listen: false).getCurrentCity; //get current city
-          DBHelper.checkIsFavorite(_currentCity).then( (checkCity) { //check if city is favorite
-            if (checkCity != null) { //if != null, the city is favorite
-              _isFavoriteCity = true;
-              _currentCity = checkCity;
-            }
-          });
+          if(!kIsWeb) {
+            _currentCity = Provider.of<TodayWeather>(context, listen: false).getCurrentCity; //get current city
+            DBHelper.checkIsFavorite(_currentCity).then( (checkCity) { //check if city is favorite
+              if (checkCity != null) { //if != null, the city is favorite
+                _isFavoriteCity = true;
+                _currentCity = checkCity;
+              }
+            });
+          }
           _isLoading = false;
         });
       })
@@ -182,7 +171,6 @@ class _TabScreenState extends State<TabScreen> {
         title: 'My Weather',
         isTabBar: true,
         context: context,
-        isSearchReady: _isSearchReady
     ).getAppBar();
 
     return DefaultTabController(
@@ -193,7 +181,7 @@ class _TabScreenState extends State<TabScreen> {
           appBar: appBar,
           drawer: MainDrawer(),
           body: _buildBody(context),
-          floatingActionButton: _buildFAB(),
+          floatingActionButton: kIsWeb ? null : _buildFAB(),
         )
     );
   }

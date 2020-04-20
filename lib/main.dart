@@ -8,9 +8,9 @@ import 'package:my_weather/pages/outline/tabs_screen.dart';
 import 'package:my_weather/pages/settings/settings_screen.dart';
 import 'package:my_weather/providers/favorite_cities.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
-import 'package:my_weather/providers/search_cities.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
+import 'package:my_weather/utilities/search_cities.dart';
 import 'theme/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +23,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   await GlobalConfiguration().loadFromAsset("secrets");
+  await SearchCitiesUtility.fetchData();
   runApp( EasyLocalization(
     child: MyApp(),
     supportedLocales: InternationalizationConstants.SUPPORTED_LOCALES, //[ Locale('en', 'US'), Locale('it', 'IT') ],
@@ -42,7 +43,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<TodayWeather>(create: (_) => TodayWeather()),
         ChangeNotifierProvider<NextFiveDaysWeather>(create: (_) => NextFiveDaysWeather()),
         ChangeNotifierProvider<FavoriteCities>(create: (_) => FavoriteCities()),
-        ChangeNotifierProvider<SearchCities>(create: (_) => SearchCities()),
       ],
       child: MaterialApp(
         localizationsDelegates: [
@@ -62,7 +62,9 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.ralewayTextTheme(textTheme), //global font (raleway)
           appBarTheme: AppBarTheme( ////different font for appbar (quicksand)
               textTheme: ThemeData.light().textTheme.copyWith(
+                  // ignore: deprecated_member_use
                   title: GoogleFonts.quicksand(
+                    // ignore: deprecated_member_use
                     textStyle: textTheme.title,
                     fontSize: 20,
                     color: Colors.white
