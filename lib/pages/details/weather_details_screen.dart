@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_weather/pages/details/widgets/chart_widget.dart';
-import 'package:my_weather/pages/details/widgets/details_card.dart';
-import 'package:my_weather/pages/details/widgets/header.dart';
+import 'package:my_weather/pages/details/widgets/details_card_widget.dart';
+import 'package:my_weather/pages/details/widgets/header_widget.dart';
 import 'package:my_weather/pages/details/widgets/next_five_days_widget.dart';
-import 'package:my_weather/pages/details/widgets/temperature_card.dart';
+import 'package:my_weather/pages/details/widgets/temperature_card_widget.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'package:provider/provider.dart';

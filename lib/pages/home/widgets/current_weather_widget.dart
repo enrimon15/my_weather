@@ -29,7 +29,6 @@ class CurrentWeather extends StatelessWidget {
             '${DateFormat.EEEE(intlLocale).format(DateTime.now())} ${now.day}',
             mediaQuery
         ),
-        //SizedBox(height: 30,),
         Image.asset(
           WeatherIcon.selectIcon(currentWeather.status),
           height: 105,

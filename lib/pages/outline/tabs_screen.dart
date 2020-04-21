@@ -1,7 +1,6 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/database/db_helper.dart';
-import 'package:my_weather/exceptions/configuration_exception.dart';
 import 'package:my_weather/models/city_favorite.dart';
 import 'package:my_weather/models/tab_item.dart';
 import 'package:my_weather/pages/details/weather_details_screen.dart';
@@ -11,32 +10,22 @@ import 'package:my_weather/pages/outline/custom_appbar.dart';
 import 'package:my_weather/pages/outline/drawer_widget.dart';
 import 'package:my_weather/pages/outline/show_alert_widget.dart';
 import 'package:my_weather/pages/settings/settings_screen.dart';
-import 'package:my_weather/providers/today_weather.dart';
-import 'package:my_weather/utilities/connectivity.dart';
-import 'package:my_weather/utilities/location.dart';
-import 'package:provider/provider.dart';
-import 'package:my_weather/providers/next_five_days_weather.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 
 
 class TabScreen extends StatefulWidget {
+  final Map<String, bool> _prerequisites;
+
+  TabScreen(this._prerequisites);
 
   @override
   _TabScreenState createState() => _TabScreenState();
 }
 
 class _TabScreenState extends State<TabScreen> {
-  bool _isLoading = false; //to check the completion of the fetching data
-  bool _isInit = true; //to check fist time the screen is loaded
-  bool _isErrorFetching = false; //to check if there is an error in fetching data
-  bool _locationPermissionPrefs = true;
-  bool _locationPermissionSettings = true;
-  bool _locationPermissionApp = true;
-  bool _isConnectivity = true;
   int _selectedIndex = 0; //to know which tab is pressed
   CityFavorite _currentCity = new CityFavorite(); //current city
-  bool _isFavoriteCity = false; //to check if current city is favorite
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>(); //key of context, for snakebar
 
   //List of tabs
@@ -46,77 +35,6 @@ class _TabScreenState extends State<TabScreen> {
     TabItem(title: tr("tab_map"), screen: Maps()),
   ];
 
-  @override
-  void didChangeDependencies() {
-    if (_isInit) { //if is the first time that the screen is loaded
-
-      setState(() { //reset all variables
-        _isLoading = true;
-        _isErrorFetching = false;
-        _isFavoriteCity = false;
-        _locationPermissionPrefs = true;
-        _locationPermissionSettings = true;
-        _locationPermissionApp = true;
-        _isConnectivity = true;
-      });
-
-      if(kIsWeb) {
-        _initAppData(context);
-      } else {
-        ConnectionUtility.checkConnection().then( (conn) { //check connectivity
-          if(conn) { //if there is connection
-            _initAppData(context);
-          } else { //if there is no connection
-            throw ConfigurationException('NO INTERNET CONNECTION');
-          }
-        }).catchError((error) => _handleInitError(error));
-      }
-
-    }
-    _isInit = false; //is not any more first time
-    super.didChangeDependencies();
-  }
-
-  _initAppData(BuildContext context) {
-    final routeArgs = ModalRoute.of(context).settings.arguments as Map<String,String>; //take param from route
-    if (routeArgs != null) { //if there are params (city, province) fetch data from server with this params
-      print('routeArgs: ' + routeArgs.toString());
-      _fetchData(routeArgs['name'], routeArgs['province'], context);
-    } else {
-      //get current location, from location get relative city and then pass it to the fetchWeatherData method
-      LocationHelper.fetchLocation().then( (city) => _fetchData(city, 'NULL', context) )
-          .catchError((error) => _handleInitError(error));
-    }
-  }
-
-
-  //it fetches data from server and then check if city is favorite or not
-  void _fetchData(String city, String province, BuildContext context) {
-    String lang = EasyLocalization.of(context).locale.languageCode.toUpperCase(); //language to send to server
-    //this wait for a list of operations passed into an array inside .wait
-    Future
-      .wait([
-        Provider.of<TodayWeather>(context, listen: false).fetchData(city, province, lang),
-        Provider.of<NextFiveDaysWeather>(context, listen: false).fetchData(city, province, lang),
-        //if (searchProvider.getAllCities.length <= 0) searchProvider.fetchData()
-      ])
-      .then((_) {
-        setState(() {
-          if(!kIsWeb) {
-            _currentCity = Provider.of<TodayWeather>(context, listen: false).getCurrentCity; //get current city
-            DBHelper.checkIsFavorite(_currentCity).then( (checkCity) { //check if city is favorite
-              if (checkCity != null) { //if != null, the city is favorite
-                _isFavoriteCity = true;
-                _currentCity = checkCity;
-              }
-            });
-          }
-          _isLoading = false;
-        });
-      })
-    .catchError((error) => _handleInitError(error));
-  }
-
   // it listens tap on tab and change _selectedIndex, FAB will show or hide
   _onItemTapped(int index) {
     setState(() {
@@ -125,14 +43,14 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   // it handles the tap on FAB of favorite city, remove/add city from favorites
-  _handleFavorite() async {
+  _handleFavorite(bool isFavoriteCity) async {
     bool result;
-    if (!_isFavoriteCity) {
+    if (!isFavoriteCity) {
       result = await DBHelper.insertCity(_currentCity);
-      result ? setState(() {_isFavoriteCity = true;}) : _showSnakebar(tr("snackbar_favorite_add_error"));
+      result ? setState(() {isFavoriteCity = true;}) : _showSnakebar(tr("snackbar_favorite_add_error"));
     } else {
       result = await DBHelper.delete(_currentCity);
-      result ? setState(() {_isFavoriteCity = false;}) : _showSnakebar(tr("snackbar_favorite_remove_error"));
+      result ? setState(() {isFavoriteCity = false;}) : _showSnakebar(tr("snackbar_favorite_remove_error"));
     }
   }
 
@@ -141,29 +59,10 @@ class _TabScreenState extends State<TabScreen> {
     _scaffoldKey.currentState.showSnackBar( SnackBar(content: Text(message)) );
   }
 
-  //it handle init error of app (fetching data, location, check ecc)
-  _handleInitError(error) {
-    print('error: ' + error.toString());
-    switch (error.toString()) {
-      case 'LOCATION PERMISSION SETTINGS NOT ENABLED' : {setState(() {_locationPermissionApp = false;});}
-      break;
-
-      case 'LOCATION PERMISSION PREFS NOT ENABLED' : {setState(() {_locationPermissionPrefs = false;});}
-      break;
-
-      case 'LOCATION SERVICE NOT ENABLED' : {setState(() {_locationPermissionSettings = false;});}
-      break;
-
-      case 'NO INTERNET CONNECTION' : {setState(() {_isConnectivity = false;});}
-      break;
-
-      default: setState(() {_isErrorFetching = true;});
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
+    Map<String, bool> prerequisites = widget._prerequisites;
 
     final appBar = CustomAppBar(
         tabItem: this._choices,
@@ -180,14 +79,14 @@ class _TabScreenState extends State<TabScreen> {
           key: _scaffoldKey,
           appBar: appBar,
           drawer: MainDrawer(),
-          body: _buildBody(context),
-          floatingActionButton: kIsWeb ? null : _buildFAB(),
+          body: _buildBody(context, prerequisites),
+          floatingActionButton: kIsWeb ? null : _buildFAB(prerequisites['isFavoriteCity']),
         )
     );
   }
 
-  Widget _buildBody(BuildContext context) {
-    if (_isErrorFetching) {
+  Widget _buildBody(BuildContext context, Map<String, bool> prerequisites) {
+    if (prerequisites['isErrorFetching']) {
       return ShowAlert(
         title: 'Oops..',
         content: tr("generic_error"),
@@ -195,7 +94,7 @@ class _TabScreenState extends State<TabScreen> {
         onTap: () => Navigator.of(context).pushReplacementNamed('/'),
       );
     }
-    else if (!_locationPermissionSettings) {
+    else if (!prerequisites['locationPermissionSettings']) {
       return ShowAlert(
         title: 'Oops..',
         content: tr("location_settings_error"),
@@ -205,7 +104,7 @@ class _TabScreenState extends State<TabScreen> {
         secondOnTap: () => AppSettings.openLocationSettings(),
       );
     }
-    else if (!_locationPermissionPrefs) {
+    else if (!prerequisites['locationPermissionPrefs']) {
       return ShowAlert(
         title: 'Oops..',
         content: tr("location_prefs_error"),
@@ -215,7 +114,7 @@ class _TabScreenState extends State<TabScreen> {
         secondOnTap: () => Navigator.of(context).pushReplacementNamed(SettingsScreen.routeName),
       );
     }
-    else if (!_locationPermissionApp) {
+    else if (!prerequisites['locationPermissionApp']) {
       return ShowAlert(
         title: 'Oops..',
         content: tr("location_app_error"),
@@ -225,7 +124,7 @@ class _TabScreenState extends State<TabScreen> {
         secondOnTap: () => AppSettings.openAppSettings(),
       );
     }
-    else if (!_isConnectivity) {
+    else if (!prerequisites['isConnectivity']) {
       return ShowAlert(
         title: 'Oops..',
         content: tr("connection_error"),
@@ -235,7 +134,7 @@ class _TabScreenState extends State<TabScreen> {
         secondOnTap: () => AppSettings.openWIFISettings(),
       );
     }
-    else if (_isLoading) {
+    else if (prerequisites['isLoading']) {
       return Center(child: CircularProgressIndicator());
     } else {
         return TabBarView(
@@ -246,12 +145,12 @@ class _TabScreenState extends State<TabScreen> {
     }
   }
 
-  Widget _buildFAB() {
+  Widget _buildFAB(bool isFavoriteCity) {
     if (_selectedIndex != 1) return null; //show fab only in details tab
     else {
       return FloatingActionButton(
-        child: _isFavoriteCity ? Icon(Icons.star, color: Colors.white) : Icon(Icons.star_border, color: Colors.white),
-        onPressed: () => _handleFavorite(),
+        child: isFavoriteCity ? Icon(Icons.star, color: Colors.white) : Icon(Icons.star_border, color: Colors.white),
+        onPressed: () => _handleFavorite(isFavoriteCity),
       );
     }
   }

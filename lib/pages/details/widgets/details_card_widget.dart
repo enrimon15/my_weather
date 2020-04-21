@@ -19,7 +19,6 @@ class DetailsCard extends StatelessWidget {
         height: 48,
       )
     ));
-    items.add(DetailsItem(title: 'DIVIDER'));
     items.add(DetailsItem(
         title: tr("details_pressure"),
         content: currentWeather.pressure,
@@ -28,7 +27,6 @@ class DetailsCard extends StatelessWidget {
           height: 48,
         )
     ));
-    items.add(DetailsItem(title: 'DIVIDER'));
     items.add(DetailsItem(
         title: tr("details_wind"),
         content: currentWeather.wind,
@@ -49,19 +47,18 @@ class DetailsCard extends StatelessWidget {
       elevation: 8,
       child: Padding(
         padding: EdgeInsets.all(20),
-        child: ListView.builder(
+        child: ListView.separated(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemCount: details.length,
             itemBuilder: (ctx, i) {
-              if (details[i].title != 'DIVIDER') {
                 return ListTile(
                   title: Text(details[i].title),
                   subtitle: Text(details[i].content),
                   trailing: details[i].img,
                 );
-              } else return Divider();
-            }
+            },
+            separatorBuilder: (ctx, index) => kIsWeb ? Divider(thickness: 1) : Divider(),
         )
       ),
     );
@@ -76,7 +73,7 @@ class DetailsItem {
 
   DetailsItem({
     @required this.title,
-    this.content,
-    this.img,
+    @required this.content,
+    @required this.img,
   });
 }

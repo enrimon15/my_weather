@@ -39,7 +39,15 @@ class DataSearch extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     // 7978 cities
     if (searchCities.length <= 0) {
-      return Column();
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Center(
+            child: Text(tr("search_no_content")),
+          )
+        ],
+      );
     }
 
     final listCitiesMatch = query.isEmpty

@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:my_weather/pages/_layout/home_layout_type.dart';
+import 'package:my_weather/pages/error_screen.dart';
 import 'package:my_weather/pages/favorites/favorites_screen.dart';
 import 'package:my_weather/pages/info/info_screen.dart';
 import 'package:my_weather/pages/outline/tabs_screen.dart';
@@ -15,6 +18,7 @@ import 'theme/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:global_configuration/global_configuration.dart';
+import 'package:flutter/foundation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,10 +66,8 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.ralewayTextTheme(textTheme), //global font (raleway)
           appBarTheme: AppBarTheme( ////different font for appbar (quicksand)
               textTheme: ThemeData.light().textTheme.copyWith(
-                  // ignore: deprecated_member_use
-                  title: GoogleFonts.quicksand(
-                    // ignore: deprecated_member_use
-                    textStyle: textTheme.title,
+                  headline6: GoogleFonts.quicksand(
+                    textStyle: textTheme.headline6,
                     fontSize: 20,
                     color: Colors.white
                   )
@@ -74,12 +76,15 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/', // default is '/'
         routes: {
-          '/': (ctx) => TabScreen(),
+          '/': (ctx) => HomeLayoutType(),
           SettingsScreen.routeName: (ctx) => SettingsScreen(),
-          FavoritesScreen.routeName: (ctx) => FavoritesScreen(),
+          FavoritesScreen.routeName: (ctx) => !kIsWeb ? FavoritesScreen() : ErrorScreen(),
           InfoScreen.routeName: (ctx) => InfoScreen(),
         },
-        //onUnknownRoute:
+        onUnknownRoute: (RouteSettings setting) {
+          print(setting.name);
+          return MaterialPageRoute(builder: (ctx) => ErrorScreen());
+        }
       ),
     );
   }

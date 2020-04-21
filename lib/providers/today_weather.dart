@@ -30,10 +30,13 @@ class TodayWeather with ChangeNotifier {
       if (response.statusCode == 200 && response.body.isNotEmpty) {
         String jsonResponse =  response.body;
         _todayWeather = DayWeather.fromJson(json.decode(jsonResponse)); //parsing json response into my object
+
         now = now.length == 1 ? '0$now:00' : '$now:00';
-        print(now);
         _currentWeather = _todayWeather.hours.singleWhere((singleHour) => singleHour.hour == now).weather; //save the current weather
-        _currentCity = CityFavorite(name: _todayWeather.cityName, province: _todayWeather.cityProvince.substring(1,3));
+        _currentCity = CityFavorite(name: _todayWeather.cityName, province: _todayWeather.cityProvince.substring(1,3)); //get current city (for favorites)
+
+        await fetchCoords(); //fetch coords of city for maps
+
         notifyListeners();
       } else {
         throw HttpException('Failed to load today weather from server');
@@ -74,7 +77,6 @@ class TodayWeather with ChangeNotifier {
         _coords['cityName'] = _todayWeather.cityName;
         _coords['condition'] = _currentWeather.status;
         _coords['temperature'] = _currentWeather.temperature;
-        notifyListeners();
       } else {
         throw HttpException('Failed to load city coords from server');
       }
