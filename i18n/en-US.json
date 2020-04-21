@@ -18,6 +18,7 @@
   "connection_error" : "No internet connection",
 
   "search_hint" : "Search",
+  "search_no_content" : "Non cities available",
 
   "drawer_home" : "Home",
   "drawer_favorites" : "Favorites",

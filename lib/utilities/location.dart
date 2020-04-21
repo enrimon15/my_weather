@@ -5,7 +5,6 @@ import 'package:my_weather/exceptions/http_exception.dart';
 import 'package:my_weather/utilities/api_constants.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
 import 'dart:convert';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationHelper {

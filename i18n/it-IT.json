@@ -18,6 +18,7 @@
   "connection_error" : "Connessione internet assente",
 
   "search_hint" : "Cerca",
+  "search_no_content" : "Non ci sono città disponibili",
 
   "drawer_home" : "Home",
   "drawer_favorites" : "Preferiti",
