@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_weather/models/tab_item.dart';
 import 'package:flutter/foundation.dart';
 import 'package:my_weather/pages/search/data_search.dart';
+import 'package:my_weather/pages/web_pages/hover_utilities.dart';
 
 class CustomNavbar {
   final String title;
@@ -27,16 +27,19 @@ class CustomNavbar {
       title: Text(this.title, textAlign: TextAlign.left,),
       elevation: 10,
       actions: <Widget>[
-        Row(
-          children: <Widget>[
-            Text('Home', style: TextStyle( color: Colors.white) ),
-            SizedBox(width: 8),
-            Icon(
-              Icons.home,
-              color: Colors.white,
-            ),
-          ],
-        ),
+        GestureDetector(
+          onTap: () => Navigator.of(context).pushReplacementNamed('/'),
+          child: Row(
+            children: <Widget>[
+              Text('Home', style: TextStyle( color: Colors.white) ),
+              SizedBox(width: 8),
+              Icon(
+                Icons.home,
+                color: Colors.white,
+              ),
+            ],
+          ),
+        ).showCursorOnHover,
         SizedBox(width: 15,),
         GestureDetector(
           onTap: () => showSearch(context: context, delegate: DataSearch()),
@@ -57,14 +60,14 @@ class CustomNavbar {
               ),*/
             ],
           ),
-        ),
+        ).showCursorOnHover,
         SizedBox(width: 55),
         Row(
           children: <Widget>[
             Text('IT | C°', style: TextStyle(color: Colors.white)),
             PopupMenuButton<String>(
               tooltip: 'Cambia la lingua',
-              icon: Icon(Icons.arrow_drop_down),
+              icon: Icon(Icons.arrow_drop_down).showCursorOnHover,
               initialValue: 'IT',
               onSelected: (String result) {},
               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[

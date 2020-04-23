@@ -5,16 +5,16 @@ import 'package:my_weather/pages/search/data_search.dart';
 import 'package:my_weather/pages/web_pages/home/home_screen.dart';
 import 'package:my_weather/pages/web_pages/outline/navbar/custom_navbar_web.dart';
 
-class TabScreenWeb extends StatefulWidget {
+class InitScreenWeb extends StatefulWidget {
   final Map<String, bool> _prerequisites;
 
-  TabScreenWeb(this._prerequisites);
+  InitScreenWeb(this._prerequisites);
 
   @override
-  _TabScreenWebState createState() => _TabScreenWebState();
+  _InitScreenWebState createState() => _InitScreenWebState();
 }
 
-class _TabScreenWebState extends State<TabScreenWeb> {
+class _InitScreenWebState extends State<InitScreenWeb> {
 
 
 

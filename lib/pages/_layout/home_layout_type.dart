@@ -4,7 +4,7 @@ import 'package:my_weather/database/db_helper.dart';
 import 'package:my_weather/exceptions/configuration_exception.dart';
 import 'package:my_weather/models/city_favorite.dart';
 import 'package:my_weather/pages/outline/tabs_screen.dart';
-import 'package:my_weather/pages/web_pages/outline/tab_screen.dart';
+import 'package:my_weather/pages/web_pages/outline/init_screen.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'package:my_weather/utilities/connectivity.dart';
@@ -135,7 +135,7 @@ class _HomeLayoutTypeState extends State<HomeLayoutType> {
           watch: 300,
         ),
         mobile: (ctx) => TabScreen(_prerequisites),
-        desktop: (ctx) => TabScreenWeb(_prerequisites),
+        desktop: (ctx) => InitScreenWeb(_prerequisites),
       );
     } else {
       return TabScreen(_prerequisites);
