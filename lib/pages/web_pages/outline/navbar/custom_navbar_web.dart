@@ -1,34 +1,65 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:my_weather/pages/search/data_search.dart';
+import 'package:my_weather/pages/settings/settings_screen.dart';
 import 'package:my_weather/pages/web_pages/hover_utilities.dart';
+import 'package:my_weather/utilities/localization_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CustomNavbar {
+class CustomNavbar extends StatefulWidget implements PreferredSizeWidget{
   final String title;
-  final BuildContext context;
-  static double height;
+  final AppBar appBar;
 
   CustomNavbar({
     @required this.title,
-    @required this.context,
+    @required this.appBar,
   });
 
-  final List<String> settingsList = [
-    'IT | C°',
-    'EN | °F'
-  ];
+  @override
+  _CustomNavbarState createState() => _CustomNavbarState();
 
-  AppBar getNavbar() {
-    final simpleAppBar = AppBar(
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(appBar.preferredSize.height);
+}
+
+class _CustomNavbarState extends State<CustomNavbar> {
+  SharedPreferences sPref;
+  String _unitsKey = InternationalizationConstants.PREFS_UNITS_KEY;
+
+  final Map<String, String> _unitsTextBinding = {
+    InternationalizationConstants.METRIC : 'C°',
+    InternationalizationConstants.IMPERIAL : '°F'
+  };
+
+  String _getMenuTextLocalization(String lang, String unit) {
+    return '$lang | ${_unitsTextBinding[unit]}';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then( (prefs) {
+      sPref = prefs;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Locale currentLocale = EasyLocalization.of(context).locale;
+    String _lang = currentLocale.languageCode.toUpperCase();
+
+    return AppBar(
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Image.asset('assets/img/icons/cielocoperto.png', height: 32),
       ),
-      title: Text(this.title, textAlign: TextAlign.left,),
+      title: Text(widget.title, textAlign: TextAlign.left,),
       elevation: 10,
       actions: <Widget>[
         GestureDetector(
-          onTap: () => Navigator.of(context).pushReplacementNamed('/'),
+          onTap: () => Navigator.of(context).pushNamed('/'),
           child: Row(
             children: <Widget>[
               Text('Home', style: TextStyle( color: Colors.white) ),
@@ -51,44 +82,28 @@ class CustomNavbar {
                 Icons.search,
                 color: Colors.white,
               ),
-              /*IconButton(
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.blue,
-                ),
-                onPressed: () => showSearch(context: context, delegate: DataSearch()),
-              ),*/
             ],
           ),
         ).showCursorOnHover,
         SizedBox(width: 55),
         Row(
           children: <Widget>[
-            Text('IT | C°', style: TextStyle(color: Colors.white)),
-            PopupMenuButton<String>(
-              tooltip: 'Cambia la lingua',
-              icon: Icon(Icons.arrow_drop_down).showCursorOnHover,
-              initialValue: 'IT',
-              onSelected: (String result) {},
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                const PopupMenuItem<String>(
-                  value: 'IT',
-                  child: Text('IT | C°'),
-                ),
-                const PopupMenuItem<String>(
-                  value: 'EN',
-                  child: Text('EN | °F'),
-                ),
-              ],
+            FutureBuilder(
+              future: InternationalizationConstants.getUnits(),
+              builder: (ctx, snapshot) => snapshot.hasData
+                  ? Text(_getMenuTextLocalization(_lang, snapshot.data), style: TextStyle(color: Colors.white))
+                  : Text ('')
             ),
+            Tooltip(
+              message: 'Internazionalizzazione',
+              child: IconButton(
+                icon: Icon(Icons.language),
+                onPressed: () => Navigator.of(context).pushNamed(SettingsScreen.routeName),
+              ).showCursorOnHover,
+            )
           ],
         )
-
       ],
     );
-
-    height = simpleAppBar.preferredSize.height;
-    return simpleAppBar;
   }
-
 }

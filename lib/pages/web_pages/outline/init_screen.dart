@@ -15,25 +15,19 @@ class InitScreenWeb extends StatefulWidget {
 }
 
 class _InitScreenWebState extends State<InitScreenWeb> {
-
-
-
   @override
   Widget build(BuildContext context) {
+
     Map<String, bool> prerequisites = widget._prerequisites;
 
     final navbar = CustomNavbar(
       title: 'My Weather',
-      context: context,
-    ).getNavbar();
+      appBar: AppBar(),
+    );
 
-    return DefaultTabController(
-        initialIndex: 0, //default page
-        length: 3,
-        child: Scaffold(
-          appBar: navbar,
-          body: _buildBody(context, prerequisites),
-        )
+    return Scaffold(
+      appBar: navbar,
+      body: _buildBody(context, prerequisites),
     );
   }
 

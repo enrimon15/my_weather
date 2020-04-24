@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/pages/details/widgets/chart_widget.dart';
 import 'package:my_weather/pages/map/widgets/leaflet_map_widget.dart';
 import 'package:my_weather/pages/web_pages/home/widget/current_details_card_widget.dart';
 import 'package:my_weather/pages/web_pages/home/widget/current_weather_widget.dart';
 import 'package:my_weather/pages/web_pages/home/widget/hours_datatables_widget.dart';
+import 'package:my_weather/pages/web_pages/home/widget/line_chart_widget.dart';
 import 'package:my_weather/pages/web_pages/home/widget/next_five_days_wisget.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'package:provider/provider.dart';
@@ -58,21 +60,15 @@ class HomeWeb extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.0),
         ),
         child: Container(
-          height: 600.0,
-          width: 600.0,
+          height: 650.0,
+          width: 700.0,
+          padding: EdgeInsets.symmetric(horizontal: 100, vertical: 40),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(15.0),
-                child: Text(
-                  'Grafici',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 100),
-                child: Chart(nextDays),
+              Chart(nextDays),
+              Expanded(
+                child: LineChartGraph(todayWeather.hours),
               ),
             ],
           ),
