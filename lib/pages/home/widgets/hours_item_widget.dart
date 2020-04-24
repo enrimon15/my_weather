@@ -11,8 +11,10 @@ class HourItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String nowString = now.hour.toString();
+    nowString = nowString.length == 1 ? '0$nowString:00' : '$nowString:00';
 
-    final _isNow = hour.hour.substring(0,2) == now.hour.toString();
+    final _isNow = hour.hour == nowString;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
