@@ -1,12 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:my_weather/pages/details/widgets/chart_widget.dart';
+import 'package:my_weather/pages/details/widgets/chart_temp_days_widget.dart';
 import 'package:my_weather/pages/map/widgets/leaflet_map_widget.dart';
+import 'package:my_weather/pages/web_pages/home/widget/chart_press_hum_days.dart';
+import 'package:my_weather/pages/web_pages/home/widget/chart_wind_days.dart';
 import 'package:my_weather/pages/web_pages/home/widget/current_details_card_widget.dart';
 import 'package:my_weather/pages/web_pages/home/widget/current_weather_widget.dart';
 import 'package:my_weather/pages/web_pages/home/widget/hours_datatables_widget.dart';
-import 'package:my_weather/pages/web_pages/home/widget/line_chart_widget.dart';
+import 'package:my_weather/pages/web_pages/home/widget/chart_temp_hours_widget.dart';
 import 'package:my_weather/pages/web_pages/home/widget/next_five_days_wisget.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'package:provider/provider.dart';
@@ -62,13 +64,30 @@ class HomeWeb extends StatelessWidget {
         child: Container(
           height: 650.0,
           width: 700.0,
-          padding: EdgeInsets.symmetric(horizontal: 100, vertical: 40),
+          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Chart(nextDays),
               Expanded(
-                child: LineChartGraph(todayWeather.hours),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Expanded(child: ChartTempDays(nextDays)),
+                    SizedBox(width: 10),
+                    Expanded(child: ChartTempHours(todayWeather.hours))
+                  ],
+                ),
+              ),
+              SizedBox(height: 30),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Expanded(child: ChartWindDays(nextDays)),
+                    SizedBox(width: 10),
+                    Expanded(child: ChartPressHumDays(nextDays)),
+                  ],
+                ),
               ),
             ],
           ),

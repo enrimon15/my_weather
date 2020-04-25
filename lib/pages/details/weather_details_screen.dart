@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_weather/pages/details/widgets/chart_widget.dart';
+import 'package:my_weather/pages/details/widgets/chart_temp_days_widget.dart';
 import 'package:my_weather/pages/details/widgets/details_card_widget.dart';
 import 'package:my_weather/pages/details/widgets/header_widget.dart';
 import 'package:my_weather/pages/details/widgets/next_five_days_widget.dart';
@@ -31,7 +31,7 @@ class Details extends StatelessWidget {
               SizedBox(height: 30),
               NextFiveDays(nextDaysWeather.days),
               SizedBox(height: 35),
-              Chart(nextDaysWeather.days),
+              ChartTempDays(nextDaysWeather.days),
               SizedBox(height: 60),
             ],
           ),

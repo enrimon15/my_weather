@@ -1,41 +1,34 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:my_weather/models/day_weather.dart';
+import 'package:my_weather/models/five_days_weather.dart';
 import 'dart:math';
 
-class LineChartGraph extends StatelessWidget {
-  final List<Hour> hours;
-
-  LineChartGraph(this.hours);
-
-  List<int> _getValues() {
-    List<int> values = [];
-    hours.map((singleHour) {
-      int value = int.parse(singleHour.weather.temperature.split(' ')[0]);
-      values.add(value);
-    }).toList();
-    return values;
-  }
-
+class ChartWindDays extends StatelessWidget {
+  final List<Day> days;
+  
+  ChartWindDays(this.days);
+  
   @override
   Widget build(BuildContext context) {
-    final values = _getValues();
-    final maxVal = values.reduce(max);
-    final range = ((maxVal + 10) / 4).round();
-    final maxY = range * 4;
-
+    List<int> wind = [];
+    days.forEach((day) { 
+      wind.add(int.parse(day.weather.wind.split(' ')[0]));
+    });
+    int maxWind = wind.reduce(max) + 5;
+    int range = (maxWind/4).round();
+    
     return Card(
       elevation: 8,
       child: Container(
         padding: EdgeInsets.all(20),
         child: LineChart(
-          sampleData2(values, range, maxY),
+          chartData(wind, maxWind, range),
         ),
       ),
     );
   }
 
-  LineChartData sampleData2(values, range, maxY) {
+  LineChartData chartData(values, maxWind, range) {
     return LineChartData(
       lineTouchData: LineTouchData(
         enabled: false,
@@ -52,19 +45,19 @@ class LineChartGraph extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: 12,
           ),
-          margin: 5,
+          margin: 6,
           getTitles: (value) {
             switch (value.toInt()) {
               case 1:
-                return '00';
-              case 7:
-                return '06';
-              case 13:
-                return '12';
-              case 19:
-                return '18';
-              case 24:
-                return '23';
+                return days[0].day.substring(0,3).toUpperCase();
+              case 2:
+                return days[1].day.substring(0,3).toUpperCase();
+              case 3:
+                return days[2].day.substring(0,3).toUpperCase();
+              case 4:
+                return days[3].day.substring(0,3).toUpperCase();
+              case 5:
+                return days[4].day.substring(0,3).toUpperCase();
             }
             return '';
           },
@@ -81,7 +74,7 @@ class LineChartGraph extends StatelessWidget {
               case 0:
                 return '0';
               case 1:
-                return range.toString();
+                return (range).toString();
               case 2:
                 return (range * 2).toString();
               case 3:
@@ -113,41 +106,35 @@ class LineChartGraph extends StatelessWidget {
             ),
           )),
       minX: 0,
-      maxX: 25,
+      maxX: 6,
       maxY: 5,
       minY: 0,
-      lineBarsData: linesBarData2(values, maxY),
+      lineBarsData: linesBarData2(values, maxWind),
     );
   }
 
-  List<LineChartBarData> linesBarData2(values, maxY) {
+  List<LineChartBarData> linesBarData2(values, maxWind) {
     return [
       LineChartBarData(
         spots: [
-          FlSpot(1, (values[0] / maxY) * 4),
-          FlSpot(4, (values[3] / maxY) * 4),
-          FlSpot(7, (values[6] / maxY) * 4),
-          FlSpot(10, (values[9] / maxY) * 4),
-          FlSpot(13, (values[12] / maxY) * 4),
-          FlSpot(16, (values[15] / maxY) * 4),
-          FlSpot(19, (values[18] / maxY) * 4),
-          FlSpot(22, (values[21] / maxY) * 4),
-          FlSpot(24, (values[23] / maxY) * 4),
+          FlSpot(1, 3.8),
+          FlSpot(2, 1.5),
+          FlSpot(3, 1.9),
         ],
         isCurved: true,
+        curveSmoothness: 0,
         colors: const [
-          Color(0x99aa4cfc),
+          Color(0x4427b6fc),
         ],
-        barWidth: 4,
+        barWidth: 2,
         isStrokeCapRound: true,
         dotData: FlDotData(
+          show: true,
+        ),
+        belowBarData: BarAreaData(
           show: false,
         ),
-        belowBarData: BarAreaData(show: true, colors: [
-          const Color(0x33aa4cfc),
-        ]),
       ),
     ];
   }
-
 }
