@@ -47,5 +47,23 @@
   "settings_language_description" : "Scegli la lingua",
   "settings_units" : "Unità di misura",
   "settings_units_description" : "Scegli l'unità",
-  "overflow_settings_subtitle" : "Gestisci"
+  "overflow_settings_subtitle" : "Gestisci",
+
+  "web_chart_text" : "Grafici",
+  "web_chart_wind_title" : "Vento (Giornaliero)",
+  "web_chart_press_title" : "Pressione",
+  "web_chart_hum_title" : "Umidità",
+  "web_chart_temp_title" : "Temperatura (Oraria)",
+
+  "web_datatable_title" : "Meteo Orario",
+  "web_datatable_temp" : "Temperatura",
+  "web_datatable_wind" : "Vento",
+  "web_datatable_press" : "Pressione",
+  "web_datatable_hum" : "Umidità",
+  "web_datatable_hour" : "Ora",
+  "web_datatable_status" : "Condizione",
+
+  "web_navbar_home" : "Home",
+  "web_navbar_search" : "Cerca",
+  "web_navbar_tootltip_localization" : "Internazionalizzazione"
 }

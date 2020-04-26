@@ -26,7 +26,6 @@ class CustomNavbar extends StatefulWidget implements PreferredSizeWidget{
 
 class _CustomNavbarState extends State<CustomNavbar> {
   SharedPreferences sPref;
-  String _unitsKey = InternationalizationConstants.PREFS_UNITS_KEY;
 
   final Map<String, String> _unitsTextBinding = {
     InternationalizationConstants.METRIC : 'C°',
@@ -62,7 +61,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
           onTap: () => Navigator.of(context).pushNamed('/'),
           child: Row(
             children: <Widget>[
-              Text('Home', style: TextStyle( color: Colors.white) ),
+              Text(tr("web_navbar_home"), style: TextStyle( color: Colors.white) ),
               SizedBox(width: 8),
               Icon(
                 Icons.home,
@@ -76,7 +75,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
           onTap: () => showSearch(context: context, delegate: DataSearch()),
           child: Row(
             children: <Widget>[
-              Text('Cerca', style: TextStyle( color: Colors.white) ),
+              Text(tr("web_navbar_search"), style: TextStyle( color: Colors.white) ),
               SizedBox(width: 8),
               Icon(
                 Icons.search,
@@ -95,7 +94,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
                   : Text ('')
             ),
             Tooltip(
-              message: 'Internazionalizzazione',
+              message: tr("web_navbar_tootltip_localization"),
               child: IconButton(
                 icon: Icon(Icons.language),
                 onPressed: () => Navigator.of(context).pushNamed(SettingsScreen.routeName),

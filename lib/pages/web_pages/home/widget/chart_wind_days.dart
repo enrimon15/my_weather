@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/models/five_days_weather.dart';
@@ -19,11 +20,23 @@ class ChartWindDays extends StatelessWidget {
     
     return Card(
       elevation: 8,
-      child: Container(
-        padding: EdgeInsets.all(20),
-        child: LineChart(
-          chartData(wind, maxWind, range),
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Text(tr("web_chart_wind_title"), style: TextStyle(color: Color(0xff72719b), fontSize: 12)),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: LineChart(
+                chartData(wind, maxWind, range),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -117,9 +130,11 @@ class ChartWindDays extends StatelessWidget {
     return [
       LineChartBarData(
         spots: [
-          FlSpot(1, 3.8),
-          FlSpot(2, 1.5),
-          FlSpot(3, 1.9),
+          FlSpot(1, (values[0] / maxWind) * 4),
+          FlSpot(2, (values[1] / maxWind) * 4),
+          FlSpot(3, (values[2] / maxWind) * 4),
+          FlSpot(4, (values[3] / maxWind) * 4),
+          FlSpot(5, (values[4] / maxWind) * 4),
         ],
         isCurved: true,
         curveSmoothness: 0,

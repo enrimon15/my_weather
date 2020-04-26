@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/models/five_days_weather.dart';
@@ -21,18 +22,42 @@ class ChartPressHumDays extends StatelessWidget {
       humidity.add(int.parse(day.weather.humidity.split(' ')[0]));
     });
 
-    int maxPressure = pressures.reduce(max) + 400;
-    int maxHumidity = 200;
+    int maxPressure = pressures.reduce(max) + 300;
+    int maxHumidity = 100;
 
 
     return Card(
       elevation: 8,
       color: const Color(0xff2c4260),
-      child: Container(
-        padding: EdgeInsets.all(50),
-        child: BarChart(
-          chartData(pressures, humidity, maxPressure, maxHumidity)
-        )
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Expanded(
+                  child: ListTile(
+                      leading: Icon(Icons.crop_square, color: Colors.greenAccent),
+                      title: Text(tr("web_chart_hum_title"), style: TextStyle(fontSize: 10, color: Colors.white))
+                  )
+              ),
+              Expanded(
+                  child: ListTile(
+                      leading: Icon(Icons.crop_square, color: Colors.redAccent),
+                      title: Text(tr("web_chart_press_title"), style: TextStyle(fontSize: 10, color: Colors.white))
+                  )
+              )
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 35, left: 35, bottom: 20, top: 5),
+              child: BarChart(
+                chartData(pressures, humidity, maxPressure, maxHumidity)
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -69,7 +94,7 @@ class ChartPressHumDays extends StatelessWidget {
                   break;
               }
               return BarTooltipItem(
-                  weekDay + '\n' + pointVal, TextStyle(color: Colors.yellow));
+                  weekDay + '\n' + pointVal, TextStyle(color: Colors.yellow, fontSize: 11));
             }),
       ),
       titlesData: FlTitlesData(
@@ -107,10 +132,10 @@ class ChartPressHumDays extends StatelessWidget {
       ),
       barGroups: [
         makeGroupData(0, (pressures[0] / maxPressure), (humidity[0] / maxHumidity)),
-        makeGroupData(1, (pressures[0] / maxPressure), (humidity[0] / maxHumidity)),
-        makeGroupData(2, (pressures[0] / maxPressure), (humidity[0] / maxHumidity)),
-        makeGroupData(3, (pressures[0] / maxPressure), (humidity[0] / maxHumidity)),
-        makeGroupData(4, (pressures[0] / maxPressure), (humidity[0] / maxHumidity)),
+        makeGroupData(1, (pressures[1] / maxPressure), (humidity[1] / maxHumidity)),
+        makeGroupData(2, (pressures[2] / maxPressure), (humidity[2] / maxHumidity)),
+        makeGroupData(3, (pressures[3] / maxPressure), (humidity[3] / maxHumidity)),
+        makeGroupData(4, (pressures[4] / maxPressure), (humidity[4] / maxHumidity)),
       ],
     );
   }

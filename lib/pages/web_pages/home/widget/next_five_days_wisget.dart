@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/models/five_days_weather.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
@@ -85,7 +86,7 @@ class _NextFiveDaysWebState extends State<NextFiveDaysWeb> {
                 width: 200,
                 alignment: Alignment.center,
                 child: ListTile(
-                  title: Text('VENTO'),
+                  title: Text(tr("details_wind").toUpperCase()),
                   subtitle: _tappedDay != null ? Text(_tappedDay.weather.wind) : Text(nextFiveDays.days.first.weather.wind),
                   leading: Image.asset('assets/img/wind.png', height: 40),
                 ),
@@ -93,16 +94,16 @@ class _NextFiveDaysWebState extends State<NextFiveDaysWeb> {
               Container(
                 width: 200,
                 child: ListTile(
-                  title: Text('UMIDITÀ'),
-                  subtitle: _tappedDay != null ? Text(_tappedDay.weather.wind) : Text(nextFiveDays.days.first.weather.wind),
+                  title: Text(tr("details_humidity").toUpperCase()),
+                  subtitle: _tappedDay != null ? Text(_tappedDay.weather.humidity) : Text(nextFiveDays.days.first.weather.humidity),
                   leading: Image.asset('assets/img/drop.png', height: 40),
                 ),
               ),
               Container(
                 width: 200,
                 child: ListTile(
-                  title: Text('PRESSIONE'),
-                  subtitle: _tappedDay != null ? Text(_tappedDay.weather.wind) : Text(nextFiveDays.days.first.weather.wind),
+                  title: Text(tr("details_pressure").toUpperCase()),
+                  subtitle: _tappedDay != null ? Text(_tappedDay.weather.pressure) : Text(nextFiveDays.days.first.weather.pressure),
                   leading: Image.asset('assets/img/speedometer.png', height: 40),
                 ),
               ),

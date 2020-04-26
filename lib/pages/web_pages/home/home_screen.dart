@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/pages/details/widgets/chart_temp_days_widget.dart';
 import 'package:my_weather/pages/map/widgets/leaflet_map_widget.dart';
@@ -10,6 +9,7 @@ import 'package:my_weather/pages/web_pages/home/widget/current_weather_widget.da
 import 'package:my_weather/pages/web_pages/home/widget/hours_datatables_widget.dart';
 import 'package:my_weather/pages/web_pages/home/widget/chart_temp_hours_widget.dart';
 import 'package:my_weather/pages/web_pages/home/widget/next_five_days_wisget.dart';
+import 'package:my_weather/pages/web_pages/outline/footer/footer.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'package:provider/provider.dart';
 import 'package:my_weather/pages/web_pages/hover_utilities.dart';
@@ -98,45 +98,52 @@ class HomeWeb extends StatelessWidget {
 
     return Scrollbar(
       child: ListView(
-        padding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
         shrinkWrap: true,
         children: <Widget>[
-          _buildCardDetails(),
-          SizedBox(height: 50,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              FlatButton.icon(
-                  onPressed: () => showSimpleCustomDialog(context),
-                  icon: Icon(Icons.insert_chart),
-                  label: Text('Grafici')
-              ),
-            ],
-          ).showCursorOnHover,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Expanded(
-                child: CurrentWeatherWeb(
-                  todayWeather.cityName,
-                  currentWeather,
-                  '${DateFormat.EEEE(intlLocale).format(DateTime.now())} ${now.day}',
-                  weatherProvider.getMinMaxTemp(),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
+            child: Column(
+              children: <Widget>[
+                _buildCardDetails(),
+                SizedBox(height: 50,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    FlatButton.icon(
+                        onPressed: () => showSimpleCustomDialog(context),
+                        icon: Icon(Icons.insert_chart),
+                        label: Text(tr("web_chart_text"))
+                    ),
+                  ],
+                ).showCursorOnHover,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Expanded(
+                      child: CurrentWeatherWeb(
+                        todayWeather.cityName,
+                        currentWeather,
+                        '${DateFormat.EEEE(intlLocale).format(DateTime.now())} ${now.day}',
+                        weatherProvider.getMinMaxTemp(),
+                      ),
+                    ),
+                    SizedBox(width: 40),
+                    Expanded(
+                      child: Container(
+                        height: 400,
+                        child: LeafletMapWidget(coords),
+                      ),
+                    )
+                  ],
                 ),
-              ),
-              SizedBox(width: 40),
-              Expanded(
-                child: Container(
-                  height: 400,
-                  child: LeafletMapWidget(coords),
-                ),
-              )
-            ],
+                SizedBox(height: 50),
+                HoursDatatable(todayWeather),
+                SizedBox(height: 70),
+                NextFiveDaysWeb(),
+              ],
+            ),
           ),
-          SizedBox(height: 50),
-          HoursDatatable(todayWeather),
-          SizedBox(height: 70),
-          NextFiveDaysWeb()
+          Footer(),
         ],
       ),
     );

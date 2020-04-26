@@ -47,5 +47,23 @@
   "settings_language_description" : "Choose the language",
   "settings_units" : "Units",
   "settings_units_description" : "Choose the units",
-  "overflow_settings_subtitle" : "Manage"
+  "overflow_settings_subtitle" : "Manage",
+
+  "web_chart_text" : "Charts",
+  "web_chart_wind_title" : "Wind (Daily)",
+  "web_chart_press_title" : "Pressure",
+  "web_chart_hum_title" : "Humidity",
+  "web_chart_temp_title" : "Temperature (Hourly)",
+
+  "web_datatable_title" : "Hourly Weather",
+  "web_datatable_temp" : "Temperature",
+  "web_datatable_wind" : "Wind",
+  "web_datatable_press" : "Pressure",
+  "web_datatable_hum" : "Humidity",
+  "web_datatable_hour" : "Hour",
+  "web_datatable_status" : "Condition",
+
+  "web_navbar_home" : "Home",
+  "web_navbar_search" : "Search",
+  "web_navbar_tootltip_localization" : "Localization"
 }

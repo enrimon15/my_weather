@@ -31,11 +31,23 @@ class ChartTempHours extends StatelessWidget {
 
     return Card(
       elevation: 8,
-      child: Container(
-        padding: EdgeInsets.all(20),
-        child: LineChart(
-          chartData(values, range, maxY,minmax),
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Text('Temperatura (Oraria)', style: TextStyle(color: Color(0xff72719b), fontSize: 12)),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: LineChart(
+                chartData(values, range, maxY,minmax),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

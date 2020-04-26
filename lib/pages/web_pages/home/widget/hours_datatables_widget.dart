@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/models/day_weather.dart';
 import 'package:my_weather/utilities/select_weather_icon.dart';
@@ -14,20 +15,26 @@ class HoursDatatable extends StatelessWidget {
     final double textSize = 16;
 
     return SingleChildScrollView(
-      child: PaginatedDataTable(
-        header: Text('Meteo Orario'),
-        source: _hoursDataSource,
-        dataRowHeight: 65,
-        rowsPerPage: 8,
-        sortColumnIndex: 0,
-        sortAscending: true,
-        columns: [
-          DataColumn(label: Text('Ora', style: TextStyle(color: color, fontSize: textSize))),
-          DataColumn(label: Text('Temperatura', style: TextStyle(color: color, fontSize: textSize))),
-          DataColumn(label: Text('Condizione', style: TextStyle(color: color, fontSize: textSize))),
-          DataColumn(label: Text('Vento', style: TextStyle(color: color, fontSize: textSize))),
-          DataColumn(label: Text('Pressione', style: TextStyle(color: color, fontSize: textSize))),
-          DataColumn(label: Text('Umidità', style: TextStyle(color: color, fontSize: textSize))),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: PaginatedDataTable(
+              header: Text(tr("web_datatable_title")),
+              source: _hoursDataSource,
+              dataRowHeight: 65,
+              rowsPerPage: 8,
+              sortColumnIndex: 0,
+              sortAscending: true,
+              columns: [
+                DataColumn(label: Text(tr("web_datatable_hour"), style: TextStyle(color: color, fontSize: textSize))),
+                DataColumn(label: Text(tr("web_datatable_temp"), style: TextStyle(color: color, fontSize: textSize))),
+                DataColumn(label: Text(tr("web_datatable_status"), style: TextStyle(color: color, fontSize: textSize))),
+                DataColumn(label: Text(tr("web_datatable_wind"), style: TextStyle(color: color, fontSize: textSize))),
+                DataColumn(label: Text(tr("web_datatable_press"), style: TextStyle(color: color, fontSize: textSize))),
+                DataColumn(label: Text(tr("web_datatable_hum"), style: TextStyle(color: color, fontSize: textSize))),
+              ],
+            ),
+          ),
         ],
       ),
     );
