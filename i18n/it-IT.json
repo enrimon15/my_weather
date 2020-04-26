@@ -47,5 +47,10 @@
   "settings_language_description" : "Scegli la lingua",
   "settings_units" : "Unità di misura",
   "settings_units_description" : "Scegli l'unità",
-  "overflow_settings_subtitle" : "Gestisci"
+  "overflow_settings_subtitle" : "Gestisci",
+
+  "info_title" : "info",
+  "info_error" : "Impossibile aprire: ",
+
+  "error_page_button" : "Torna alla Home"
 }

@@ -30,12 +30,19 @@ class Chart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: days.map((day) {
             String temp = day.weather.temperature.split(' ')[0];
+
+            double tempDouble = double.parse(temp); //manage negative temperature
+            if (tempDouble < 0) {
+              tempDouble = 0 - tempDouble;
+              _maxValue += tempDouble;
+            }
+
             return Flexible(
               fit: FlexFit.tight,
               child: ChartBar(
                   day.day.split(" ")[0],
                   temp,
-                  (double.parse(temp)) / _maxValue,
+                  (tempDouble) / _maxValue,
               ),
             );
           }).toList(),

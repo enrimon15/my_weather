@@ -16,8 +16,10 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   _createMarker(context, String img) {
     if (customIcon == null) {
+      bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
       ImageConfiguration configuration = createLocalImageConfiguration(context);
-      BitmapDescriptor.fromAssetImage(configuration, WeatherIcon.selectIconMarker(img))
+      BitmapDescriptor.fromAssetImage(configuration, WeatherIcon.selectIconMarker(img, isIOS))
           .then((icon) {
         setState(() {
           customIcon = icon;

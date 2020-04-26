@@ -2,6 +2,7 @@
 class WeatherIcon {
   static final String iconPath = 'assets/img/icons/';
   static final String iconPathMarker = 'assets/img/markers/';
+  static final String iconPathMarkerIOS = 'assets/img/markers_ios/';
 
   static final Map<String, String> iconMappingIT = {
     "Sereno" : "sereno.png",
@@ -27,14 +28,16 @@ class WeatherIcon {
 
   }
 
-  static String selectIconMarker(String icon){
+  static String selectIconMarker(String icon, isIos){
     String addMarker = 'marker.';
     List<String> splitted = [];
 
     if (iconMappingIT.containsKey(icon)) splitted = iconMappingIT[icon].split('.');
     else if (iconMappingEN.containsKey(icon)) splitted = iconMappingEN[icon].split('.');
 
-    return iconPathMarker + splitted[0] + addMarker + splitted[1];
+    String basePath = isIos ? iconPathMarkerIOS : iconPathMarker;
+
+    return basePath + splitted[0] + addMarker + splitted[1];
   }
 
 }

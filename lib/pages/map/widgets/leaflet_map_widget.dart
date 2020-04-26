@@ -30,7 +30,7 @@ class LeafletMapWidget extends StatelessWidget {
                   Tooltip(
                     message: '${coords['cityName']}, ${coords['temperature']}',
                     child: Image.asset(
-                      WeatherIcon.selectIconMarker(coords['condition']),
+                      WeatherIcon.selectIconMarker(coords['condition'], false),
                     ),
                   ),
             ),

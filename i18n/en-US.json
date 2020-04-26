@@ -18,7 +18,7 @@
   "connection_error" : "No internet connection",
 
   "search_hint" : "Search",
-  "search_no_content" : "Non cities available",
+  "search_no_content" : "No cities available",
 
   "drawer_home" : "Home",
   "drawer_favorites" : "Favorites",
@@ -47,5 +47,10 @@
   "settings_language_description" : "Choose the language",
   "settings_units" : "Units",
   "settings_units_description" : "Choose the units",
-  "overflow_settings_subtitle" : "Manage"
+  "overflow_settings_subtitle" : "Manage",
+
+  "info_title" : "info",
+  "info_error" : "Could not launch: ",
+
+  "error_page_button" : "Back to Home"
 }

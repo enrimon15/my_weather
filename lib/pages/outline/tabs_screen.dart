@@ -90,7 +90,6 @@ class _TabScreenState extends State<TabScreen> {
       .wait([
         Provider.of<TodayWeather>(context, listen: false).fetchData(city, province, lang),
         Provider.of<NextFiveDaysWeather>(context, listen: false).fetchData(city, province, lang),
-        //if (searchProvider.getAllCities.length <= 0) searchProvider.fetchData()
       ])
       .then((_) {
         setState(() {
