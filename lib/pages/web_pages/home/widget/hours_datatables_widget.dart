@@ -50,11 +50,11 @@ class HoursDataSource extends DataTableSource {
 
   Widget _buildHourContainer(singleHour, backgroundColor, textColor, text) {
     return  Container(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
       decoration: BoxDecoration(
         color: backgroundColor,
         border: Border.all(color: Colors.blue),
-        borderRadius: BorderRadius.vertical(
+        borderRadius: const BorderRadius.vertical(
             top: Radius.circular(23),
             bottom: Radius.circular(23)
         ),

@@ -29,7 +29,7 @@ class CurrentWeatherWeb extends StatelessWidget {
           maxLines: 1,
           minFontSize: 0,
         ),
-        SizedBox(height: 15,),
+        const SizedBox(height: 15,),
         Text(
           date,
           style: TextStyle(
@@ -49,7 +49,7 @@ class CurrentWeatherWeb extends StatelessWidget {
           'assets/img/maxtemp.png',
           height: 48,
         ),
-        SizedBox(width: 6),
+        const SizedBox(width: 6),
         Expanded(
           child: AutoSizeText.rich(
             TextSpan(
@@ -68,7 +68,7 @@ class CurrentWeatherWeb extends StatelessWidget {
           ),
         ),
         //Spacer(),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Expanded(
           child: AutoSizeText.rich(
             TextSpan(
@@ -86,7 +86,7 @@ class CurrentWeatherWeb extends StatelessWidget {
             textAlign: TextAlign.right,
           ),
         ),
-        SizedBox(width: 6),
+        const SizedBox(width: 6),
         Image.asset(
           'assets/img/mintemp.png',
           height: 48,
@@ -99,7 +99,7 @@ class CurrentWeatherWeb extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 400,
-      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
       decoration: BoxDecoration(
           gradient: LinearGradient(
               begin: Alignment.topCenter,

@@ -65,5 +65,10 @@
 
   "web_navbar_home" : "Home",
   "web_navbar_search" : "Cerca",
-  "web_navbar_tootltip_localization" : "Internazionalizzazione"
+  "web_navbar_tootltip_localization" : "Internazionalizzazione",
+
+  "info_title" : "info",
+  "info_error" : "Impossibile aprire: ",
+
+  "error_page_button" : "Torna alla Home"
 }

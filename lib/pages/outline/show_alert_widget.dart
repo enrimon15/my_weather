@@ -32,8 +32,8 @@ class ShowAlert extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.error_outline, size: 30),
-            SizedBox(height: 20),
+            const Icon(Icons.error_outline, size: 30),
+            const SizedBox(height: 20),
             Text(content),
           ],
         ),

@@ -1,15 +1,13 @@
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/database/db_helper.dart';
 import 'package:my_weather/models/city_favorite.dart';
 import 'package:my_weather/models/tab_item.dart';
+import 'package:my_weather/pages/_layout/check_prerequisites.dart';
 import 'package:my_weather/pages/details/weather_details_screen.dart';
 import 'package:my_weather/pages/home/weather_home_screen.dart';
 import 'package:my_weather/pages/map/weather_map_screen.dart';
 import 'package:my_weather/pages/outline/custom_appbar.dart';
 import 'package:my_weather/pages/outline/drawer_widget.dart';
-import 'package:my_weather/pages/outline/show_alert_widget.dart';
-import 'package:my_weather/pages/settings/settings_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 
@@ -79,70 +77,18 @@ class _TabScreenState extends State<TabScreen> {
           key: _scaffoldKey,
           appBar: appBar,
           drawer: MainDrawer(),
-          body: _buildBody(context, prerequisites),
+          body: CheckPrerequisites(
+            prerequisites: prerequisites,
+            isTabBar: true,
+            tabBarView: TabBarView(
+              children: _choices.map((TabItem choice){
+                return choice.screen;
+              }).toList(),
+            ),
+          ),
           floatingActionButton: kIsWeb ? null : _buildFAB(prerequisites['isFavoriteCity']),
         )
     );
-  }
-
-  Widget _buildBody(BuildContext context, Map<String, bool> prerequisites) {
-    if (prerequisites['isErrorFetching']) {
-      return ShowAlert(
-        title: 'Oops..',
-        content: tr("generic_error"),
-        buttonContent: tr("try_again"),
-        onTap: () => Navigator.of(context).pushReplacementNamed('/'),
-      );
-    }
-    else if (!prerequisites['locationPermissionSettings']) {
-      return ShowAlert(
-        title: 'Oops..',
-        content: tr("location_settings_error"),
-        buttonContent: tr("try_again"),
-        secondButtonContent: tr("settings_button"),
-        onTap: () => Navigator.of(context).pushReplacementNamed('/'),
-        secondOnTap: () => AppSettings.openLocationSettings(),
-      );
-    }
-    else if (!prerequisites['locationPermissionPrefs']) {
-      return ShowAlert(
-        title: 'Oops..',
-        content: tr("location_prefs_error"),
-        buttonContent: tr("try_again"),
-        secondButtonContent: tr("settings_button"),
-        onTap: () => Navigator.of(context).pushReplacementNamed('/'),
-        secondOnTap: () => Navigator.of(context).pushReplacementNamed(SettingsScreen.routeName),
-      );
-    }
-    else if (!prerequisites['locationPermissionApp']) {
-      return ShowAlert(
-        title: 'Oops..',
-        content: tr("location_app_error"),
-        buttonContent: tr("try_again"),
-        secondButtonContent: tr("settings_button"),
-        onTap: () => Navigator.of(context).pushReplacementNamed('/'),
-        secondOnTap: () => AppSettings.openAppSettings(),
-      );
-    }
-    else if (!prerequisites['isConnectivity']) {
-      return ShowAlert(
-        title: 'Oops..',
-        content: tr("connection_error"),
-        buttonContent: tr("try_again"),
-        secondButtonContent: tr("settings_button"),
-        onTap: () => Navigator.of(context).pushReplacementNamed('/'),
-        secondOnTap: () => AppSettings.openWIFISettings(),
-      );
-    }
-    else if (prerequisites['isLoading']) {
-      return Center(child: CircularProgressIndicator());
-    } else {
-        return TabBarView(
-          children: _choices.map((TabItem choice){
-            return choice.screen;
-          }).toList(),
-        );
-    }
   }
 
   Widget _buildFAB(bool isFavoriteCity) {

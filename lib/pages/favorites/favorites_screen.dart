@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class FavoritesScreen extends StatelessWidget{
   static const routeName = '/favorites';
 
-  List<BackgroundCard> backgroundList = [
+  final List<BackgroundCard> backgroundList = [
     BackgroundCard('assets/img/backgrounds/01b.jpg', Alignment.bottomCenter),
     BackgroundCard('assets/img/backgrounds/02b.jpg', Alignment.bottomCenter),
     BackgroundCard('assets/img/backgrounds/03b.jpg', Alignment.bottomCenter),
@@ -34,7 +34,7 @@ class FavoritesScreen extends StatelessWidget{
         future: Provider.of<FavoriteCities>(context, listen: false).fetchFavoriteCities(lang),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center( child: CircularProgressIndicator() );
+            return const Center( child: CircularProgressIndicator() );
           }
           else if (snapshot.hasError) {
             return Center(child: Text(tr("fav_error")));

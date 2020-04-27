@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:my_weather/pages/_layout/home_layout_type.dart';
+import 'package:my_weather/pages/_layout/info_layout.dart';
 import 'package:my_weather/pages/error_screen.dart';
 import 'package:my_weather/pages/favorites/favorites_screen.dart';
-import 'package:my_weather/pages/info/info_screen.dart';
 import 'package:my_weather/pages/settings/settings_screen.dart';
 import 'package:my_weather/providers/favorite_cities.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
           '/': (ctx) => HomeLayoutType(),
           SettingsScreen.routeName: (ctx) => SettingsScreen(),
           FavoritesScreen.routeName: (ctx) => !kIsWeb ? FavoritesScreen() : ErrorScreen(),
-          InfoScreen.routeName: (ctx) => InfoScreen(),
+          InfoLayout.routeName: (ctx) => InfoLayout(),
         },
         onUnknownRoute: (RouteSettings setting) {
           print(setting.name);

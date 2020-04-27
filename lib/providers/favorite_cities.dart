@@ -21,7 +21,7 @@ class FavoriteCities with ChangeNotifier {
       });
       notifyListeners();
     } catch (error) {
-      print('DbFetch Exception:' + error);
+      print('DbFetch Exception:' + error.toString());
       throw error;
     }
   }
@@ -47,7 +47,7 @@ class FavoriteCities with ChangeNotifier {
         throw HttpException('Failed to load today weather from server');
       }
     } catch (error) {
-      print(error);
+      print('Fetch single favorite error: ' + error.toString());
       throw error;
     }
   }

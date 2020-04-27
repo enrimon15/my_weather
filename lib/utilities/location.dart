@@ -39,7 +39,10 @@ class LocationHelper {
       }
     }
     //all permission is ok
-    _locData = await location.getLocation().catchError( (error) => print('Unable to get location: ' + error.toString()) );
+    _locData = await location.getLocation().catchError( (error) {
+      print('Unable to get location: ' + error.toString());
+      throw ConfigurationException('UNABLE TO GET USER COORDINATES');
+    } );
 
     //final url = 'http://192.168.1.51:3000/mock/coords/getCity/${_locData.latitude}/${_locData.longitude}/api-key=$_apiKey';
     final url = '${ApiConstants.baseURL}/mock/coords/getCity/${_locData.latitude}/${_locData.longitude}/api-key=${ApiConstants.apiKey}';

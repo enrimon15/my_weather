@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/pages/outline/custom_appbar.dart';
 import 'package:my_weather/pages/outline/drawer_widget.dart';
-import 'package:my_weather/pages/web_pages/outline/navbar/custom_navbar_web.dart';
+import 'package:my_weather/pages/web_pages/outline/custom_navbar_web.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,12 +79,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget _buildBody(BuildContext context, lang) {
     return !_isPrefsLoaded
-        ? Center( child: CircularProgressIndicator() )
+        ? const Center( child: CircularProgressIndicator() )
         : Column(
             children: <Widget>[
               Expanded(
                 child: ListView(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   children: <Widget>[
                     if (!kIsWeb) _buildSwitchListTile(
                       tr("settings_location"),
@@ -151,6 +151,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     if (kIsWeb) {
       return ScreenTypeLayout.builder(
+        breakpoints: ScreenBreakpoints( //define the desktop breakpoint (tablet and watch isn't used)
+          desktop: 800,
+          tablet: 600,
+          watch: 300,
+        ),
         mobile: (BuildContext context) => Scaffold(
           appBar: appBar,
           drawer: MainDrawer(),

@@ -81,7 +81,7 @@ class TodayWeather with ChangeNotifier {
         throw HttpException('Failed to load city coords from server');
       }
     } catch (error) {
-      print('TodayWeatherProvider coords: ' + error);
+      print('TodayWeatherProvider coords: ' + error.toString());
       throw error;
     }
   }

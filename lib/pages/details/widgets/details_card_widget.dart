@@ -46,7 +46,7 @@ class DetailsCard extends StatelessWidget {
     return Card(
       elevation: 8,
       child: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: ListView.separated(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
@@ -58,7 +58,7 @@ class DetailsCard extends StatelessWidget {
                   trailing: details[i].img,
                 );
             },
-            separatorBuilder: (ctx, index) => kIsWeb ? Divider(thickness: 1) : Divider(),
+            separatorBuilder: (ctx, index) => kIsWeb ? const Divider(thickness: 1) : const Divider(),
         )
       ),
     );

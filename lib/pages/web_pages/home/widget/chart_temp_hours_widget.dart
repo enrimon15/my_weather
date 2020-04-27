@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/models/day_weather.dart';
@@ -37,7 +38,7 @@ class ChartTempHours extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 15),
-            child: Text('Temperatura (Oraria)', style: TextStyle(color: Color(0xff72719b), fontSize: 12)),
+            child: Text(tr("web_chart_temp_title"), style: TextStyle(color: Color(0xff72719b), fontSize: 12)),
           ),
           Expanded(
             child: Padding(

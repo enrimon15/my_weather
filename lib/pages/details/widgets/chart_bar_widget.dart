@@ -26,7 +26,7 @@ class ChartBar extends StatelessWidget {
               )
           ),
         ),
-        SizedBox(height: 20,),
+        const SizedBox(height: 20),
         Tooltip(
           message: '$temp°',
           child: Container(
@@ -55,9 +55,7 @@ class ChartBar extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          height: 20,
-        ),
+        const SizedBox(height: 20),
         Container(
           height: 15,
           child: FittedBox(

@@ -29,7 +29,7 @@ class NextFiveDaysWeather with ChangeNotifier {
         throw HttpException('Failed to load today weather from server');
       }
     } catch (error) {
-      print('NextFiveDaysProvider: ' + error);
+      print('NextFiveDaysProvider: ' + error.toString());
       throw error;
     }
   }

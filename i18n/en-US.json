@@ -65,5 +65,10 @@
 
   "web_navbar_home" : "Home",
   "web_navbar_search" : "Search",
-  "web_navbar_tootltip_localization" : "Localization"
+  "web_navbar_tootltip_localization" : "Localization",
+
+  "info_title" : "info",
+  "info_error" : "Could not launch: ",
+
+  "error_page_button" : "Back to Home"
 }

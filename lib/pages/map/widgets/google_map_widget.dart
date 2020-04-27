@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:my_weather/utilities/select_weather_icon.dart';
@@ -16,8 +18,10 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   _createMarker(context, String img) {
     if (customIcon == null) {
+      bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
       ImageConfiguration configuration = createLocalImageConfiguration(context);
-      BitmapDescriptor.fromAssetImage(configuration, WeatherIcon.selectIconMarker(img))
+      BitmapDescriptor.fromAssetImage(configuration, WeatherIcon.selectIconMarker(img, isIOS))
           .then((icon) {
         setState(() {
           customIcon = icon;
@@ -51,6 +55,9 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
           icon: customIcon != null ? customIcon : null,
         )
       },
+      gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[ //enable map scroll
+        new Factory<OneSequenceGestureRecognizer>(() => new EagerGestureRecognizer(),),
+      ].toSet()
     );
   }
 }

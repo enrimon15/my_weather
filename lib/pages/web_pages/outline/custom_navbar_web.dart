@@ -62,29 +62,29 @@ class _CustomNavbarState extends State<CustomNavbar> {
           child: Row(
             children: <Widget>[
               Text(tr("web_navbar_home"), style: TextStyle( color: Colors.white) ),
-              SizedBox(width: 8),
-              Icon(
+              const SizedBox(width: 8),
+              const Icon(
                 Icons.home,
                 color: Colors.white,
               ),
             ],
           ),
         ).showCursorOnHover,
-        SizedBox(width: 15,),
+        const SizedBox(width: 15,),
         GestureDetector(
           onTap: () => showSearch(context: context, delegate: DataSearch()),
           child: Row(
             children: <Widget>[
               Text(tr("web_navbar_search"), style: TextStyle( color: Colors.white) ),
-              SizedBox(width: 8),
-              Icon(
+              const SizedBox(width: 8),
+              const Icon(
                 Icons.search,
                 color: Colors.white,
               ),
             ],
           ),
         ).showCursorOnHover,
-        SizedBox(width: 55),
+        const SizedBox(width: 55),
         Row(
           children: <Widget>[
             FutureBuilder(

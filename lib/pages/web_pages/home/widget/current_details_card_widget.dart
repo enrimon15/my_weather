@@ -22,7 +22,7 @@ class CurrentDetails extends StatelessWidget {
           width: width,
           alignment: Alignment.center,
           padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             border: Border(left: BorderSide(color: Colors.blue, width: 5)),
           ),
           child: ListTile(

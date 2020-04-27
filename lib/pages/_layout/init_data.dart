@@ -6,7 +6,7 @@ import 'package:my_weather/database/db_helper.dart';
 import 'package:my_weather/exceptions/configuration_exception.dart';
 import 'package:my_weather/models/city_favorite.dart';
 import 'package:my_weather/pages/outline/tabs_screen.dart';
-import 'package:my_weather/pages/web_pages/outline/init_screen.dart';
+import 'package:my_weather/pages/web_pages/outline/init_web_screen.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'package:my_weather/utilities/connectivity.dart';
@@ -82,7 +82,7 @@ class _InitDataState extends State<InitData> {
 
   //it handle init error of app (fetching data, location, check ecc)
   _handleInitError(error) {
-    print('error: ' + error.toString());
+    print('init error: ' + error.toString());
     switch (error.toString()) {
       case 'LOCATION PERMISSION SETTINGS NOT ENABLED' : {setState(() {_prerequisites['locationPermissionApp'] = false;});}
       break;
