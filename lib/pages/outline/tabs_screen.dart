@@ -20,7 +20,6 @@ import 'package:easy_localization/easy_localization.dart';
 
 
 class TabScreen extends StatefulWidget {
-
   @override
   _TabScreenState createState() => _TabScreenState();
 }
@@ -29,10 +28,10 @@ class _TabScreenState extends State<TabScreen> {
   bool _isLoading = false; //to check the completion of the fetching data
   bool _isInit = true; //to check fist time the screen is loaded
   bool _isErrorFetching = false; //to check if there is an error in fetching data
-  bool _locationPermissionPrefs = true;
-  bool _locationPermissionSettings = true;
-  bool _locationPermissionApp = true;
-  bool _isConnectivity = true;
+  bool _locationPermissionPrefs = true; //to check if there is location permission from shared preferences
+  bool _locationPermissionSettings = true; //to check if there is location permission from system settings
+  bool _locationPermissionApp = true; //to check if there is location permission from app settings
+  bool _isConnectivity = true; //to check if connection is up
   int _selectedIndex = 0; //to know which tab is pressed
   CityFavorite _currentCity = new CityFavorite(); //current city
   bool _isFavoriteCity = false; //to check if current city is favorite
@@ -132,7 +131,7 @@ class _TabScreenState extends State<TabScreen> {
 
   //it handle init error of app (fetching data, location, check ecc)
   _handleInitError(error) {
-    print('error: ' + error.toString());
+    print('init error: ' + error.toString());
     switch (error.toString()) {
       case 'LOCATION PERMISSION SETTINGS NOT ENABLED' : {setState(() {_locationPermissionApp = false;});}
       break;
@@ -225,7 +224,7 @@ class _TabScreenState extends State<TabScreen> {
       );
     }
     else if (_isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     } else {
         return TabBarView(
           children: _choices.map((TabItem choice){

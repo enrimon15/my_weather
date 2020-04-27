@@ -12,12 +12,12 @@ class FavoriteCard extends StatelessWidget {
   final CityFavorite favoriteCity;
   final BackgroundCard background;
 
-  const FavoriteCard(this.favoriteCity, this.background);
+  FavoriteCard(this.favoriteCity, this.background);
 
   @override
   Widget build(BuildContext context) {
-    final white = Colors.white;
-    final bold = FontWeight.bold;
+    const white = Colors.white;
+    const bold = FontWeight.bold;
 
     return Dismissible(
       key: ValueKey(favoriteCity.id), //it takes an unique key
@@ -26,14 +26,14 @@ class FavoriteCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(15.0),
           color: Theme.of(context).errorColor,
         ),
-        child: Icon(
+        child: const Icon(
           Icons.delete,
           color: Colors.white,
           size: 40,
         ),
         alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20),
-        margin: EdgeInsets.symmetric(vertical: 12.5, horizontal: 8),
+        padding: const EdgeInsets.only(right: 20),
+        margin: const EdgeInsets.symmetric(vertical: 12.5, horizontal: 8),
       ),
       direction: DismissDirection.endToStart,
       confirmDismiss: (direction) {
@@ -66,7 +66,7 @@ class FavoriteCard extends StatelessWidget {
         onTap: () => Navigator.of(context).pushReplacementNamed('/', arguments: {'name': favoriteCity.name, 'province': favoriteCity.province}),
         child: Card(
           elevation: 6,
-          margin: EdgeInsets.symmetric(vertical: 12.5, horizontal: 8),
+          margin: const EdgeInsets.symmetric(vertical: 12.5, horizontal: 8),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),

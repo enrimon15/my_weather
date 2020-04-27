@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:my_weather/database/db_helper.dart';
 import 'package:my_weather/exceptions/http_exception.dart';
 import 'package:my_weather/models/city_favorite.dart';
@@ -21,7 +20,7 @@ class FavoriteCities with ChangeNotifier {
       });
       notifyListeners();
     } catch (error) {
-      print('DbFetch Exception:' + error);
+      print('DbFetch Exception:' + error.toString());
       throw error;
     }
   }
@@ -47,7 +46,7 @@ class FavoriteCities with ChangeNotifier {
         throw HttpException('Failed to load today weather from server');
       }
     } catch (error) {
-      print(error);
+      print('Fetch single favorite error: ' + error.toString());
       throw error;
     }
   }

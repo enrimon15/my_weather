@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
 import 'package:my_weather/exceptions/http_exception.dart';
 import 'package:my_weather/models/five_days_weather.dart';
@@ -29,7 +28,7 @@ class NextFiveDaysWeather with ChangeNotifier {
         throw HttpException('Failed to load today weather from server');
       }
     } catch (error) {
-      print('NextFiveDaysProvider: ' + error);
+      print('NextFiveDaysProvider: ' + error.toString());
       throw error;
     }
   }

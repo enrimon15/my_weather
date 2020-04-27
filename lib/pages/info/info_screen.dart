@@ -14,7 +14,6 @@ class InfoScreen extends StatelessWidget {
       await launch(url);
     } else {
       _showSnakeBar(tr("info_error") + '$url', context);
-      //throw 'Could not launch $url';
     }
   }
 
@@ -42,17 +41,17 @@ class InfoScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Image.asset('assets/img/icons/cielocoperto.png', height: 26),
-                  SizedBox(width: 20),
-                  Text('My Weather', style: TextStyle(fontSize: 16))
+                  const SizedBox(width: 20),
+                  const Text('My Weather', style: TextStyle(fontSize: 16))
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Text('Developed by Enrico Monte', style: TextStyle(color: Theme.of(context).primaryColor, letterSpacing: 0.5, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               RichText(
                 text: TextSpan(
                   children: [
-                    TextSpan(
+                    const TextSpan(
                       text: 'Powered by ',
                       style: TextStyle(color: Colors.black)
                     ),
@@ -65,8 +64,8 @@ class InfoScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
-              Text('Copyright © 2020 Univaq. All rights reserved.')
+              const SizedBox(height: 10),
+              const Text('Copyright © 2020 Univaq. All rights reserved.')
             ],
           ),
         ),

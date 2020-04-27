@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:my_weather/utilities/select_weather_icon.dart';
@@ -53,6 +55,9 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
           icon: customIcon != null ? customIcon : null,
         )
       },
+      gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[ //enable map scroll
+         new Factory<OneSequenceGestureRecognizer>(() => new EagerGestureRecognizer(),),
+      ].toSet()
     );
   }
 }

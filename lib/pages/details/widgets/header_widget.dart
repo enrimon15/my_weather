@@ -16,10 +16,11 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       height: 150,
       color: Theme.of(context).primaryColor,
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -50,7 +51,7 @@ class Header extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 AutoSizeText(
                   cityName,
                   maxLines: 1,
@@ -75,7 +76,7 @@ class Header extends StatelessWidget {
                     fontSize: 70
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Text(
                 cityName,
                 style: TextStyle(

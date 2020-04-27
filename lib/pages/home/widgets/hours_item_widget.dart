@@ -5,15 +5,14 @@ import 'package:my_weather/utilities/select_weather_icon.dart';
 
 class HourItem extends StatelessWidget {
   final Hour hour;
-  final DateTime now = new DateTime.now();
 
   HourItem(this.hour);
 
   @override
   Widget build(BuildContext context) {
+    final DateTime now = new DateTime.now();
     String nowString = now.hour.toString();
     nowString = nowString.length == 1 ? '0$nowString:00' : '$nowString:00';
-
     final _isNow = hour.hour == nowString;
 
     return Padding(
@@ -32,7 +31,7 @@ class HourItem extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: Colors.blue,
-            borderRadius: BorderRadius.vertical(
+            borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(23),
                 bottom: Radius.circular(23)
             ),
@@ -44,7 +43,7 @@ class HourItem extends StatelessWidget {
               ),
             ],
           ),
-          padding: EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           margin: EdgeInsets.symmetric(vertical: paddingNowItem),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -60,7 +59,6 @@ class HourItem extends StatelessWidget {
               ),
               Image.asset(
                 WeatherIcon.selectIcon(hour.weather.status),
-                //alignment: Alignment.bottomLeft,
                 height: 34,
               ),
             ],
@@ -87,7 +85,7 @@ class HourItem extends StatelessWidget {
         ),
         Text(
           '${hour.weather.temperature.split(' ')[0]}°',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 15,
           ),
         )

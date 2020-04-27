@@ -48,7 +48,7 @@ class MainDrawer extends StatelessWidget {
                   alignment: Alignment.bottomLeft,
                   height: 64,
                 ),
-                SizedBox(height: 5,),
+                const SizedBox(height: 5),
                 Text(
                   'My Weather',
                    style: GoogleFonts.quicksand(
@@ -63,10 +63,10 @@ class MainDrawer extends StatelessWidget {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          SizedBox(height: 20,),
+          const SizedBox(height: 20),
           ...drawerItem.map((DrawerItem item) {
             if (item.title == 'DIVIDER')
-              return Divider();
+              return const Divider();
             else
               return buildDrawerListTile(
                   item.title,

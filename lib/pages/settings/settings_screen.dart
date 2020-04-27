@@ -96,7 +96,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: <Widget>[
           Expanded(
             child: ListView(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               children: <Widget>[
                 _buildSwitchListTile(
                   tr("settings_location"),

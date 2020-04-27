@@ -47,7 +47,7 @@ class CurrentWeather extends StatelessWidget {
     );
 
     return Container(
-      padding: EdgeInsets.only(bottom: 75, right: 5, left: 5),
+      padding: const EdgeInsets.only(bottom: 75, right: 5, left: 5),
       width: double.infinity,
       height: heightContainer,
       color: Theme.of(context).primaryColor,
@@ -76,7 +76,7 @@ class CurrentWeather extends StatelessWidget {
           maxLines: 1,
           minFontSize: 0,
         ),
-        SizedBox(height: 15,),
+        SizedBox(height: 15),
         Text(
           date,
           style: TextStyle(

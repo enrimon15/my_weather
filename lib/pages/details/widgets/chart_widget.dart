@@ -4,7 +4,6 @@ import 'package:my_weather/pages/details/widgets/chart_bar_widget.dart';
 import "dart:math";
 
 class Chart extends StatelessWidget {
-  double _maxValue = 0;
   final List<Day> days;
 
   Chart(this.days);
@@ -20,12 +19,12 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _maxValue = _getMaxValue();
+    double _maxValue = _getMaxValue();
 
     return Card(
       elevation: 8,
       child: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: days.map((day) {

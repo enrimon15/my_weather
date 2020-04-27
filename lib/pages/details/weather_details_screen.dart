@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 class Details extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final currentDayWeather = Provider.of<TodayWeather>(context).getCurrentWeather;
+    final todayWeather = Provider.of<TodayWeather>(context);
     final nextDaysProvider = Provider.of<NextFiveDaysWeather>(context);
     final nextDaysWeather = nextDaysProvider.getFiveDaysWeather;
 
@@ -19,20 +19,20 @@ class Details extends StatelessWidget {
       children: <Widget>[
         Header(
           cityName: nextDaysWeather.cityName + ', ' + nextDaysWeather.cityProvince,
-          currentWeather: currentDayWeather,
+          currentWeather: todayWeather.getCurrentWeather,
         ),
         Expanded(
           child: ListView(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             children: <Widget>[
-              TempCard(),
-              SizedBox(height: 25),
-              DetailsCard(currentDayWeather),
-              SizedBox(height: 30),
+              TempCard(todayWeather.getMinMaxTemp()),
+              const SizedBox(height: 25),
+              DetailsCard(todayWeather.getCurrentWeather),
+              const SizedBox(height: 30),
               NextFiveDays(nextDaysWeather.days),
-              SizedBox(height: 35),
+              const SizedBox(height: 35),
               Chart(nextDaysWeather.days),
-              SizedBox(height: 60),
+              const SizedBox(height: 60),
             ],
           ),
         )

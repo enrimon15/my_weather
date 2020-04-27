@@ -48,7 +48,7 @@ class NextFiveDays extends StatelessWidget {
           if (i == 0) {
             return Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Divider(),
+              child: const Divider(),
             );
           } else {
             return Padding(

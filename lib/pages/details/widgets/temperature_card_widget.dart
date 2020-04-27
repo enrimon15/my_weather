@@ -5,15 +5,16 @@ import 'package:my_weather/providers/today_weather.dart';
 import 'package:provider/provider.dart';
 
 class TempCard extends StatelessWidget {
+  final Map<String,int> temperatureAverage;
+
+  TempCard(this.temperatureAverage);
+
   @override
   Widget build(BuildContext context) {
-    final temperatureAverage = Provider.of<TodayWeather>(context).getMinMaxTemp();
-
-
     return Card(
       elevation: 8,
       child: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -21,7 +22,7 @@ class TempCard extends StatelessWidget {
               'assets/img/maxtemp.png',
               height: 48,
             ),
-            SizedBox(width: 6),
+            const SizedBox(width: 6),
             Expanded(
               child: AutoSizeText.rich(
                 TextSpan(
@@ -39,8 +40,7 @@ class TempCard extends StatelessWidget {
                 textAlign: TextAlign.left,
               ),
             ),
-            //Spacer(),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: AutoSizeText.rich(
                 TextSpan(
@@ -58,7 +58,7 @@ class TempCard extends StatelessWidget {
                 textAlign: TextAlign.right,
               ),
             ),
-            SizedBox(width: 6),
+            const SizedBox(width: 6),
             Image.asset(
               'assets/img/mintemp.png',
               height: 48,
@@ -69,16 +69,3 @@ class TempCard extends StatelessWidget {
     );
   }
 }
-
-/*
-
-Text('MAX'),
-            SizedBox(width: 10),
-            Text(
-              '${temperatureAverage['max']}°',
-              style: GoogleFonts.lato(
-                textStyle: TextStyle(color: Colors.grey),
-              ),
-            ),
-
- */

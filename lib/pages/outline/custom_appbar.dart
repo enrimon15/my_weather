@@ -29,7 +29,7 @@ class CustomAppBar {
         elevation: 0.0,
         actions: <Widget>[
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.search,
               color: Colors.white,
             ),
@@ -60,7 +60,7 @@ class CustomAppBar {
         elevation: 10,
         actions: <Widget>[
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.search,
               color: Colors.white,
             ),

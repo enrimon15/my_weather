@@ -58,7 +58,8 @@ class DataSearch extends SearchDelegate<String> {
     return ListView.builder(
         itemCount: listCitiesMatch.length,
         itemBuilder: (context, index) => ListTile(
-          onTap: () => Navigator.of(context).pushReplacementNamed('/', arguments: {'name': listCitiesMatch[index].name.toString(), 'province': listCitiesMatch[index].province.toString()}),
+          //pushNamedAndRemoveUntil push the new named page and remove from stack all the pages
+          onTap: () => Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false ,arguments: {'name': listCitiesMatch[index].name.toString(), 'province': listCitiesMatch[index].province.toString()}),
           leading: Icon(Icons.location_city),
           title: RichText(
               text: TextSpan(

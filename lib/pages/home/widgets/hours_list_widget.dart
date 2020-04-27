@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 class HoursList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     final weatherProvider = Provider.of<TodayWeather>(context); //provider
     final hours = weatherProvider.getTodayWeather.hours; //list of hours
 
