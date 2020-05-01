@@ -1,0 +1,8 @@
+convert ic_launcher.png -resize 512x512 -gravity center -background transparent -extent 860x860 logo-adaptive.png
+
+<item name="android:windowFullscreen">true</item>
+togliere
+per non avere la status bar
+
+<item name="android:windowShowWallpaper">true</item>
+per togliere black screen iniziale
