@@ -1,12 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/models/city_search.dart';
-import 'package:my_weather/utilities/search_cities.dart';
+import 'package:my_weather/services/city_search_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class DataSearch extends SearchDelegate<String> {
 
-  List<CitySearch> searchCities = SearchCitiesUtility.allCities;
+  List<CitySearch> searchCities = locator<SearchCityService>().getCities; //SearchCitiesUtility.allCities;
 
   @override
   String get searchFieldLabel => tr("search_hint");
@@ -59,9 +60,10 @@ class DataSearch extends SearchDelegate<String> {
     return ListView.builder(
         itemCount: listCitiesMatch.length,
         itemBuilder: (context, index) => ListTile(
-          onTap: !kIsWeb || MediaQuery.of(context).size.width <= 800
+          onTap: () => Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false, arguments: {'name': listCitiesMatch[index].name.toString(), 'province': listCitiesMatch[index].province.toString()}),
+          /*onTap: !kIsWeb || MediaQuery.of(context).size.width <= 800
               ? () => Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false, arguments: {'name': listCitiesMatch[index].name.toString(), 'province': listCitiesMatch[index].province.toString()})
-              : () => Navigator.of(context).pushReplacementNamed('/', arguments: {'name': listCitiesMatch[index].name.toString(), 'province': listCitiesMatch[index].province.toString()}),
+              : () => Navigator.of(context).pushReplacementNamed('/', arguments: {'name': listCitiesMatch[index].name.toString(), 'province': listCitiesMatch[index].province.toString()}),*/
           leading: Icon(Icons.location_city),
           title: RichText(
             text: TextSpan(

@@ -3,16 +3,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:my_weather/pages/_layout/home_layout_type.dart';
-import 'package:my_weather/pages/_layout/info_layout.dart';
-import 'package:my_weather/pages/error_screen.dart';
 import 'package:my_weather/pages/favorites/favorites_screen.dart';
+import 'package:my_weather/pages/layout/home_layout_type.dart';
+import 'package:my_weather/pages/layout/info_layout.dart';
+import 'package:my_weather/pages/outline/error_screen.dart';
 import 'package:my_weather/pages/settings/settings_screen.dart';
 import 'package:my_weather/providers/favorite_cities.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
 import 'package:my_weather/providers/today_weather.dart';
+import 'package:my_weather/services/city_search_service.dart';
+import 'package:my_weather/services/service_locator.dart';
+import 'package:my_weather/services/shared_preferences_service.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
-import 'package:my_weather/utilities/search_cities.dart';
 import 'theme/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -24,11 +26,13 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  await GlobalConfiguration().loadFromAsset("secrets");
-  await SearchCitiesUtility.fetchData();
+  await GlobalConfiguration().loadFromAsset("secrets"); //load global config from json (apiKey)
+  setupServiceLocator(); //register all services
+  await locator<SearchCityService>().fetchData(); //fetch all cities from json
+  await locator<PrefsService>().getPrefsInstance(); //get instance of shared preferences
   runApp( EasyLocalization(
     child: MyApp(),
-    supportedLocales: InternationalizationConstants.SUPPORTED_LOCALES, //[ Locale('en', 'US'), Locale('it', 'IT') ],
+    supportedLocales: InternationalizationConstants.SUPPORTED_LOCALES, //[Locale('en', 'US'), Locale('it', 'IT')],
     path: 'i18n',
   ));
 }
@@ -40,8 +44,7 @@ class MyApp extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return MultiProvider( //wrap all into state manager (Provider)
-      //declaration of providers class
-      providers: [
+      providers: [ //registering providers
         ChangeNotifierProvider<TodayWeather>(create: (_) => TodayWeather()),
         ChangeNotifierProvider<NextFiveDaysWeather>(create: (_) => NextFiveDaysWeather()),
         ChangeNotifierProvider<FavoriteCities>(create: (_) => FavoriteCities()),
@@ -52,17 +55,17 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate, //translate the text direction (LTR/RTL)
           EasyLocalization.of(context).delegate, //it takes the json in i18n
         ],
-        supportedLocales: EasyLocalization.of(context).supportedLocales,
-        locale: EasyLocalization.of(context).locale,
+        supportedLocales: EasyLocalization.of(context).supportedLocales, //all locales
+        locale: EasyLocalization.of(context).locale, //current locale
         localeResolutionCallback: (locale, supportedLocales) => resolutionLocale(locale, supportedLocales),
         debugShowCheckedModeBanner: false,
-        title: 'My Weather',
+        title: tr("app_title"),
         theme: ThemeData(
           primarySwatch: ThemeColors.primaryColor, //#0D47A1
           accentColor: ThemeColors.tertiaryColor, //#FFC107
-          secondaryHeaderColor: ThemeColors.secondaryColor, //#4FC3F7
+          secondaryHeaderColor: Colors.blue, //#2196F3
           textTheme: GoogleFonts.ralewayTextTheme(textTheme), //global font (raleway)
-          appBarTheme: AppBarTheme( ////different font for appbar (quicksand)
+          appBarTheme: AppBarTheme( //different font for appbar (quicksand)
               textTheme: ThemeData.light().textTheme.copyWith(
                   headline6: GoogleFonts.quicksand(
                     textStyle: textTheme.headline6,
@@ -79,7 +82,7 @@ class MyApp extends StatelessWidget {
           FavoritesScreen.routeName: (ctx) => !kIsWeb ? FavoritesScreen() : ErrorScreen(),
           InfoLayout.routeName: (ctx) => InfoLayout(),
         },
-        onUnknownRoute: (RouteSettings setting) {
+        onUnknownRoute: (RouteSettings setting) { //if the route is not declared
           print(setting.name);
           return MaterialPageRoute(builder: (ctx) => ErrorScreen());
         }
@@ -95,6 +98,6 @@ Locale resolutionLocale(locale, supportedLocales) {
       return supportedLocale;
     }
   }
-  //if the locale is not supported, use the first one (default english)
+  //if the locale is not supported, use (default english)
   return InternationalizationConstants.ENGLISH;
 }

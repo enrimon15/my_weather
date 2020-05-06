@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_weather/database/db_helper.dart';
 import 'package:my_weather/models/city_favorite.dart';
 import 'package:my_weather/models/tab_item.dart';
-import 'package:my_weather/pages/_layout/check_prerequisites.dart';
+import 'package:my_weather/pages/_init_data/check_prerequisites.dart';
 import 'package:my_weather/pages/details/weather_details_screen.dart';
 import 'package:my_weather/pages/home/weather_home_screen.dart';
 import 'package:my_weather/pages/map/weather_map_screen.dart';
@@ -14,8 +14,9 @@ import 'package:flutter/foundation.dart';
 
 class TabScreen extends StatefulWidget {
   final Map<String, bool> _prerequisites;
+  final CityFavorite _currentCity;
 
-  TabScreen(this._prerequisites);
+  TabScreen(this._prerequisites, this._currentCity);
 
   @override
   _TabScreenState createState() => _TabScreenState();
@@ -23,7 +24,6 @@ class TabScreen extends StatefulWidget {
 
 class _TabScreenState extends State<TabScreen> {
   int _selectedIndex = 0; //to know which tab is pressed
-  CityFavorite _currentCity = new CityFavorite(); //current city
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>(); //key of context, for snakebar
 
   //List of tabs
@@ -41,13 +41,13 @@ class _TabScreenState extends State<TabScreen> {
   }
 
   // it handles the tap on FAB of favorite city, remove/add city from favorites
-  _handleFavorite(bool isFavoriteCity) async {
+  _handleFavorite(bool isFavoriteCity, CityFavorite currentCity) async {
     bool result;
     if (!isFavoriteCity) {
-      result = await DBHelper.insertCity(_currentCity);
+      result = await DBHelper.insertCity(currentCity);
       result ? setState(() {isFavoriteCity = true;}) : _showSnakebar(tr("snackbar_favorite_add_error"));
     } else {
-      result = await DBHelper.delete(_currentCity);
+      result = await DBHelper.delete(currentCity);
       result ? setState(() {isFavoriteCity = false;}) : _showSnakebar(tr("snackbar_favorite_remove_error"));
     }
   }
@@ -61,11 +61,12 @@ class _TabScreenState extends State<TabScreen> {
   @override
   Widget build(BuildContext context) {
     Map<String, bool> prerequisites = widget._prerequisites;
+    CityFavorite currentCity = widget._currentCity;
 
     final appBar = CustomAppBar(
         tabItem: this._choices,
         onTabPressed: _onItemTapped,
-        title: 'My Weather',
+        title: tr("app_title"),
         isTabBar: true,
         context: context,
     ).getAppBar();
@@ -86,17 +87,17 @@ class _TabScreenState extends State<TabScreen> {
               }).toList(),
             ),
           ),
-          floatingActionButton: kIsWeb ? null : _buildFAB(prerequisites['isFavoriteCity']),
+          floatingActionButton: kIsWeb ? null : _buildFAB(prerequisites['isFavoriteCity'], currentCity),
         )
     );
   }
 
-  Widget _buildFAB(bool isFavoriteCity) {
+  Widget _buildFAB(bool isFavoriteCity, CityFavorite currentCity) {
     if (_selectedIndex != 1) return null; //show fab only in details tab
     else {
       return FloatingActionButton(
         child: isFavoriteCity ? Icon(Icons.star, color: Colors.white) : Icon(Icons.star_border, color: Colors.white),
-        onPressed: () => _handleFavorite(isFavoriteCity),
+        onPressed: () => _handleFavorite(isFavoriteCity, currentCity),
       );
     }
   }

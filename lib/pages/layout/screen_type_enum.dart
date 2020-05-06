@@ -1,0 +1,4 @@
+enum ScreenType {
+  mobile,
+  desktop
+}

@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_weather/pages/_layout/info_layout.dart';
 import 'package:my_weather/pages/favorites/favorites_screen.dart';
+import 'package:my_weather/pages/layout/info_layout.dart';
 import 'package:my_weather/pages/settings/settings_screen.dart';
 
 class MainDrawer extends StatelessWidget {

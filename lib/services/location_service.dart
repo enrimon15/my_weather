@@ -7,9 +7,9 @@ import 'package:my_weather/utilities/localization_constants.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LocationHelper {
+class LocationService {
 
-  static Future<String> fetchLocation() async {
+  Future<String> fetchLocation() async {
 
     //check permission shared preferences status
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -44,7 +44,6 @@ class LocationHelper {
       throw ConfigurationException('UNABLE TO GET USER COORDINATES');
     } );
 
-    //final url = 'http://192.168.1.51:3000/mock/coords/getCity/${_locData.latitude}/${_locData.longitude}/api-key=$_apiKey';
     final url = '${ApiConstants.baseURL}/mock/coords/getCity/${_locData.latitude}/${_locData.longitude}/api-key=${ApiConstants.apiKey}';
     print(url);
 

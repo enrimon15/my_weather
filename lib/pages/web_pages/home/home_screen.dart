@@ -8,7 +8,7 @@ import 'package:my_weather/pages/web_pages/home/widget/chart_wind_days.dart';
 import 'package:my_weather/pages/web_pages/home/widget/current_weather_widget.dart';
 import 'package:my_weather/pages/web_pages/home/widget/hours_datatables_widget.dart';
 import 'package:my_weather/pages/web_pages/home/widget/chart_temp_hours_widget.dart';
-import 'package:my_weather/pages/web_pages/home/widget/next_five_days_wisget.dart';
+import 'package:my_weather/pages/web_pages/home/widget/next_five_days_widget.dart';
 import 'package:my_weather/pages/web_pages/outline/footer.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'package:provider/provider.dart';

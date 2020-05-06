@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:my_weather/models/five_days_weather.dart';
 import 'package:my_weather/pages/web_pages/home/widget/expandable_details_widget.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
-import 'package:my_weather/utilities/select_weather_icon.dart';
+import 'package:my_weather/services/icon_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 import 'package:provider/provider.dart';
 import 'package:my_weather/pages/web_pages/hover_utilities.dart';
 
@@ -13,6 +14,7 @@ class NextFiveDaysWeb extends StatefulWidget {
 }
 
 class _NextFiveDaysWebState extends State<NextFiveDaysWeb> {
+  final iconService = locator<WeatherIconService>();
   final List<Color> _colors = [
     Colors.blue[900],
     Colors.blue[800],
@@ -48,7 +50,7 @@ class _NextFiveDaysWebState extends State<NextFiveDaysWeb> {
                     ],
                   ),
                   Image.asset(
-                    WeatherIcon.selectIcon(singleDay.weather.status),
+                    iconService.selectIcon(singleDay.weather.status),
                     height: 48,
                   ),
                   Text(

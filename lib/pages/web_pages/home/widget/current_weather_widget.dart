@@ -1,13 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_weather/utilities/select_weather_icon.dart';
+import 'package:my_weather/services/icon_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 
 class CurrentWeatherWeb extends StatelessWidget {
   final city;
   final currentWeather;
   final date;
   final temperatureAverage;
+  final iconService = locator<WeatherIconService>();
 
   CurrentWeatherWeb(this.city, this.currentWeather, this.date, this.temperatureAverage);
 
@@ -112,7 +114,7 @@ class CurrentWeatherWeb extends StatelessWidget {
         children: <Widget>[
           _buildHeader(),
           Image.asset(
-            WeatherIcon.selectIcon(currentWeather.status),
+            iconService.selectIcon(currentWeather.status),
             height: 80,
           ),
           AutoSizeText(

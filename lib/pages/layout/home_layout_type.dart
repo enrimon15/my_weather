@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_weather/pages/_layout/init_data.dart';
+import 'package:my_weather/pages/_init_data/init_data.dart';
+import 'package:my_weather/pages/layout/screen_type_enum.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:flutter/foundation.dart';
 
@@ -15,11 +16,11 @@ class HomeLayoutType extends StatelessWidget {
           tablet: 600,
           watch: 300,
         ),
-        mobile: (ctx) => InitData('mobile'),
-        desktop: (ctx) => InitData('web'),
+        mobile: (ctx) => InitData(ScreenType.mobile),
+        desktop: (ctx) => InitData(ScreenType.desktop),
       );
     } else {
-      return InitData('mobile');
+      return InitData(ScreenType.mobile);
     }
 
   }

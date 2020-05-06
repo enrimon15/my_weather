@@ -4,10 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:my_weather/pages/search/data_search.dart';
 import 'package:my_weather/pages/settings/settings_screen.dart';
 import 'package:my_weather/pages/web_pages/hover_utilities.dart';
+import 'package:my_weather/services/service_locator.dart';
+import 'package:my_weather/services/shared_preferences_service.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class CustomNavbar extends StatefulWidget implements PreferredSizeWidget{
+class CustomNavbar extends StatelessWidget implements PreferredSizeWidget{
   final String title;
   final AppBar appBar;
 
@@ -17,31 +18,11 @@ class CustomNavbar extends StatefulWidget implements PreferredSizeWidget{
   });
 
   @override
-  _CustomNavbarState createState() => _CustomNavbarState();
-
-  @override
   // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(appBar.preferredSize.height);
-}
-
-class _CustomNavbarState extends State<CustomNavbar> {
-  SharedPreferences sPref;
-
-  final Map<String, String> _unitsTextBinding = {
-    InternationalizationConstants.METRIC : 'C°',
-    InternationalizationConstants.IMPERIAL : '°F'
-  };
 
   String _getMenuTextLocalization(String lang, String unit) {
-    return '$lang | ${_unitsTextBinding[unit]}';
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    SharedPreferences.getInstance().then( (prefs) {
-      sPref = prefs;
-    });
+    return '$lang | ${InternationalizationConstants.getDisplayUnits(unit)}';
   }
 
   @override
@@ -54,11 +35,11 @@ class _CustomNavbarState extends State<CustomNavbar> {
         padding: const EdgeInsets.all(8.0),
         child: Image.asset('assets/img/icons/cielocoperto.png', height: 32),
       ),
-      title: Text(widget.title, textAlign: TextAlign.left,),
+      title: Text(title, textAlign: TextAlign.left,),
       elevation: 10,
       actions: <Widget>[
         GestureDetector(
-          onTap: () => Navigator.of(context).pushNamed('/'),
+          onTap: () => Navigator.of(context).pushReplacementNamed('/'), //Navigator.of(context).pushNamed('/'),
           child: Row(
             children: <Widget>[
               Text(tr("web_navbar_home"), style: TextStyle( color: Colors.white) ),
@@ -87,17 +68,12 @@ class _CustomNavbarState extends State<CustomNavbar> {
         const SizedBox(width: 55),
         Row(
           children: <Widget>[
-            FutureBuilder(
-              future: InternationalizationConstants.getUnits(),
-              builder: (ctx, snapshot) => snapshot.hasData
-                  ? Text(_getMenuTextLocalization(_lang, snapshot.data), style: TextStyle(color: Colors.white))
-                  : Text ('')
-            ),
+            Text(_getMenuTextLocalization(_lang, locator<PrefsService>().getUnits()), style: TextStyle(color: Colors.white)),
             Tooltip(
               message: tr("web_navbar_tootltip_localization"),
               child: IconButton(
                 icon: Icon(Icons.language),
-                onPressed: () => Navigator.of(context).pushNamed(SettingsScreen.routeName),
+                onPressed: () => Navigator.of(context).pushReplacementNamed(SettingsScreen.routeName), //Navigator.of(context).pushNamed(SettingsScreen.routeName),
               ).showCursorOnHover,
             )
           ],

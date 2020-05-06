@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:my_weather/utilities/select_weather_icon.dart';
+import 'package:my_weather/services/icon_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
 class LeafletMapWidget extends StatelessWidget {
   final Map<String,dynamic> coords;
+  final iconService = locator<WeatherIconService>();
 
   LeafletMapWidget(this.coords);
 
@@ -17,9 +19,9 @@ class LeafletMapWidget extends StatelessWidget {
       ),
       layers: [
         TileLayerOptions(
-            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            subdomains: ['a', 'b', 'c'],
-            tileProvider: NonCachingNetworkTileProvider(),
+          urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+          subdomains: ['a', 'b', 'c'],
+          tileProvider: NonCachingNetworkTileProvider(),
         ),
         MarkerLayerOptions(
           markers: [
@@ -31,7 +33,7 @@ class LeafletMapWidget extends StatelessWidget {
                   Tooltip(
                     message: '${coords['cityName']}, ${coords['temperature']}',
                     child: Image.asset(
-                      WeatherIcon.selectIconMarker(coords['condition'], false),
+                      iconService.selectIconMarker(coords['condition'], false),
                     ),
                   ),
             ),

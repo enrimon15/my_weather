@@ -1,21 +1,21 @@
-import 'dart:html';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/database/db_helper.dart';
 import 'package:my_weather/exceptions/configuration_exception.dart';
 import 'package:my_weather/models/city_favorite.dart';
+import 'package:my_weather/pages/layout/screen_type_enum.dart';
 import 'package:my_weather/pages/outline/tabs_screen.dart';
-import 'package:my_weather/pages/web_pages/outline/init_web_screen.dart';
+import 'package:my_weather/pages/web_pages/outline/web_screen.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
 import 'package:my_weather/providers/today_weather.dart';
-import 'package:my_weather/utilities/connectivity.dart';
-import 'package:my_weather/utilities/location.dart';
+import 'package:my_weather/services/connectivity_service.dart';
+import 'package:my_weather/services/location_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 
 class InitData extends StatefulWidget {
-  final String pageType;
+  final ScreenType pageType;
 
   InitData(this.pageType);
 
@@ -24,10 +24,12 @@ class InitData extends StatefulWidget {
 }
 
 class _InitDataState extends State<InitData> {
+  final connectionService = locator<ConnectionService>();
+  final locationService = locator<LocationService>();
 
   Map<String, bool> _prerequisites= {
     'isLoading' : false, //to check the completion of the fetching data
-    'isInit' : true, //to check fist time the screen is loaded
+    'isInit' : true, //to check first time the screen is loaded
     'isErrorFetching' : false, //to check if there is an error in fetching data
     'locationPermissionPrefs' : true, //to check shared prefs location permission
     'locationPermissionSettings' : true, //to check system settings location permission
@@ -51,17 +53,13 @@ class _InitDataState extends State<InitData> {
         _prerequisites['isConnectivity'] = true;
       });
 
-      if(kIsWeb) {
-        _initAppData(context);
-      } else {
-        ConnectionUtility.checkConnection().then( (conn) { //check connectivity
-          if(conn) { //if there is connection
-            _initAppData(context);
-          } else { //if there is no connection
-            throw ConfigurationException('NO INTERNET CONNECTION');
-          }
-        }).catchError((error) => _handleInitError(error));
-      }
+      connectionService.checkConnection().then( (conn) { //check web connectivity
+        if(conn) { //if there is connection
+          _initAppData(context);
+        } else { //if there is no connection
+          throw ConfigurationException('NO INTERNET CONNECTION');
+        }
+      }).catchError((error) => _handleInitError(error));
 
     }
     _prerequisites['isInit'] = false; //is not any more first time
@@ -71,12 +69,10 @@ class _InitDataState extends State<InitData> {
   _initAppData(BuildContext context) {
     final routeArgs = ModalRoute.of(context).settings.arguments as Map<String,String>; //take param from route
     if (routeArgs != null) { //if there are params (city, province) fetch data from server with this params
-      print('routeArgs: ' + routeArgs.toString());
       _fetchData(routeArgs['name'], routeArgs['province'], context);
     } else {
       //get current location, from location get relative city and then pass it to the fetchWeatherData method
-      LocationHelper.fetchLocation().then( (city) => _fetchData(city, 'NULL', context) )
-          .catchError((error) => _handleInitError(error));
+      locationService.fetchLocation().then( (city) => _fetchData(city, 'NULL', context) ).catchError((error) => _handleInitError(error));
     }
   }
 
@@ -128,16 +124,13 @@ class _InitDataState extends State<InitData> {
 
   @override
   Widget build(BuildContext context) {
-    switch (widget.pageType) {
-      case 'mobile' :
-        return TabScreen(_prerequisites);
-        break;
-
-      case 'web' :
-        return InitScreenWeb(_prerequisites);
-        break;
-
-       default: return TabScreen(_prerequisites);
+    if ('${widget.pageType}' == '${ScreenType.mobile}') {
+      return TabScreen(_prerequisites, _currentCity);
+    }
+    else if ('${widget.pageType}' == '${ScreenType.desktop}') {
+      return ScreenWeb(_prerequisites);
+    } else {
+      return TabScreen(_prerequisites, _currentCity);
     }
   }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:my_weather/pages/error_screen.dart';
 import 'package:my_weather/pages/info/info_screen.dart';
+import 'package:my_weather/pages/outline/error_screen.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class InfoLayout extends StatelessWidget {

@@ -21,9 +21,20 @@ class InternationalizationConstants {
     return result;
   }
 
-  static Future<String> getUnits() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(InternationalizationConstants.PREFS_UNITS_KEY) ?? InternationalizationConstants.METRIC;
+  static String getUnits(String unitsDisplay) {
+    final binding = {
+      InternationalizationConstants.IMPERIAL_DISPLAY : InternationalizationConstants.IMPERIAL,
+      InternationalizationConstants.METRIC_DISPLAY : InternationalizationConstants.METRIC
+    };
+    return binding[unitsDisplay];
+  }
+
+  static String getDisplayUnits(String units) {
+    final binding = {
+      InternationalizationConstants.IMPERIAL : InternationalizationConstants.IMPERIAL_DISPLAY,
+      InternationalizationConstants.METRIC : InternationalizationConstants.METRIC_DISPLAY
+    };
+    return binding[units];
   }
 
 }

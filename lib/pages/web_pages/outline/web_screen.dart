@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:my_weather/pages/_layout/check_prerequisites.dart';
+import 'package:my_weather/pages/_init_data/check_prerequisites.dart';
 import 'package:my_weather/pages/web_pages/home/home_screen.dart';
 import 'package:my_weather/pages/web_pages/outline/custom_navbar_web.dart';
 
-class InitScreenWeb extends StatefulWidget {
+class ScreenWeb extends StatefulWidget {
   final Map<String, bool> _prerequisites;
 
-  InitScreenWeb(this._prerequisites);
+  ScreenWeb(this._prerequisites);
 
   @override
-  _InitScreenWebState createState() => _InitScreenWebState();
+  _ScreenWebState createState() => _ScreenWebState();
 }
 
-class _InitScreenWebState extends State<InitScreenWeb> {
+class _ScreenWebState extends State<ScreenWeb> {
   @override
   Widget build(BuildContext context) {
 

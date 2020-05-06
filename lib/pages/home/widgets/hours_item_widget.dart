@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/models/day_weather.dart';
-import 'package:my_weather/utilities/select_weather_icon.dart';
+import 'package:my_weather/services/icon_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 
 class HourItem extends StatelessWidget {
   final Hour hour;
+  final iconService = locator<WeatherIconService>();
 
   HourItem(this.hour);
 
@@ -26,7 +28,6 @@ class HourItem extends StatelessWidget {
   Widget _buildNowHour() {
     return LayoutBuilder(
       builder: (ctx, constraints) {
-        //20.9
         final constr = constraints.maxHeight * 0.15;
         double paddingNowItem = constr > 20 ? constr : 8;
         return Container(
@@ -59,7 +60,8 @@ class HourItem extends StatelessWidget {
                 ),
               ),
               Image.asset(
-                WeatherIcon.selectIcon(hour.weather.status),
+                iconService.selectIcon(hour.weather.status),
+                //WeatherIcon.selectIcon(hour.weather.status),
                 //alignment: Alignment.bottomLeft,
                 height: 34,
               ),
@@ -82,7 +84,7 @@ class HourItem extends StatelessWidget {
           ),
         ),
         Image.asset(
-          WeatherIcon.selectIcon(hour.weather.status),
+          iconService.selectIcon(hour.weather.status),
           height: 34,
         ),
         Text(

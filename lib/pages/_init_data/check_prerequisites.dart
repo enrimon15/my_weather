@@ -43,7 +43,7 @@ class CheckPrerequisites extends StatelessWidget {
             : () => AppSettings.openLocationSettings(),
       );
     }
-    else if (!prerequisites['locationPermissionPrefs'] && !kIsWeb) {
+    else if (!prerequisites['locationPermissionPrefs']) {
       return ShowAlert(
         title: 'Oops..',
         content: tr("location_prefs_error"),
@@ -72,9 +72,9 @@ class CheckPrerequisites extends StatelessWidget {
         title: 'Oops..',
         content: tr("connection_error"),
         buttonContent: tr("try_again"),
-        secondButtonContent: tr("settings_button"),
+        secondButtonContent: kIsWeb ? null : tr("settings_button"),
         onTap: () => Navigator.of(context).pushReplacementNamed('/'),
-        secondOnTap: () => AppSettings.openWIFISettings(),
+        secondOnTap: kIsWeb ? null : () => AppSettings.openWIFISettings(),
       );
     }
     else if (prerequisites['isLoading']) {

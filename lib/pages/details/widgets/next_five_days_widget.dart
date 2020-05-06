@@ -5,10 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_weather/models/five_days_weather.dart';
-import 'package:my_weather/utilities/select_weather_icon.dart';
+import 'package:my_weather/services/icon_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 
 class NextFiveDays extends StatelessWidget {
   final List<Day> nextFiveDays;
+  final iconService = locator<WeatherIconService>();
 
   NextFiveDays(this.nextFiveDays);
 
@@ -19,7 +21,7 @@ class NextFiveDays extends StatelessWidget {
         temp: nextFiveDays[index].weather.temperature,
         condition: nextFiveDays[index].weather.status,
         image: Image.asset(
-          WeatherIcon.selectIcon(nextFiveDays[index].weather.status),
+          iconService.selectIcon(nextFiveDays[index].weather.status),
           height: 48,
         ),
       );
@@ -55,7 +57,7 @@ class NextFiveDays extends StatelessWidget {
               padding: const EdgeInsets.only(top: 10),
               child: ListTile(
                 leading: days[i-1].image,
-                title: AutoSizeText( days[i-1].day, maxLines: 1, minFontSize: 10, overflowReplacement: Text(days[i-1].day.split(' ')[0]) ),
+                title: AutoSizeText( days[i-1].day, maxLines: 1, minFontSize: 10, overflowReplacement: Text(days[i-1].day.split(' ')[0], style: TextStyle(fontSize: 10)) ),
                 subtitle: AutoSizeText(
                   days[i-1].condition,
                   style: TextStyle(

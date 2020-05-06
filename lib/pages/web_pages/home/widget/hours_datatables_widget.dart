@@ -1,7 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/models/day_weather.dart';
-import 'package:my_weather/utilities/select_weather_icon.dart';
+import 'package:my_weather/services/icon_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 
 class HoursDatatable extends StatelessWidget {
   final DayWeather todayWeather;
@@ -45,6 +46,7 @@ class HoursDataSource extends DataTableSource {
   final List<Hour> _hours;
   int _selectCount = 0;
   final DateTime now = new DateTime.now();
+  final iconService = locator<WeatherIconService>();
 
   HoursDataSource(this._hours);
 
@@ -71,7 +73,7 @@ class HoursDataSource extends DataTableSource {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Text(text, style: TextStyle(color: textColor)),
-          Image.asset(WeatherIcon.selectIcon(singleHour.weather.status), height: 32),
+          Image.asset(iconService.selectIcon(singleHour.weather.status), height: 32),
         ],
       ),
     );
@@ -122,55 +124,3 @@ class HoursDataSource extends DataTableSource {
   int get selectedRowCount => _selectCount;
 
 }
-
-/*
-
-          rows: todayWeather.hours
-            .map( (singleHour) => DataRow(
-              cells: [
-                DataCell(
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(23),
-                          bottom: Radius.circular(23)
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          spreadRadius: 4,
-                          blurRadius:2,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Text(singleHour.hour, style: TextStyle(color: Colors.white)),
-                        Image.asset(WeatherIcon.selectIcon(singleHour.weather.status), height: 32),
-                      ],
-                    ),
-                  ),
-                ),
-                DataCell(
-                    Text(singleHour.weather.temperature)
-                ),
-                DataCell(
-                    Text(singleHour.weather.status)
-                ),
-                DataCell(
-                    Text(singleHour.weather.wind)
-                ),
-                DataCell(
-                    Text(singleHour.weather.pressure)
-                ),
-                DataCell(
-                    Text(singleHour.weather.humidity)
-                )
-              ],
-            )).toList(),
-
- */
