@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/models/city_search.dart';
 import 'package:my_weather/services/city_search_service.dart';
@@ -7,7 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 class DataSearch extends SearchDelegate<String> {
 
-  List<CitySearch> searchCities = locator<SearchCityService>().getCities; //SearchCitiesUtility.allCities;
+  List<CitySearch> searchCities = locator<SearchCityService>().getCities;
 
   @override
   String get searchFieldLabel => tr("search_hint");

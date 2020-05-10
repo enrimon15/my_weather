@@ -20,7 +20,7 @@ class NextFiveDaysWeather with ChangeNotifier {
     print(url);
 
     try {
-      final response = await http.get(url).timeout(const Duration(seconds: 8));
+      final response = await http.get(url).timeout(const Duration(seconds: 10));
       if (response.statusCode == 200 && response.body.isNotEmpty) {
         String jsonResponse = response.body;
         _fiveDaysWeather = FiveDaysWeather.fromJson(json.decode(jsonResponse));

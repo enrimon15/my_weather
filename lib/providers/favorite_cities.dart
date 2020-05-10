@@ -31,10 +31,10 @@ class FavoriteCities with ChangeNotifier {
     _units = locator<PrefsService>().getUnits();
 
     final url = '${ApiConstants.baseURL}/${ApiConstants.CURRENT}/${city.name}/${city.province}/$lang/units=$_units/api-key=${ApiConstants.apiKey}';
-    print(url);
+    //print(url);
 
     try {
-      final response = await http.get(url).timeout(const Duration(seconds: 5));
+      final response = await http.get(url).timeout(const Duration(seconds: 10));
       if (response.statusCode == 200 && response.body.isNotEmpty) {
         String jsonResponse =  response.body;
         Map<String,dynamic> result = json.decode(jsonResponse);

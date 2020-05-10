@@ -29,6 +29,16 @@ class CheckPrerequisites extends StatelessWidget {
         onTap: () => Navigator.of(context).pushReplacementNamed('/'),
       );
     }
+    else if (prerequisites['isErrorCoord']) {
+      return ShowAlert(
+        title: 'Oops..',
+        content: tr("no_coords_error"),
+        buttonContent: tr("try_again"),
+        secondButtonContent: tr("search_hint"),
+        onTap: () => Navigator.of(context).pushReplacementNamed('/'),
+        secondOnTap: () => showSearch(context: context, delegate: DataSearch()),
+      );
+    }
     else if (!prerequisites['locationPermissionSettings']) {
       return ShowAlert(
         title: 'Oops..',

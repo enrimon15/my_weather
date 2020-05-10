@@ -18,6 +18,7 @@
   "location_app_error" : "L'App non concede i permessi per la geolocalizzazione",
   "settings_button" : "Impostazioni",
   "connection_error" : "Connessione internet assente",
+  "no_coords_error" : "Posizione corrente non trovata",
 
   "search_hint" : "Cerca",
   "search_no_content" : "Non ci sono città disponibili",

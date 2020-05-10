@@ -1,23 +1,38 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:my_weather/models/day_weather.dart';
+import 'package:my_weather/models/chart_data.dart';
 import 'package:my_weather/providers/today_weather.dart';
 import 'dart:math';
 import 'package:provider/provider.dart';
 
 class ChartTempHours extends StatelessWidget {
-  final List<Hour> hours;
+  final List<HourChart> hours;
 
   ChartTempHours(this.hours);
 
   List<int> _getValues() {
     List<int> values = [];
     hours.map((singleHour) {
-      int value = int.parse(singleHour.weather.temperature.split(' ')[0]);
+      int value = int.parse(singleHour.temperature.split(' ')[0]);
       values.add(value);
     }).toList();
     return values;
+  }
+
+  Map<String, int> getMinMaxTemp() {
+    List<double> temperatures = [];
+    Map<String,int> result = {};
+
+    hours.map( (singleHour) {
+      double temp = double.parse(singleHour.temperature.split(' ')[0]);
+      temperatures.add(temp);
+    }).toList();
+
+    result["max"] = (temperatures.reduce(max)).round();
+    result["min"] = (temperatures.reduce(min)).round();
+
+    return result;
   }
 
 
@@ -28,7 +43,7 @@ class ChartTempHours extends StatelessWidget {
     final maxVal = values.reduce(max);
     final range = ((maxVal + 5) / 4).round();
     final maxY = (range * 4);
-    final minmax = Provider.of<TodayWeather>(context).getMinMaxTemp();
+    final minmax = getMinMaxTemp();
 
     return Card(
       elevation: 8,
@@ -53,7 +68,13 @@ class ChartTempHours extends StatelessWidget {
     );
   }
 
-  LineChartData chartData(values, range, maxY, minmax) {
+  LineChartData chartData(List<int> values, range, maxY, minmax) {
+    String firstLabel = hours.first.hour.split(':')[0];
+    String secondLabel = hours[6].hour.split(':')[0];
+    String thirdLabel = hours[12].hour.split(':')[0];
+    String fourthLabel = hours[18].hour.split(':')[0];
+    String fifthLabel = hours.last.hour.split(':')[0];
+
     return LineChartData(
       lineTouchData: LineTouchData(
         enabled: false,
@@ -74,15 +95,15 @@ class ChartTempHours extends StatelessWidget {
           getTitles: (value) {
             switch (value.toInt()) {
               case 1:
-                return '00';
+                return firstLabel;
               case 7:
-                return '06';
+                return secondLabel;
               case 13:
-                return '12';
+                return thirdLabel;
               case 19:
-                return '18';
+                return fourthLabel;
               case 24:
-                return '23';
+                return fifthLabel;
             }
             return '';
           },
@@ -138,12 +159,13 @@ class ChartTempHours extends StatelessWidget {
     );
   }
 
-  List<LineChartBarData> linesBarData2(values, maxY, minmax) {
+  List<LineChartBarData> linesBarData2(List<int> values, maxY, minmax) {
     final traslate = (minmax['min'] / maxY) * 4;
 
     double _getPoint(value) {
       return ((value / maxY) * 4) - traslate;
     }
+
 
     return [
       LineChartBarData(

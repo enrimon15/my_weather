@@ -36,6 +36,7 @@ class _InitDataState extends State<InitData> {
     'locationPermissionApp' : true, //to check app location permission
     'isConnectivity' : true, //to check connection status
     'isFavoriteCity' : false, //to check if city is favorite
+    'isErrorCoord' : false,
   };
   CityFavorite _currentCity = new CityFavorite(); //current city
 
@@ -51,6 +52,7 @@ class _InitDataState extends State<InitData> {
         _prerequisites['locationPermissionSettings'] = true;
         _prerequisites['locationPermissionApp'] = true;
         _prerequisites['isConnectivity'] = true;
+        _prerequisites['isErrorCoord'] = false;
       });
 
       connectionService.checkConnection().then( (conn) { //check web connectivity
@@ -90,6 +92,9 @@ class _InitDataState extends State<InitData> {
       break;
 
       case 'NO INTERNET CONNECTION' : {setState(() {_prerequisites['isConnectivity'] = false;});}
+      break;
+
+      case 'UNABLE TO GET USER COORDINATES' : {setState(() {_prerequisites['isErrorCoord'] = true;});}
       break;
 
       default: setState(() {_prerequisites['isErrorFetching'] = true;});

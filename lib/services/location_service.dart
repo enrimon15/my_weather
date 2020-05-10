@@ -13,7 +13,7 @@ class LocationService {
 
     //check permission shared preferences status
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool(InternationalizationConstants.PREFS_LOCATION_KEY) == false) {
+    if (prefs.getBool(InternationalizationConstants.PREFS_LOCATION_KEY)  != null && prefs.getBool(InternationalizationConstants.PREFS_LOCATION_KEY) == false) {
       throw ConfigurationException('LOCATION PERMISSION PREFS NOT ENABLED');
     }
 
@@ -23,29 +23,31 @@ class LocationService {
     LocationData _locData;
 
     //check permission status
-    _permissionGranted = await location.hasPermission();
+    _permissionGranted = await location.hasPermission().catchError((error) => throw ConfigurationException('UNABLE TO GET USER COORDINATES'));
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
         throw ConfigurationException('LOCATION PERMISSION SETTINGS NOT ENABLED');
       }
     }
+
     //check service status
-    _serviceEnabled = await location.serviceEnabled();
+    _serviceEnabled = await location.serviceEnabled().catchError((error) => throw ConfigurationException('UNABLE TO GET USER COORDINATES'));;
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
         throw ConfigurationException('LOCATION SERVICE NOT ENABLED');
       }
     }
+
     //all permission is ok
     _locData = await location.getLocation().catchError( (error) {
       print('Unable to get location: ' + error.toString());
       throw ConfigurationException('UNABLE TO GET USER COORDINATES');
     } );
 
-    final url = '${ApiConstants.baseURL}/mock/coords/getCity/${_locData.latitude}/${_locData.longitude}/api-key=${ApiConstants.apiKey}';
-    print(url);
+    final url = '${ApiConstants.baseURL}/${ApiConstants.COORDS_BY_CITY}/${_locData.latitude}/${_locData.longitude}/api-key=${ApiConstants.apiKey}';
+    //print(url);
 
     try {
       final response = await http.get(url);

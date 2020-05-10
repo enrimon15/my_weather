@@ -80,7 +80,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: ListView(
                   padding: const EdgeInsets.all(8),
                   children: <Widget>[
-                    if (!kIsWeb) _buildSwitchListTile(
+                    _buildSwitchListTile(
                       tr("settings_location"),
                       tr("settings_location_description"),
                       _isPosition,

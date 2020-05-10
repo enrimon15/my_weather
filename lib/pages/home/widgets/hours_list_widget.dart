@@ -9,6 +9,7 @@ class HoursList extends StatelessWidget {
 
     final weatherProvider = Provider.of<TodayWeather>(context); //provider
     final hours = weatherProvider.getTodayWeather.hours; //list of hours
+    final hoursNextDay = weatherProvider.getChartData.hours; //list of hour from now to the same hour of next day
 
     return Expanded(
       child: Container(
@@ -16,9 +17,11 @@ class HoursList extends StatelessWidget {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemBuilder: (ctx, index) {
-            return HourItem(hours[index]);
+            return hours.length > 9
+                    ? HourItem(hours[index].hour, hours[index].weather.temperature, hours[index].weather.status)
+                    : HourItem(hoursNextDay[index].hour, hoursNextDay[index].temperature, hoursNextDay[index].status);
           },
-          itemCount: hours.length,
+          itemCount: hours.length > 9 ? hours.length : hoursNextDay.length,
         ),
       ),
     );

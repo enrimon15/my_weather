@@ -26,6 +26,7 @@ class HomeWeb extends StatelessWidget {
     final currentWeather = weatherProvider.getCurrentWeather;
     final coords = weatherProvider.getCityCoords;
     final nextDays = Provider.of<NextFiveDaysWeather>(context).getFiveDaysWeather.days;
+    final chartData = Provider.of<TodayWeather>(context).getChartData;
 
     void showSimpleCustomDialog(BuildContext context) {
       Dialog simpleDialog = Dialog(
@@ -45,7 +46,7 @@ class HomeWeb extends StatelessWidget {
                   children: <Widget>[
                     Expanded(child: ChartTempDays(nextDays)),
                     const SizedBox(width: 10),
-                    Expanded(child: ChartTempHours(todayWeather.hours))
+                    Expanded(child: ChartTempHours(chartData.hours))
                   ],
                 ),
               ),
