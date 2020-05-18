@@ -17,9 +17,11 @@ class FavoriteCities with ChangeNotifier {
   Future<void> fetchFavoriteCities(String lang) async {
     try{
       _favoriteCities = await DBHelper.getAllCities();
-      await Future.forEach(_favoriteCities, (singleCity) async {
-        singleCity = await fetchData(singleCity, lang);
-      });
+      if (_favoriteCities.length > 0) {
+        await Future.forEach(_favoriteCities, (singleCity) async {
+          singleCity = await fetchData(singleCity, lang);
+        });
+      }
       notifyListeners();
     } catch (error) {
       print('DbFetch favorites_provider Exception:' + error.toString());
