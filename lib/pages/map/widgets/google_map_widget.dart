@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:my_weather/utilities/select_weather_icon.dart';
+import 'package:my_weather/services/icon_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 
 class GoogleMapWidget extends StatefulWidget {
   final Map<String,dynamic> coords;
@@ -15,13 +16,14 @@ class GoogleMapWidget extends StatefulWidget {
 
 class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   BitmapDescriptor customIcon;
+  final iconService = locator<WeatherIconService>();
 
   _createMarker(context, String img) {
     if (customIcon == null) {
       bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
       ImageConfiguration configuration = createLocalImageConfiguration(context);
-      BitmapDescriptor.fromAssetImage(configuration, WeatherIcon.selectIconMarker(img, isIOS))
+      BitmapDescriptor.fromAssetImage(configuration, iconService.selectIconMarker(img, isIOS))
           .then((icon) {
         setState(() {
           customIcon = icon;

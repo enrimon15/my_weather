@@ -3,6 +3,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/pages/outline/custom_appbar.dart';
 import 'package:my_weather/pages/outline/drawer_widget.dart';
+import 'package:my_weather/services/service_locator.dart';
+import 'package:my_weather/services/shared_preferences_service.dart';
 import 'package:my_weather/utilities/localization_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,28 +16,23 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  final prefsService = locator<PrefsService>();
   List<String> _languages = InternationalizationConstants.languages;
   List<String> _listUnits = InternationalizationConstants.LIST_UNITS_DISPLAY;
-  String _unitsKey = InternationalizationConstants.PREFS_UNITS_KEY;
-  String _locationKey = InternationalizationConstants.PREFS_LOCATION_KEY;
 
   bool _isPosition;
   String _units;
-  SharedPreferences prefs;
-
-  bool _isPrefsLoaded = false;
 
 
   @override
   void initState() {
     super.initState();
-    _getSharedPrefs().then( (_) { setState(() { _isPrefsLoaded = true; }); });
+    _getSharedPrefs();
   }
 
-  Future<void> _getSharedPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-    _isPosition = prefs.getBool(_locationKey) ?? true;
-    _units = prefs.getString(_unitsKey) ?? InternationalizationConstants.METRIC;
+  _getSharedPrefs() async {
+    _isPosition = prefsService.getPosition();
+    _units = prefsService.getUnits();
   }
 
   Widget _buildSwitchListTile(String title, String subtitle, bool currentValue, Function updateValue, Icon icon) {
@@ -90,9 +87,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           context: context
       ).getAppBar(),
       drawer: MainDrawer(),
-      body: !_isPrefsLoaded
-        ? Center( child: CircularProgressIndicator() )
-        : Column(
+      body: Column(
         children: <Widget>[
           Expanded(
             child: ListView(
@@ -103,7 +98,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   tr("settings_location_description"),
                   _isPosition,
                   (newValue) {
-                    prefs.setBool(_locationKey, newValue);
+                    prefsService.setPosition(newValue);
                     setState(() {
                       _isPosition = newValue;
                     });
@@ -124,12 +119,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _buildDropDownListTile(
                   tr("settings_units"),
                   tr("settings_units_description"),
-                  _getDisplayUnits(_units),
+                  InternationalizationConstants.getDisplayUnits(_units),
                   _listUnits,
                   (newValue) {
-                    prefs.setString(_unitsKey, _getUnits(newValue));
+                    prefsService.setUnits(InternationalizationConstants.getUnits(newValue));
                     setState(() {
-                      _units = _getUnits(newValue);
+                      _units = InternationalizationConstants.getUnits(newValue);
                     });
                   },
                   const Icon(Icons.whatshot),
@@ -140,21 +135,5 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
-  }
-
-  String _getUnits(String unitsDisplay) {
-    final binding = {
-      InternationalizationConstants.IMPERIAL_DISPLAY : InternationalizationConstants.IMPERIAL,
-      InternationalizationConstants.METRIC_DISPLAY : InternationalizationConstants.METRIC
-    };
-    return binding[unitsDisplay];
-  }
-
-  String _getDisplayUnits(String units) {
-    final binding = {
-      InternationalizationConstants.IMPERIAL : InternationalizationConstants.IMPERIAL_DISPLAY,
-      InternationalizationConstants.METRIC : InternationalizationConstants.METRIC_DISPLAY
-    };
-    return binding[units];
   }
 }

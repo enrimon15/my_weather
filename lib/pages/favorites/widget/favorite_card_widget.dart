@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_weather/database/db_helper.dart';
 import 'package:my_weather/models/city_favorite.dart';
-import 'package:my_weather/utilities/select_weather_icon.dart';
+import 'package:my_weather/services/icon_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 
 import '../favorites_screen.dart';
 
 class FavoriteCard extends StatelessWidget {
   final CityFavorite favoriteCity;
   final BackgroundCard background;
+  final iconService = locator<WeatherIconService>();
 
   FavoriteCard(this.favoriteCity, this.background);
 
@@ -82,7 +84,7 @@ class FavoriteCard extends StatelessWidget {
             ),
             child: ListTile(
               leading: Image.asset(
-                WeatherIcon.selectIcon(favoriteCity.condition),
+                iconService.selectIcon(favoriteCity.condition),
                 height: 48,
               ),
               title: AutoSizeText(

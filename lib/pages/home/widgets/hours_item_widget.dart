@@ -1,19 +1,22 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:my_weather/models/day_weather.dart';
-import 'package:my_weather/utilities/select_weather_icon.dart';
+import 'package:my_weather/services/icon_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 
 class HourItem extends StatelessWidget {
-  final Hour hour;
+  final iconService = locator<WeatherIconService>();
+  final String hour;
+  final String temp;
+  final String status;
 
-  HourItem(this.hour);
+  HourItem(this.hour, this.temp, this.status);
 
   @override
   Widget build(BuildContext context) {
     final DateTime now = new DateTime.now();
     String nowString = now.hour.toString();
     nowString = nowString.length == 1 ? '0$nowString:00' : '$nowString:00';
-    final _isNow = hour.hour == nowString;
+    final _isNow = hour == nowString;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -58,7 +61,7 @@ class HourItem extends StatelessWidget {
                 ),
               ),
               Image.asset(
-                WeatherIcon.selectIcon(hour.weather.status),
+                iconService.selectIcon(status),
                 height: 34,
               ),
             ],
@@ -73,18 +76,18 @@ class HourItem extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         Text(
-          hour.hour.substring(0,2),
+          hour.substring(0,2),
           style: TextStyle(
             color: Theme.of(context).primaryColor,
             fontSize: 18,
           ),
         ),
         Image.asset(
-          WeatherIcon.selectIcon(hour.weather.status),
+          iconService.selectIcon(status),
           height: 34,
         ),
         Text(
-          '${hour.weather.temperature.split(' ')[0]}°',
+          '${temp.split(' ')[0]}°',
           style: const TextStyle(
             fontSize: 15,
           ),

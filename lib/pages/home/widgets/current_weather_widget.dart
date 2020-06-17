@@ -3,18 +3,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:my_weather/pages/outline/custom_appbar.dart';
 import 'package:my_weather/providers/today_weather.dart';
-import 'package:my_weather/utilities/select_weather_icon.dart';
+import 'package:my_weather/services/icon_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class CurrentWeather extends StatelessWidget {
-
+  final iconService = locator<WeatherIconService>();
   final DateTime now = new DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     final intlLocale = EasyLocalization.of(context).locale.toString();
-    final weatherProvider = Provider.of<TodayWeather>(context); //provider
+    final weatherProvider = Provider.of<TodayWeather>(context);
     final currentWeather = weatherProvider.getCurrentWeather;
     final mediaQuery = MediaQuery.of(context);
     final heightContainer = (mediaQuery.size.height - CustomAppBar.height - mediaQuery.padding.top) * 0.72;
@@ -30,7 +31,7 @@ class CurrentWeather extends StatelessWidget {
             mediaQuery
         ),
         Image.asset(
-          WeatherIcon.selectIcon(currentWeather.status),
+          iconService.selectIcon(currentWeather.status),
           height: 105,
         ),
         AutoSizeText(

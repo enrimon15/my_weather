@@ -7,13 +7,13 @@ import 'package:my_weather/utilities/localization_constants.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LocationHelper {
+class LocationService {
 
-  static Future<String> fetchLocation() async {
+  Future<String> fetchLocation() async {
 
     //check permission shared preferences status
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.getBool(InternationalizationConstants.PREFS_LOCATION_KEY) == false) {
+    if (prefs.getBool(InternationalizationConstants.PREFS_LOCATION_KEY) != null && prefs.getBool(InternationalizationConstants.PREFS_LOCATION_KEY) == false) {
       throw ConfigurationException('LOCATION PERMISSION PREFS NOT ENABLED');
     }
 
@@ -23,7 +23,7 @@ class LocationHelper {
     LocationData _locData;
 
     //check permission status
-    _permissionGranted = await location.hasPermission();
+    _permissionGranted = await location.hasPermission().catchError((error) => throw ConfigurationException('UNABLE TO GET USER COORDINATES'));
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
@@ -31,7 +31,7 @@ class LocationHelper {
       }
     }
     //check service status
-    _serviceEnabled = await location.serviceEnabled();
+    _serviceEnabled = await location.serviceEnabled().catchError((error) => throw ConfigurationException('UNABLE TO GET USER COORDINATES'));
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
@@ -44,8 +44,7 @@ class LocationHelper {
       throw ConfigurationException('UNABLE TO GET USER COORDINATES');
     } );
 
-    //final url = 'http://192.168.1.51:3000/mock/coords/getCity/${_locData.latitude}/${_locData.longitude}/api-key=$_apiKey';
-    final url = '${ApiConstants.baseURL}/mock/coords/getCity/${_locData.latitude}/${_locData.longitude}/api-key=${ApiConstants.apiKey}';
+    final url = '${ApiConstants.baseURL}/${ApiConstants.COORDS_BY_CITY}/${_locData.latitude}/${_locData.longitude}/api-key=${ApiConstants.apiKey}';
     print(url);
 
     try {

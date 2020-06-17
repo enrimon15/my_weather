@@ -10,10 +10,12 @@ import 'package:my_weather/pages/map/weather_map_screen.dart';
 import 'package:my_weather/pages/outline/custom_appbar.dart';
 import 'package:my_weather/pages/outline/drawer_widget.dart';
 import 'package:my_weather/pages/outline/show_alert_widget.dart';
+import 'package:my_weather/pages/search/data_search.dart';
 import 'package:my_weather/pages/settings/settings_screen.dart';
 import 'package:my_weather/providers/today_weather.dart';
-import 'package:my_weather/utilities/connectivity.dart';
-import 'package:my_weather/utilities/location.dart';
+import 'package:my_weather/services/connectivity_service.dart';
+import 'package:my_weather/services/location_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 import 'package:provider/provider.dart';
 import 'package:my_weather/providers/next_five_days_weather.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -26,16 +28,20 @@ class TabScreen extends StatefulWidget {
 
 class _TabScreenState extends State<TabScreen> {
   bool _isLoading = false; //to check the completion of the fetching data
-  bool _isInit = true; //to check fist time the screen is loaded
+  bool _isInit = true; //to check first time the screen is loaded
   bool _isErrorFetching = false; //to check if there is an error in fetching data
   bool _locationPermissionPrefs = true; //to check if there is location permission from shared preferences
   bool _locationPermissionSettings = true; //to check if there is location permission from system settings
   bool _locationPermissionApp = true; //to check if there is location permission from app settings
   bool _isConnectivity = true; //to check if connection is up
   int _selectedIndex = 0; //to know which tab is pressed
+  bool _isErrorCoord = false;
   CityFavorite _currentCity = new CityFavorite(); //current city
   bool _isFavoriteCity = false; //to check if current city is favorite
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>(); //key of context, for snakebar
+
+  final connectionService = locator<ConnectionService>();
+  final locationService = locator<LocationService>();
 
   //List of tabs
   final List<TabItem> _choices = [
@@ -56,9 +62,10 @@ class _TabScreenState extends State<TabScreen> {
         _locationPermissionSettings = true;
         _locationPermissionApp = true;
         _isConnectivity = true;
+        _isErrorCoord = false;
       });
 
-      ConnectionUtility.checkConnection().then( (conn) { //check connectivity
+      connectionService.checkConnection().then( (conn) { //check connectivity
         if(conn) { //if there is connection
           final routeArgs = ModalRoute.of(context).settings.arguments as Map<String,String>; //take param from route
           if (routeArgs != null) { //if there are params (city, province) fetch data from server with this params
@@ -66,7 +73,7 @@ class _TabScreenState extends State<TabScreen> {
             _fetchData(routeArgs['name'], routeArgs['province'], context);
           } else {
             //get current location, from location get relative city and then pass it to the fetchWeatherData method
-            LocationHelper.fetchLocation().then( (city) => _fetchData(city, 'NULL', context) )
+            locationService.fetchLocation().then( (city) => _fetchData(city, 'NULL', context) )
                 .catchError((error) => _handleInitError(error));
           }
         } else { //if there is no connection
@@ -142,6 +149,9 @@ class _TabScreenState extends State<TabScreen> {
       case 'LOCATION SERVICE NOT ENABLED' : {setState(() {_locationPermissionSettings = false;});}
       break;
 
+      case 'UNABLE TO GET USER COORDINATES' : {setState(() {_isErrorCoord = true;});}
+      break;
+
       case 'NO INTERNET CONNECTION' : {setState(() {_isConnectivity = false;});}
       break;
 
@@ -211,6 +221,16 @@ class _TabScreenState extends State<TabScreen> {
         secondButtonContent: tr("settings_button"),
         onTap: () => Navigator.of(context).pushReplacementNamed('/'),
         secondOnTap: () => AppSettings.openAppSettings(),
+      );
+    }
+    else if (_isErrorCoord) {
+      return ShowAlert(
+        title: 'Oops..',
+        content: tr("no_coords_error"),
+        buttonContent: tr("try_again"),
+        secondButtonContent: tr("search_hint"),
+        onTap: () => Navigator.of(context).pushReplacementNamed('/'),
+        secondOnTap: () => showSearch(context: context, delegate: DataSearch()),
       );
     }
     else if (!_isConnectivity) {

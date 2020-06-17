@@ -8,8 +8,8 @@ class Maps extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    final coords = Provider.of<TodayWeather>(context, listen: false).getCityCoords;
+    final coords = Provider.of<TodayWeather>(context, listen: false)
+                  .getCityCoords;
     return GoogleMapWidget(coords);
-    //LeafletMapWidget(coords);
   }
 }

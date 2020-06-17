@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_weather/models/generic_weather.dart';
-import 'package:my_weather/utilities/select_weather_icon.dart';
+import 'package:my_weather/services/icon_service.dart';
+import 'package:my_weather/services/service_locator.dart';
 
 class Header extends StatelessWidget {
+  final iconService = locator<WeatherIconService>();
   final String cityName;
   final GenericWeather currentWeather;
 
@@ -26,7 +28,7 @@ class Header extends StatelessWidget {
         children: <Widget>[
           _buildColumnHeader(cityName, context),
           Image.asset(
-            WeatherIcon.selectIcon(currentWeather.status),
+            iconService.selectIcon(currentWeather.status),
             height: 80,
           ),
         ],

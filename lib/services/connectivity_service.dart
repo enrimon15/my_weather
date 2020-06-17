@@ -1,8 +1,8 @@
 import 'package:connectivity/connectivity.dart';
 
-class ConnectionUtility {
+class ConnectionService {
 
-  static Future<bool> checkConnection() async {
+  Future<bool> checkConnection() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     //check if there is connection
     if (connectivityResult != ConnectivityResult.mobile && connectivityResult != ConnectivityResult.wifi) {

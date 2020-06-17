@@ -12,7 +12,7 @@ class DBHelper {
   static Future<sql.Database> open() async {
     final dbPath = await sql.getDatabasesPath(); //get the db path in which it is stored (an app folder)
     //open db and pass it the path and the name of the db
-    //if it is the first time that this code is executed this operation create the db, otherwise take the db already created
+    //if it's the first time that this code is executed this operation create the db, otherwise take the db already created
     return sql.openDatabase(
         path.join(dbPath, 'weather.db'),
         onCreate: (db, version) async { //a function that start when the db is created/opened

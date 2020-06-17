@@ -1,4 +1,6 @@
 {
+  "app_title": "My Weather",
+
   "yes" : "Si",
   "no" : "No",
 
@@ -19,6 +21,7 @@
 
   "search_hint" : "Cerca",
   "search_no_content" : "Non ci sono città disponibili",
+  "no_coords_error" : "Posizione corrente non trovata",
 
   "drawer_home" : "Home",
   "drawer_favorites" : "Preferiti",
