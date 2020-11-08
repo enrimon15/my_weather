@@ -5,11 +5,11 @@ import 'package:my_weather/providers/today_weather.dart';
 import 'package:provider/provider.dart';
 
 class Maps extends StatelessWidget {
-  
+
   @override
   Widget build(BuildContext context) {
     final coords = Provider.of<TodayWeather>(context, listen: false)
-                  .getCityCoords;
+        .getCityCoords;
     return GoogleMapWidget(coords);
   }
 }
