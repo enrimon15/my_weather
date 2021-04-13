@@ -9,3 +9,6 @@ My Weather e  un’applicazione  IOS/Android/Web  realizzata  attraverso  Flutte
  
 ### Immagini
 #### ![Demo_Image](<https://github.com/enrimon15/my_weather/blob/master/img_demo/UI_multidevice.png>)
+
+
+[Vedi altre immagini](https://github.com/enrimon15/my_weather/tree/master/img_demo)
